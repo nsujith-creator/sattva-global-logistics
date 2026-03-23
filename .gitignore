@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.local
+src/App.jsx.bak
+migrate_to_router.py
+fix_jsx.py
