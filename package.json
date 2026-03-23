@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "postbuild": "react-snap"
+    "postbuild": "echo build complete"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -22,6 +22,8 @@
     "react-snap": "^1.23.0"
   },
   "reactSnap": {
+    "source": "dist",
+    "destination": "dist",
     "inlineCss": false,
     "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
   }
