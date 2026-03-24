@@ -82,7 +82,15 @@ if(step==="form") return(
 <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:14}}>
 <div><label style={st.lb}>Your Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} value={g.name} onChange={e=>{upg("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/>{errs.name&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.name}</div>}</div>
 <div><label style={st.lb}>Company</label><input style={st.inp} value={g.company} onChange={e=>upg("company",e.target.value)} placeholder="Company name"/></div>
-<div><label style={st.lb}>Company Email *</label><input type="email" style={{...st.inp,borderColor:errs.email?B.red:undefined}} value={g.email} onChange={e=>{upg("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@yourcompany.com"/>{errs.email&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.email}</div>}</div>
+<div><label style={st.lb}>Company Email *</label><input type="email" style={{...st.inp,borderColor:errs.email?B.red:undefined}} value={g.email}
+  onChange={e=>{upg("email",e.target.value);setErrs(p=>({...p,email:""}));}}
+  onBlur={()=>{
+    const v=g.email.trim();
+    if(!v) return;
+    if(!/^[^@]+@[^@]+\.[^@]+$/.test(v)){setErrs(p=>({...p,email:"Invalid email address"}));return;}
+    if(isFreeEmail(v)){setErrs(p=>({...p,email:"Please use your company email — Gmail, Yahoo, Hotmail and similar are not accepted"}));}
+  }}
+  placeholder="you@yourcompany.com"/>{errs.email&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.email}</div>}</div>
 <div><label style={st.lb}>Phone *</label>
 <PhoneField value={g.phone} onChange={v=>{upg("phone",v);setErrs(p=>({...p,phone:""}));}} error={errs.phone} onError={e=>setPhoneErr(e)} st={st}/>
 </div>
