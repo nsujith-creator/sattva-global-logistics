@@ -12,7 +12,7 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 <div style={{minWidth:0}}>
 <div style={{fontSize:11,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:2,marginBottom:16,lineHeight:1.5}}>International Freight Forwarding from Mumbai</div>
 <h1 style={st.h1}>Mumbai's Most Reliable <span style={{color:B.primary}}>Middle East, Red Sea & Africa</span> Freight Forwarder</h1>
-<p style={{...st.bd,fontSize:m?15:17,marginTop:20,maxWidth:500}}>20+ years of export forwarding experience. FCL shipments from JNPT, Mundra, Chennai and Cochin to the Gulf, Red Sea and Africa â€” with documentation accuracy your buyers depend on.</p>
+<p style={{...st.bd,fontSize:m?15:17,marginTop:20,maxWidth:500}}>20+ years of export forwarding experience. FCL shipments from JNPT, Mundra, Chennai and Cochin to the Gulf, Red Sea and Africa — with documentation accuracy your buyers depend on.</p>
 <div style={{display:"flex",gap:12,marginTop:32,flexWrap:"wrap"}}>
 <button onClick={()=>go("/quote")} style={{...st.bp,fontSize:m?13:14}}>Get a Freight Quote <I.Ar/></button>
 <button onClick={()=>go("/testimonials")} style={{...st.bs,fontSize:m?13:14}}>Client Stories</button>
@@ -24,11 +24,11 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 {!m&&<div style={{display:"flex",justifyContent:"center"}}>
 <div style={{width:400,height:400,borderRadius:"50%",background:`linear-gradient(135deg,${B.primary}10,${B.accent}10)`,display:"flex",alignItems:"center",justifyContent:"center"}}>
 <div style={{width:300,height:300,borderRadius:"50%",background:`linear-gradient(135deg,${B.primary}16,${B.accent}16)`,display:"flex",alignItems:"center",justifyContent:"center"}}>
-<div style={{textAlign:"center"}}><svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1" opacity=".5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><div style={{fontSize:13,fontWeight:600,color:B.primary,marginTop:6}}>Mumbai â†’ Middle East Â· Africa</div></div>
+<div style={{textAlign:"center"}}><svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1" opacity=".5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><div style={{fontSize:13,fontWeight:600,color:B.primary,marginTop:6}}>Mumbai → Middle East · Africa</div></div>
 </div></div></div>}
 </div></section>
 
-{/* â”€â”€ Trade Lane Map with Transit Times â”€â”€ */}
+{/* Trade lane map with transit times */}
 <section style={{background:B.dark,padding:m?"48px 20px":"64px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
 <div style={{textAlign:"center",marginBottom:40}}>
 <div style={{fontSize:12,fontWeight:600,color:B.accent,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Trade Lanes We Serve</div>
@@ -36,9 +36,9 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 </div>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(3,1fr)",gap:16}}>
 {[
-{region:"Middle East & Upper Gulf",color:B.accent,lanes:[["JNPT â†’ Jebel Ali","Direct Â· 8â€“10 days"],["Mundra â†’ Jebel Ali","Direct Â· 7â€“9 days"],["JNPT â†’ Dammam","Direct Â· 10â€“12 days"],["JNPT â†’ Jeddah","Direct Â· 12â€“14 days"],["Mundra â†’ Sohar","Direct Â· 8â€“10 days"]]},
-{region:"Red Sea & East Africa",color:"#10b981",lanes:[["JNPT â†’ Mombasa","Direct Â· 14â€“16 days"],["Mundra â†’ Mombasa","Direct Â· 14â€“16 days"],["JNPT â†’ Dar es Salaam","Direct Â· 16â€“18 days"],["JNPT â†’ Port Sudan","Via hub Â· 18â€“22 days"],["JNPT â†’ Djibouti","Via hub Â· 16â€“20 days"]]},
-{region:"Southern & West Africa",color:"#f59e0b",lanes:[["JNPT â†’ Durban","Direct Â· 18â€“22 days"],["JNPT â†’ Lagos","Via hub Â· 22â€“26 days"],["Mundra â†’ Lagos","Via hub Â· 22â€“26 days"],["JNPT â†’ Tema (Ghana)","Via hub Â· 24â€“28 days"],["JNPT â†’ Maputo","Via hub Â· 20â€“24 days"]]},
+{region:"Middle East & Upper Gulf",color:B.accent,lanes:[["JNPT → Jebel Ali","Direct · 8–10 days"],["Mundra → Jebel Ali","Direct · 7–9 days"],["JNPT → Dammam","Direct · 10–12 days"],["JNPT → Jeddah","Direct · 12–14 days"],["Mundra → Sohar","Direct · 8–10 days"]]},
+{region:"Red Sea & East Africa",color:"#10b981",lanes:[["JNPT → Mombasa","Direct · 14–16 days"],["Mundra → Mombasa","Direct · 14–16 days"],["JNPT → Dar es Salaam","Direct · 16–18 days"],["JNPT → Port Sudan","Via hub · 18–22 days"],["JNPT → Djibouti","Via hub · 16–20 days"]]},
+{region:"Southern & West Africa",color:"#f59e0b",lanes:[["JNPT → Durban","Direct · 18–22 days"],["JNPT → Lagos","Via hub · 22–26 days"],["Mundra → Lagos","Via hub · 22–26 days"],["JNPT → Tema (Ghana)","Via hub · 24–28 days"],["JNPT → Maputo","Via hub · 20–24 days"]]},
 ].map((r,i)=>(
 <div key={i} style={{background:"rgba(255,255,255,.05)",borderRadius:12,padding:24,border:`1px solid rgba(255,255,255,.1)`}}>
 <div style={{fontSize:11,fontWeight:700,color:r.color,textTransform:"uppercase",letterSpacing:2,marginBottom:16}}>{r.region}</div>
@@ -51,7 +51,7 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 </div>
 </div></section>
 
-{/* â”€â”€ Recent Shipments â”€â”€ */}
+{/* Recent shipments */}
 <section style={{background:B.g1}}><div style={st.sec}>
 <div style={{textAlign:"center",marginBottom:40}}>
 <div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Shipment Activity</div>
@@ -60,12 +60,12 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 </div>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":m?"1fr":"repeat(3,1fr)",gap:16}}>
 {[
-{cargo:"Readymade Garments",route:"JNPT â†’ Jeddah",eq:"2 Ã— 40HC",transit:"Direct Â· 12 days",tag:"Textiles"},
-{cargo:"Pharma API / Chemicals",route:"JNPT â†’ Mombasa",eq:"7 Ã— 20GP",transit:"Direct Â· 15 days",tag:"Pharmaceuticals"},
-{cargo:"Engineering Goods",route:"JNPT â†’ Dammam",eq:"3 Ã— 40HC",transit:"Direct Â· 11 days",tag:"Engineering"},
-{cargo:"Ceramic Tiles",route:"Mundra â†’ Jebel Ali",eq:"6 Ã— 40HC",transit:"Direct Â· 8 days",tag:"Building Materials"},
-{cargo:"Food Products / FMCG",route:"Mundra â†’ Mombasa",eq:"4 Ã— 20GP",transit:"Direct Â· 14 days",tag:"Food & FMCG"},
-{cargo:"Auto Components",route:"Chennai â†’ Durban",eq:"2 Ã— 40HC",transit:"Direct Â· 18 days",tag:"Automotive"},
+{cargo:"Readymade Garments",route:"JNPT → Jeddah",eq:"2 × 40HC",transit:"Direct · 12 days",tag:"Textiles"},
+{cargo:"Pharma API / Chemicals",route:"JNPT → Mombasa",eq:"7 × 20GP",transit:"Direct · 15 days",tag:"Pharmaceuticals"},
+{cargo:"Engineering Goods",route:"JNPT → Dammam",eq:"3 × 40HC",transit:"Direct · 11 days",tag:"Engineering"},
+{cargo:"Ceramic Tiles",route:"Mundra → Jebel Ali",eq:"6 × 40HC",transit:"Direct · 8 days",tag:"Building Materials"},
+{cargo:"Food Products / FMCG",route:"Mundra → Mombasa",eq:"4 × 20GP",transit:"Direct · 14 days",tag:"Food & FMCG"},
+{cargo:"Auto Components",route:"Chennai → Durban",eq:"2 × 40HC",transit:"Direct · 18 days",tag:"Automotive"},
 ].map((s,i)=>(
 <div key={i} style={{...st.cd,padding:20}}>
 <div style={{fontSize:10,fontWeight:700,color:B.primary,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8,background:`${B.primary}10`,display:"inline-block",padding:"3px 8px",borderRadius:4}}>{s.tag}</div>
@@ -79,17 +79,17 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 </div>
 </div></section>
 
-{/* â”€â”€ Core Services â”€â”€ */}
+{/* Core services */}
 <section><div style={st.sec}>
 <h2 style={st.h2}>Core Services</h2><p style={st.sub}>Full-service export logistics for Indian exporters shipping to the Gulf, Red Sea and Africa.</p>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:28,marginTop:48}}>
-{[{icon:<I.Sh/>,t:"Export FCL Ocean Freight",d:"Full container load from JNPT, Mundra, Chennai and Cochin. Competitive rates on weekly services to the Gulf and Africa."},{icon:<I.Sd/>,t:"Customs Clearance & Documentation",d:"Expert handling of export documentation, customs procedures, and regulatory compliance â€” zero BL amendments."},{icon:<I.Gl/>,t:"End-to-End Freight Forwarding",d:"Complete logistics from factory to destination â€” inland transport, port handling, and destination delivery coordination."},{icon:<I.Tr/>,t:"Inland Transportation",d:"Factory-to-port pickup across Maharashtra, Gujarat and Tamil Nadu. GPS-tracked, timely vessel cut-off delivery."}].map((x,i)=>(
+{[{icon:<I.Sh/>,t:"Export FCL Ocean Freight",d:"Full container load from JNPT, Mundra, Chennai and Cochin. Competitive rates on weekly services to the Gulf and Africa."},{icon:<I.Sd/>,t:"Customs Clearance & Documentation",d:"Expert handling of export documentation, customs procedures, and regulatory compliance — zero BL amendments."},{icon:<I.Gl/>,t:"End-to-End Freight Forwarding",d:"Complete logistics from factory to destination — inland transport, port handling, and destination delivery coordination."},{icon:<I.Tr/>,t:"Inland Transportation",d:"Factory-to-port pickup across Maharashtra, Gujarat and Tamil Nadu. GPS-tracked, timely vessel cut-off delivery."}].map((x,i)=>(
 <div key={i} style={{...st.cd,textAlign:"center",padding:"40px 28px"}}>
 <div style={{width:64,height:64,borderRadius:14,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}>{x.icon}</div>
 <h3 style={{...st.h3,fontSize:18,marginBottom:10}}>{x.t}</h3><p style={{...st.bd,fontSize:14}}>{x.d}</p></div>))}
 </div></div></section>
 
-{/* â”€â”€ Carrier Network â”€â”€ */}
+{/* Carrier network */}
 <section style={{background:B.g1}}><div style={st.sec}>
 <div style={{textAlign:"center",marginBottom:40}}>
 <div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Carrier Network</div>
@@ -101,10 +101,10 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 </div>
 </div></section>
 
-{/* â”€â”€ Why Exporters Choose Sattva â”€â”€ */}
+{/* Why exporters choose Sattva */}
 <section><div style={st.sec}>
 <h2 style={st.h2}>Why Exporters Choose Sattva</h2>
-<p style={st.sub}>Precision, compliance, and long-term reliability â€” not just freight rates.</p>
+<p style={st.sub}>Precision, compliance, and long-term reliability — not just freight rates.</p>
 <p style={{textAlign:"center",fontStyle:"italic",color:B.g7,marginTop:20,fontSize:14}}>"In international logistics, small mistakes cause big delays. Our systems prevent them."</p>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:0,marginTop:40,borderRadius:14,overflow:"hidden",boxShadow:"0 4px 20px rgba(0,0,0,.05)"}}>
 <div style={{background:`${B.primary}05`,padding:36}}>
@@ -118,9 +118,9 @@ export function HomePage({ st, I }){const go=useNavigate();const m=useIsMobile()
 <CTA headline="Experience Logistics Done Right" st={st} I={I}/>
 </div></section>
 
-{/* â”€â”€ Process â”€â”€ */}
+{/* Process */}
 <section style={{background:B.g1}}><div style={st.sec}>
-<h2 style={st.h2}>Our Process â€” Step-by-Step Export Flow</h2>
+<h2 style={st.h2}>Our Process — Step-by-Step Export Flow</h2>
 <p style={st.sub}>A structured approach from booking to departure.</p>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:28,marginTop:48}}>
 {[{icon:<I.Cb/>,n:"01",t:"Assessment",d:"Cargo details, destination & planning."},{icon:<I.Sh/>,n:"02",t:"Booking",d:"Space secured with reliable carriers."},{icon:<I.Dc/>,n:"03",t:"Documentation",d:"Export docs verified for compliance."},{icon:<I.Tr/>,n:"04",t:"Pickup",d:"Safe movement to port/ICD."},{icon:<I.Sd/>,n:"05",t:"Customs",d:"Efficient clearance procedures."},{icon:<I.Gl/>,n:"06",t:"Departure",d:"On-schedule with tracking."}].map((x,i)=>(

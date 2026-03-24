@@ -28,26 +28,26 @@ import { st } from "./styles/sharedStyles";
 import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
-/* â•â•â• EMAILJS CONFIG â•â•â• */
-/* â•â•â• RESPONSIVE HOOK â•â•â• */
-/* â•â•â• PACKING TYPES â•â•â• */
-/* â•â•â• BRAND â€” Sattva Brand Palette â•â•â• */
-/* â•â•â• PORT DATA â•â•â• */
-/* â•â•â• GOOGLE SHEETS BACKEND â•â•â• */
-/* â•â•â• ICONS â•â•â• */
-/* â•â•â• STYLES â•â•â• */
-/* â•â•â• NAV â•â•â• */
-/* â•â•â• FOOTER â•â•â• */
-/* â•â•â• CTA â•â•â• */
-/* â•â•â• HOME â•â•â• */
-/* â•â•â• ABOUT â•â•â• */
-/* â•â•â• SERVICES â•â•â• */
-/* â•â•â• INDUSTRIES â•â•â• */
-/* â•â•â• KNOWLEDGE â•â•â• */
-/* â•â•â• TESTIMONIALS â•â•â• */
-/* â•â•â• COUNTRY PHONE DATA â•â•â• */
-/* â•â•â• RATE GATE â€” email OTP verification â•â•â• */
-/* â•â•â• QUOTE PAGE â€” with instant rate lookup â•â•â• */
+/* EmailJS config */
+/* Responsive hook */
+/* Packing types */
+/* Brand: Sattva palette */
+/* Port data */
+/* Google Sheets backend */
+/* Icons */
+/* Styles */
+/* Nav */
+/* Footer */
+/* CTA */
+/* Home */
+/* About */
+/* Services */
+/* Industries */
+/* Knowledge */
+/* Testimonials */
+/* Country phone data */
+/* Rate gate: email OTP verification */
+/* Quote page: instant rate lookup */
 function QuotePage({rates}){const go=useNavigate();
 const m=useIsMobile();
 const[f,setF]=useState({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});
@@ -81,7 +81,7 @@ useEffect(()=>{
       name:gateUser.name,email:gateUser.email,
       company:gateUser.company||"(not provided)",phone:gateUser.phone,
       pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,
-      eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"â€”",note:"Route lookup"
+      eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Route lookup"
     });
   }
 },[rk,gateUser]);
@@ -116,7 +116,7 @@ const handleSubmit=async()=>{
     name:gateUser.name,email:gateUser.email,
     company:gateUser.company||"(not provided)",phone:gateUser.phone,
     pol:params.pol,pod:params.pod,eq:f.eq,
-    found:rate?"1":"0",total:rate?rate.total:"â€”",note:"Quote submitted"
+    found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"
   });
   try{
     await emailjs.send(EJS.serviceId,EJS.templateId,params,EJS.publicKey);
@@ -129,7 +129,7 @@ const handleSubmit=async()=>{
   }
   finally{setSending(false);}
 };
-const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} â†’ POD: ${f.pod}\nCargo: ${f.cargo} | ${f.eq} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
+const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} → POD: ${f.pod}\nCargo: ${f.cargo} | ${f.eq} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
 const resetForm=()=>{setDone(false);setF({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});setFiles([]);setErrs({});setGateUser(null);clearSession();refreshCaptcha();};
 if(done)return(<div style={{paddingTop:68,minHeight:"80vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"68px 24px 40px"}}><div style={{textAlign:"center",maxWidth:480}}><div style={{width:72,height:72,borderRadius:"50%",background:B.gBg,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h2 style={{...st.h2,fontSize:26}}>Quote Request Received!</h2><p style={{...st.bd,marginTop:14}}>Our team will respond within 24 hours with a competitive quotation.</p><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:28}}><button onClick={resetForm} style={st.bp}>Submit Another</button><button onClick={()=>go("/")} style={st.bs}>Back to Home</button></div></div></div>);
 return(
@@ -137,7 +137,7 @@ return(
 <section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
 <div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Get a Quote</div>
 <h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Request a <span style={{color:B.primary}}>Freight Quote</span></h1>
-<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:600}}>Fill in details â€” if rates are loaded for your route, you'll see instant pricing.</p>
+<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:600}}>Fill in details — if rates are loaded for your route, you'll see instant pricing.</p>
 </div></section>
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
 <div style={{...st.cd,padding:m?20:36}}>
@@ -151,7 +151,7 @@ return(
 <div><label style={st.lb}>Containers</label><input type="number" style={st.inp} value={f.vol} onChange={e=>up("vol",e.target.value)} min="1"/></div>
 </div>
 {isOTFR&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:`${B.primary}05`,border:`1.5px solid ${B.primary}22`}}>
-<h4 style={{fontSize:14,fontWeight:700,color:B.primary,marginBottom:16}}>ðŸ“ Special Cargo Details â€” Required for {f.eq}</h4>
+<h4 style={{fontSize:14,fontWeight:700,color:B.primary,marginBottom:16}}>📐 Special Cargo Details — Required for {f.eq}</h4>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr 1fr",gap:14,marginBottom:16}}>
 <div><label style={st.lb}>Length (m) *</label><input type="number" step="0.01" style={{...st.inp,borderColor:errs.dims?B.red:undefined}} value={f.dimL} onChange={e=>{up("dimL",e.target.value);setErrs(p=>({...p,dims:""}));}} placeholder="e.g. 4.5"/></div>
 <div><label style={st.lb}>Width (m) *</label><input type="number" step="0.01" style={{...st.inp,borderColor:errs.dims?B.red:undefined}} value={f.dimW} onChange={e=>{up("dimW",e.target.value);setErrs(p=>({...p,dims:""}));}} placeholder="e.g. 2.1"/></div>
@@ -159,22 +159,22 @@ return(
 </div>
 {errs.dims&&<div style={{fontSize:11,color:B.red,marginBottom:10}}>{errs.dims}</div>}
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
-<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional â€” max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.green,marginTop:6}}>âœ“ {files.length} file(s) selected: {files.map(x=>x.name).join(", ")}</div>}</div>
+<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.green,marginTop:6}}>✓ {files.length} file(s) selected: {files.map(x=>x.name).join(", ")}</div>}</div>
 </div>)}
 {rk&&!gateUser&&<RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>}
-{gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`Â· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
+{gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
 {rk&&gateUser&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:rate?B.gBg:B.aBg,border:`1px solid ${rate?B.green:B.amber}22`}}>
-{rate?(<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><h4 style={{fontSize:15,fontWeight:700,color:B.green,margin:0}}>âœ“ Instant Rate Available</h4>{rate.carrier&&<CarrierBadge name={rate.carrier}/>}</div><span style={{fontSize:12,color:B.g5}}>Valid: {rate.validFrom||"â€”"} to {rate.validTo||"â€”"}</span></div>
+{rate?(<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><h4 style={{fontSize:15,fontWeight:700,color:B.green,margin:0}}>✓ Instant Rate Available</h4>{rate.carrier&&<CarrierBadge name={rate.carrier}/>}</div><span style={{fontSize:12,color:B.g5}}>Valid: {rate.validFrom||"—"} to {rate.validTo||"—"}</span></div>
 <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}}>{[["Ocean Freight",rate.oceanFreight],["THC Origin",rate.thcOrigin],["THC Dest",rate.thcDest],["BL Fee",rate.blFee],["Surcharges",rate.surcharges||0],...(rate.extraItems||[]).map(x=>[x.label,parseFloat(x.value)||0])].map(([lb,v])=><div key={lb} style={{background:"#fff",padding:8,borderRadius:8,textAlign:"center"}}><div style={{fontSize:10,color:B.g5}}>{lb}</div><div style={{fontSize:15,fontWeight:700,color:B.dark}}>${v}</div></div>)}<div style={{background:B.primary,padding:8,borderRadius:8,textAlign:"center"}}><div style={{fontSize:10,color:"#fff",opacity:.8}}>Per Container</div><div style={{fontSize:15,fontWeight:700,color:"#fff"}}>${rate.total}</div></div></div>
 {qty>1&&<div style={{background:"#fff",padding:10,borderRadius:8,textAlign:"center",marginBottom:8}}><span style={{fontSize:13,color:B.g5}}>Total {qty} ctrs: </span><span style={{fontSize:18,fontWeight:800,color:B.primary}}>${(rate.total*qty).toLocaleString()} USD</span></div>}
 <p style={{fontSize:11,color:B.g5,marginTop:4,fontStyle:"italic"}}>* Indicative. Final quote subject to space & surcharges at booking.</p></>
-):(<div><h4 style={{fontSize:14,fontWeight:600,color:B.amber,margin:0,marginBottom:6}}>Rate not pre-loaded for this route</h4><p style={{fontSize:13,color:B.g5,margin:0}}>Submit your request â€” custom quote within 24 hours.</p></div>)}</div>)}
+):(<div><h4 style={{fontSize:14,fontWeight:600,color:B.amber,margin:0,marginBottom:6}}>Rate not pre-loaded for this route</h4><p style={{fontSize:13,color:B.g5,margin:0}}>Submit your request — custom quote within 24 hours.</p></div>)}</div>)}
 <div style={{marginTop:20}}><label style={st.lb}>Additional Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Special requirements…"/></div>
 <div style={{marginTop:20,padding:16,borderRadius:10,background:B.g1,display:"flex",alignItems:"center",gap:14,flexWrap:"wrap"}}>
 <label style={{...st.lb,margin:0}}>Verification *</label>
 <span style={{fontSize:15,fontWeight:700,color:B.dark}}>{captcha.a} + {captcha.b} = ?</span>
 <input type="number" style={{...st.inp,width:80,borderColor:errs.captcha?B.red:undefined}} value={f.captchaAns} onChange={e=>{up("captchaAns",e.target.value);setErrs(p=>({...p,captcha:""}));}} placeholder="Answer"/>
-<button onClick={refreshCaptcha} title="New question" style={{background:"none",border:"none",cursor:"pointer",fontSize:20,color:B.g5,padding:"2px 6px"}}>â†»</button>
+<button onClick={refreshCaptcha} title="New question" style={{background:"none",border:"none",cursor:"pointer",fontSize:20,color:B.g5,padding:"2px 6px"}}>↻</button>
 {errs.captcha&&<span style={{fontSize:11,color:B.red}}>{errs.captcha}</span>}
 </div>
 {sendErr&&<div style={{marginTop:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
@@ -189,7 +189,7 @@ return(
 <div style={st.cd}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Why Get a Quote?</h4>{["Multi-carrier rates","Transparent breakdown","24hr response","No hidden charges","Expert routing advice"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}><div style={{flexShrink:0,marginTop:2}}><I.Ck/></div><span style={{fontSize:13,color:B.g7}}>{t}</span></div>)}</div>
 </div>
 </div></div></div>);}
-/* â•â•â• ADMIN PANEL â€” Rate Management Backend â•â•â• */
+/* Admin panel: rate management backend */
 function AdminPage({rates,setRates}){const go=useNavigate();
 const[authed,setAuthed]=useState(false);
 const[pin,setPin]=useState("");
@@ -226,18 +226,18 @@ const ok=await saveRateAPI(key,entry);
 if(ok){
   const updated={...rates,[key]:entry};
   setRates(updated);
-  setMsg(`âœ“ Saved to Google Sheets: ${key} â€” $${entry.total}/ctr`);
+  setMsg(`✓ Saved to Google Sheets: ${key} — $${entry.total}/ctr`);
   setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});
   setExtraItems([]);
   setEditKey(null);setTab("rates");
-}else setMsg("âš  Save failed. Check your SCRIPT_URL in App.jsx.");};
+}else setMsg("⚠ Save failed. Check your SCRIPT_URL in App.jsx.");};
 
 const del=async(key)=>{
   setMsg("Deleting…");
   await deleteRateAPI(key);
   const u={...rates};delete u[key];
   setRates(u);
-  setMsg(`âœ“ Deleted: ${key}`);
+  setMsg(`✓ Deleted: ${key}`);
 };;
 
 const edit=(key)=>{
@@ -258,7 +258,7 @@ const importBulk=async()=>{
     }
     const m={...rates,...p};
     setRates(m);
-    setMsg(`âœ“ Imported ${count}/${Object.keys(p).length} rates to Google Sheets.`);
+    setMsg(`✓ Imported ${count}/${Object.keys(p).length} rates to Google Sheets.`);
     setBulk("");
   }catch{setMsg("Invalid JSON.");}
 };;
@@ -281,20 +281,20 @@ if(!authed) return(
 {pinErr&&<p style={{color:B.red,fontSize:13,marginTop:8}}>{pinErr}</p>}
 <button onClick={doLogin} style={{...st.bp,marginTop:16,width:"100%",justifyContent:"center"}}>Unlock</button>
 </>)}
-<button onClick={()=>go("/")} style={{...st.bs,marginTop:12,width:"100%",justifyContent:"center",fontSize:13}}>â† Website</button>
+<button onClick={()=>go("/")} style={{...st.bs,marginTop:12,width:"100%",justifyContent:"center",fontSize:13}}>← Website</button>
 </div></div>);
 
 return(
 <div style={{paddingTop:68,minHeight:"100vh",background:B.g1}}>
 <div style={{maxWidth:1200,margin:"0 auto",padding:"32px 24px"}}>
 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:28}}>
-<div><h1 style={{fontSize:26,fontWeight:700,color:B.dark,fontFamily:FF,margin:0}}>Rate Management</h1><p style={{fontSize:13,color:B.g5,marginTop:4}}>{Object.keys(rates).length} rates Â· Auto-saved</p></div>
+<div><h1 style={{fontSize:26,fontWeight:700,color:B.dark,fontFamily:FF,margin:0}}>Rate Management</h1><p style={{fontSize:13,color:B.g5,marginTop:4}}>{Object.keys(rates).length} rates · Auto-saved</p></div>
 <div style={{display:"flex",gap:10}}>
 <button onClick={exportRates} style={{...st.bs,padding:"8px 16px",fontSize:12}}><I.Dw/> Export</button>
-<button onClick={()=>go("/")} style={{...st.bs,padding:"8px 16px",fontSize:12}}>â† Site</button>
+<button onClick={()=>go("/")} style={{...st.bs,padding:"8px 16px",fontSize:12}}>← Site</button>
 </div></div>
 
-{msg&&<div style={{padding:"10px 16px",borderRadius:8,background:msg.startsWith("âœ“")?B.gBg:B.aBg,color:msg.startsWith("âœ“")?B.green:B.amber,fontSize:13,marginBottom:16,fontWeight:500}}>{msg}</div>}
+{msg&&<div style={{padding:"10px 16px",borderRadius:8,background:msg.startsWith("✓")?B.gBg:B.aBg,color:msg.startsWith("✓")?B.green:B.amber,fontSize:13,marginBottom:16,fontWeight:500}}>{msg}</div>}
 
 <div style={{display:"flex",gap:4,marginBottom:24}}>
 {[["rates","All Rates"],["add",editKey?"Edit Rate":"Add Rate"],["bulk","Bulk Import"]].map(([id,lb])=>
@@ -318,14 +318,14 @@ return(
 <td style={{padding:"10px 12px",fontWeight:600,color:B.dark}}>{pol}</td>
 <td style={{padding:"10px 12px"}}>{pn(pod)}<br/><span style={{fontSize:11,color:B.g5}}>{pod}</span></td>
 <td style={{padding:"10px 12px"}}>{eq}</td>
-<td style={{padding:"10px 12px"}}>{r.carrier?<CarrierBadge name={r.carrier} size="sm"/>:<span style={{color:B.g5,fontSize:11}}>â€”</span>}</td>
+<td style={{padding:"10px 12px"}}>{r.carrier?<CarrierBadge name={r.carrier} size="sm"/>:<span style={{color:B.g5,fontSize:11}}>—</span>}</td>
 <td style={{padding:"10px 12px"}}>${r.oceanFreight}</td>
 <td style={{padding:"10px 12px"}}>${r.thcOrigin}</td>
 <td style={{padding:"10px 12px"}}>${r.thcDest}</td>
 <td style={{padding:"10px 12px"}}>${r.blFee}</td>
 <td style={{padding:"10px 12px"}}>${r.surcharges||0}</td>
 <td style={{padding:"10px 12px",fontWeight:700,color:B.primary}}>${r.total}</td>
-<td style={{padding:"10px 12px",fontSize:11,color:B.g5,whiteSpace:"nowrap"}}>{r.validFrom||"â€”"}<br/>{r.validTo||"â€”"}</td>
+<td style={{padding:"10px 12px",fontSize:11,color:B.g5,whiteSpace:"nowrap"}}>{r.validFrom||"—"}<br/>{r.validTo||"—"}</td>
 <td style={{padding:"10px 12px",whiteSpace:"nowrap"}}>
 <button onClick={()=>edit(key)} style={{background:"none",border:"none",cursor:"pointer",color:B.primary,padding:4,marginRight:4}}><I.Ed/></button>
 <button onClick={()=>del(key)} style={{background:"none",border:"none",cursor:"pointer",color:B.red,padding:4}}><I.Dl/></button>
@@ -361,7 +361,7 @@ return(
 <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 140px 36px",gap:10,marginBottom:10,alignItems:"center"}}>
 <input style={{...st.inp}} value={x.label} onChange={e=>upExtra(i,"label",e.target.value)} placeholder="e.g. CAF, PSS, AMS Fee..."/>
 <input type="number" style={{...st.inp}} value={x.value} onChange={e=>upExtra(i,"value",e.target.value)} placeholder="0"/>
-<button onClick={()=>removeExtraItem(i)} style={{background:"none",border:`1px solid ${B.red}44`,borderRadius:6,cursor:"pointer",color:B.red,fontSize:16,height:42,display:"flex",alignItems:"center",justifyContent:"center"}}>Ã—</button>
+<button onClick={()=>removeExtraItem(i)} style={{background:"none",border:`1px solid ${B.red}44`,borderRadius:6,cursor:"pointer",color:B.red,fontSize:16,height:42,display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
 </div>
 ))}
 </div>)}
@@ -397,7 +397,7 @@ return(
 </div>)}
 </div></div>);}
 
-/* â•â•â• APP â•â•â• */
+/* App */
 export default function App(){
 const[rates,setRates]=useState({});
 useEffect(()=>{lr().then(setRates);},[]);
@@ -419,7 +419,7 @@ return(
 </Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
 </Routes>
-{/* WhatsApp float â€” shown on all non-admin routes */}
+{/* WhatsApp float shown on all non-admin routes */}
 <Routes><Route path="/*" element={
 <a href={WA_FLOAT} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp"
   style={{position:"fixed",bottom:28,right:28,zIndex:999,width:56,height:56,borderRadius:"50%",background:"#25D366",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(37,211,102,.5)",textDecoration:"none",transition:"transform .2s"}}

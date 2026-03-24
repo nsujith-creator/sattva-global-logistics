@@ -1,9 +1,9 @@
 ﻿export const B = {
-  primary:"#024aab",   /* Sattva Blue â€” buttons, headings, links */
-  pl:"#233dff",        /* Bright blue â€” hover accents */
-  pd:"#12229d",        /* Deep blue â€” pressed states */
-  accent:"#5cb6f9",    /* Sky blue â€” info, highlights */
-  dark:"#050a30",      /* Deep navy â€” footer, body text */
+  primary:"#024aab",   /* Sattva Blue — buttons, headings, links */
+  pl:"#233dff",        /* Bright blue — hover accents */
+  pd:"#12229d",        /* Deep blue — pressed states */
+  accent:"#5cb6f9",    /* Sky blue — info, highlights */
+  dark:"#050a30",      /* Deep navy — footer, body text */
   g9:"#0d1a4a",        /* Near-navy */
   g7:"#334155",        /* Slate grey text */
   g5:"#64748b",        /* Muted text */

@@ -68,7 +68,7 @@ const verifyOtp=()=>{
   if(!otp.trim()){setOtpErr("Enter the OTP");return;}
   if(otp.trim()!==sentOtp){setOtpErr("Incorrect OTP. Please try again.");return;}
   if(Date.now()>expiry){setOtpErr("OTP expired. Please request a new one.");setStep("form");return;}
-  logSearchAPI({name:g.name,email:g.email,company:g.company||"(not provided)",phone:g.phone,pol:"â€”",pod:"â€”",eq:"â€”",found:"0",total:"â€”",note:"Gate unlock via OTP"});
+  logSearchAPI({name:g.name,email:g.email,company:g.company||"(not provided)",phone:g.phone,pol:"—",pod:"—",eq:"—",found:"0",total:"—",note:"Gate unlock via OTP"});
   onUnlock(g);
 };
 
@@ -88,9 +88,9 @@ if(step==="form") return(
 </div>
 </div>
 <button onClick={sendOtp} disabled={sending} style={{...st.bp,marginTop:18,opacity:sending?.7:1}}>
-{sending?"Sending OTP…":"Send Verification Code â†’"}
+{sending?"Sending OTP…":"Send Verification Code →"}
 </button>
-<p style={{fontSize:11,color:B.g5,marginTop:10}}>ðŸ”’ Your details are kept confidential and used only for rate access purposes.</p>
+<p style={{fontSize:11,color:B.g5,marginTop:10}}>🔐 Your details are kept confidential and used only for rate access purposes.</p>
 </div>);
 
 return(
@@ -107,10 +107,10 @@ A 6-digit code was sent to <strong>{g.email}</strong>. Enter it below to unlock 
 <label style={st.lb}>Enter 6-digit OTP *</label>
 <input type="number" maxLength={6} style={{...st.inp,fontSize:24,fontWeight:700,letterSpacing:8,textAlign:"center",borderColor:otpErr?B.red:undefined}}
   value={otp} onChange={e=>{setOtp(e.target.value.slice(0,6));setOtpErr("");}}
-  placeholder="â€”â€”â€”â€”â€”â€”"/>
+  placeholder="——————"/>
 {otpErr&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{otpErr}</div>}
 </div>
-<button onClick={verifyOtp} style={{...st.bp,marginTop:22,whiteSpace:"nowrap"}}>Verify & Unlock â†’</button>
+<button onClick={verifyOtp} style={{...st.bp,marginTop:22,whiteSpace:"nowrap"}}>Verify & Unlock →</button>
 </div>
 <div style={{marginTop:14,display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
 <span style={{fontSize:12,color:B.g5}}>Didn't receive it? Check spam folder.</span>
@@ -118,7 +118,7 @@ A 6-digit code was sent to <strong>{g.email}</strong>. Enter it below to unlock 
   ?<span style={{fontSize:12,color:B.g5}}>Resend in {resendCooldown}s</span>
   :<button onClick={sendOtp} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:B.primary,fontWeight:600,padding:0}}>Resend OTP</button>
 }
-<button onClick={()=>{setStep("form");setOtp("");setOtpErr("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:B.g5,padding:0}}>â† Change email</button>
+<button onClick={()=>{setStep("form");setOtp("");setOtpErr("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:B.g5,padding:0}}>← Change email</button>
 </div>
 </div>);
 }

@@ -11,7 +11,7 @@ export function AboutPage({ st, I }){const go=useNavigate();return(
 </div></section>
 <div style={st.sec}>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:28}}>
-{[{t:"Our Mission",d:"Documentation accuracy, transparent pricing, and proactive coordination â€” delivering freight forwarding that Indian exporters can depend on."},{t:"Mumbai Advantage",d:"Direct JNPT/Nhava Sheva access, strong carrier relationships, and deep Indian export regulation expertise built over 20+ years."},{t:"IMEA Network",d:"Partnerships across 40+ destinations in the Middle East, Red Sea corridor and Africa with shipping lines, overseas agents, and customs brokers."},{t:"Compliance First",d:"Systems designed to prevent documentation errors before they happen â€” zero BL amendments is our standard, not our target."}].map((x,i)=>
+{[{t:"Our Mission",d:"Documentation accuracy, transparent pricing, and proactive coordination — delivering freight forwarding that Indian exporters can depend on."},{t:"Mumbai Advantage",d:"Direct JNPT/Nhava Sheva access, strong carrier relationships, and deep Indian export regulation expertise built over 20+ years."},{t:"IMEA Network",d:"Partnerships across 40+ destinations in the Middle East, Red Sea corridor and Africa with shipping lines, overseas agents, and customs brokers."},{t:"Compliance First",d:"Systems designed to prevent documentation errors before they happen — zero BL amendments is our standard, not our target."}].map((x,i)=>
 <div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}><h3 style={{...st.h3,marginBottom:10}}>{x.t}</h3><p style={{...st.bd,fontSize:14}}>{x.d}</p></div>)}
 </div>
 <CTA headline="Partner with a Team That Delivers" st={st} I={I}/>

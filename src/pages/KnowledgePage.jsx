@@ -22,32 +22,32 @@ const incoterms=[
 ];
 
 const containers=[
-{type:"20GP",name:"20' Standard",dim:"L: 5.9m Ã— W: 2.35m Ã— H: 2.39m",door:"W: 2.34m Ã— H: 2.28m",cap:"33.2 CBM / 28,200 kg",desc:"Most common. Ideal for heavy cargo like steel, chemicals, machinery, rice bags. Max payload ~21.7 tonnes due to road weight limits in India.",cargo:"Rice, chemicals, steel coils, machinery parts, cement bags"},
-{type:"40GP",name:"40' Standard",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.39m",door:"W: 2.34m Ã— H: 2.28m",cap:"67.7 CBM / 26,680 kg",desc:"Double the length of 20GP. Good for voluminous goods with moderate weight. Standard for most FCL shipments from India.",cargo:"Textiles, garments, furniture, auto parts, packaged food"},
-{type:"40HC",name:"40' High Cube",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.69m",door:"W: 2.34m Ã— H: 2.58m",cap:"76.3 CBM / 26,460 kg",desc:"Extra 30cm height vs 40GP. Most popular for voluminous cargo. Slightly higher freight but much better cube utilization. The go-to container for Indian garment exporters.",cargo:"Garments on hangers, cotton bales, voluminous goods, furniture"},
-{type:"20RF",name:"20' Reefer",dim:"L: 5.44m Ã— W: 2.29m Ã— H: 2.27m",door:"W: 2.29m Ã— H: 2.26m",cap:"28.3 CBM / 27,400 kg",desc:"Temperature-controlled (-30Â°C to +30Â°C). Built-in refrigeration unit needs power (ship provides). Smaller internal dimensions due to insulation.",cargo:"Pharma products, frozen seafood, dairy, temperature-sensitive chemicals"},
-{type:"40RH",name:"40' Reefer HC",dim:"L: 11.56m Ã— W: 2.29m Ã— H: 2.55m",door:"W: 2.29m Ã— H: 2.44m",cap:"67.5 CBM / 26,280 kg",desc:"Large reefer with high-cube height. Standard for perishable Indian exports. Requires pre-cooling and temperature monitoring throughout transit.",cargo:"Fresh fruits (grapes, mangoes), frozen shrimp, meat, pharma, flowers"},
-{type:"20OT",name:"20' Open Top",dim:"L: 5.9m Ã— W: 2.35m Ã— H: 2.35m",door:"W: 2.34m Ã— H: 2.28m",cap:"32.5 CBM / 28,130 kg",desc:"Removable tarpaulin roof. Allows top-loading with crane. Used for tall cargo that won't fit through standard doors. Higher freight rates.",cargo:"Machinery, marble slabs, tall industrial equipment, project cargo"},
-{type:"40OT",name:"40' Open Top",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.35m",door:"W: 2.34m Ã— H: 2.28m",cap:"65.9 CBM / 26,630 kg",desc:"Longer open-top for oversized cargo. Crane-loadable. May incur Over-Height surcharges if cargo extends above container wall.",cargo:"Large machinery, long pipes, wind turbine components"},
-{type:"20FR",name:"20' Flat Rack",dim:"L: 5.62m Ã— W: 2.24m Ã— H: 2.23m",door:"Open sides",cap:"N/A / 31,250 kg",desc:"Collapsible end walls, no sides or roof. For heavy, oversized cargo. Can be stacked when empty. Requires special lashing and securing.",cargo:"Trucks, bulldozers, transformers, heavy machinery, boats"},
-{type:"40FR",name:"40' Flat Rack",dim:"L: 12.08m Ã— W: 2.42m Ã— H: 2.10m",door:"Open sides",cap:"N/A / 39,200 kg",desc:"Large flat rack for very heavy project cargo. Often used with Over-Dimensional Cargo (ODC) surcharges. Popular for Indian engineering/infrastructure exports.",cargo:"Generators, heavy vehicles, construction equipment, large fabrications"},
-{type:"ISO Tank",name:"ISO Tank Container",dim:"L: 6.06m Ã— Ã˜: 1.52m",door:"Valve openings",cap:"21,000-26,000 litres",desc:"Stainless steel tank in ISO frame for liquid bulk. Can carry hazardous and non-hazardous liquids. Temperature control options available. Reusable.",cargo:"Chemicals, food-grade oils, wine, latex, pharmaceutical liquids"},
+{type:"20GP",name:"20' Standard",dim:"L: 5.9m × W: 2.35m × H: 2.39m",door:"W: 2.34m × H: 2.28m",cap:"33.2 CBM / 28,200 kg",desc:"Most common. Ideal for heavy cargo like steel, chemicals, machinery, rice bags. Max payload ~21.7 tonnes due to road weight limits in India.",cargo:"Rice, chemicals, steel coils, machinery parts, cement bags"},
+{type:"40GP",name:"40' Standard",dim:"L: 12.03m × W: 2.35m × H: 2.39m",door:"W: 2.34m × H: 2.28m",cap:"67.7 CBM / 26,680 kg",desc:"Double the length of 20GP. Good for voluminous goods with moderate weight. Standard for most FCL shipments from India.",cargo:"Textiles, garments, furniture, auto parts, packaged food"},
+{type:"40HC",name:"40' High Cube",dim:"L: 12.03m × W: 2.35m × H: 2.69m",door:"W: 2.34m × H: 2.58m",cap:"76.3 CBM / 26,460 kg",desc:"Extra 30cm height vs 40GP. Most popular for voluminous cargo. Slightly higher freight but much better cube utilization. The go-to container for Indian garment exporters.",cargo:"Garments on hangers, cotton bales, voluminous goods, furniture"},
+{type:"20RF",name:"20' Reefer",dim:"L: 5.44m × W: 2.29m × H: 2.27m",door:"W: 2.29m × H: 2.26m",cap:"28.3 CBM / 27,400 kg",desc:"Temperature-controlled (-30°C to +30°C). Built-in refrigeration unit needs power (ship provides). Smaller internal dimensions due to insulation.",cargo:"Pharma products, frozen seafood, dairy, temperature-sensitive chemicals"},
+{type:"40RH",name:"40' Reefer HC",dim:"L: 11.56m × W: 2.29m × H: 2.55m",door:"W: 2.29m × H: 2.44m",cap:"67.5 CBM / 26,280 kg",desc:"Large reefer with high-cube height. Standard for perishable Indian exports. Requires pre-cooling and temperature monitoring throughout transit.",cargo:"Fresh fruits (grapes, mangoes), frozen shrimp, meat, pharma, flowers"},
+{type:"20OT",name:"20' Open Top",dim:"L: 5.9m × W: 2.35m × H: 2.35m",door:"W: 2.34m × H: 2.28m",cap:"32.5 CBM / 28,130 kg",desc:"Removable tarpaulin roof. Allows top-loading with crane. Used for tall cargo that won't fit through standard doors. Higher freight rates.",cargo:"Machinery, marble slabs, tall industrial equipment, project cargo"},
+{type:"40OT",name:"40' Open Top",dim:"L: 12.03m × W: 2.35m × H: 2.35m",door:"W: 2.34m × H: 2.28m",cap:"65.9 CBM / 26,630 kg",desc:"Longer open-top for oversized cargo. Crane-loadable. May incur Over-Height surcharges if cargo extends above container wall.",cargo:"Large machinery, long pipes, wind turbine components"},
+{type:"20FR",name:"20' Flat Rack",dim:"L: 5.62m × W: 2.24m × H: 2.23m",door:"Open sides",cap:"N/A / 31,250 kg",desc:"Collapsible end walls, no sides or roof. For heavy, oversized cargo. Can be stacked when empty. Requires special lashing and securing.",cargo:"Trucks, bulldozers, transformers, heavy machinery, boats"},
+{type:"40FR",name:"40' Flat Rack",dim:"L: 12.08m × W: 2.42m × H: 2.10m",door:"Open sides",cap:"N/A / 39,200 kg",desc:"Large flat rack for very heavy project cargo. Often used with Over-Dimensional Cargo (ODC) surcharges. Popular for Indian engineering/infrastructure exports.",cargo:"Generators, heavy vehicles, construction equipment, large fabrications"},
+{type:"ISO Tank",name:"ISO Tank Container",dim:"L: 6.06m × Ø: 1.52m",door:"Valve openings",cap:"21,000-26,000 litres",desc:"Stainless steel tank in ISO frame for liquid bulk. Can carry hazardous and non-hazardous liquids. Temperature control options available. Reusable.",cargo:"Chemicals, food-grade oils, wine, latex, pharmaceutical liquids"},
 ];
 
 const rateComp=[
 {name:"Ocean Freight (OF)",desc:"The base rate charged by the shipping line for transporting your container from origin port to destination port. Varies by trade lane, season, demand, and container type."},
-{name:"Terminal Handling Charges â€“ Origin (THC-O)",desc:"Charged at the Indian port (JNPT, Mundra, etc.) for receiving the container, yard handling, and loading onto the vessel. Quoted in INR but converted to USD in freight quotes."},
-{name:"Terminal Handling Charges â€“ Destination (THC-D)",desc:"Same as THC-O but at the destination port. Charged to the consignee/buyer in most cases. Varies significantly by country and port."},
+{name:"Terminal Handling Charges – Origin (THC-O)",desc:"Charged at the Indian port (JNPT, Mundra, etc.) for receiving the container, yard handling, and loading onto the vessel. Quoted in INR but converted to USD in freight quotes."},
+{name:"Terminal Handling Charges – Destination (THC-D)",desc:"Same as THC-O but at the destination port. Charged to the consignee/buyer in most cases. Varies significantly by country and port."},
 {name:"Bill of Lading Fee (BL/DOC)",desc:"Shipping line's documentation fee for issuing the Bill of Lading. Some lines charge separately for surrender BL, telex release, or switch BL services."},
 {name:"Container Freight Station (CFS) Charges",desc:"If your cargo goes through a CFS (common at JNPT), charges include: handling, storage, seal charges, and documentation at the CFS. Avoided if you do direct port delivery (DPD) or use ICD."},
 {name:"Inland Haulage / Transport",desc:"Cost of moving the container from your factory/warehouse to the port, ICD, or CFS. Depends on distance, route, and vehicle type required."},
 {name:"Customs Broker Fee",desc:"Your customs broker's professional fee for filing the Shipping Bill, managing customs examination, and ensuring compliance. Separate from ICEGATE filing fees."},
 {name:"BAF/Bunker Adjustment Factor",desc:"Fuel surcharge to cover fluctuating bunker fuel costs. Applied as a fixed amount per container or as a percentage of ocean freight. Fluctuates monthly with oil prices. Currently a significant component of total freight."},
 {name:"CAF/Currency Adjustment Factor",desc:"Protects the shipping line from currency exchange fluctuations. Applied as a percentage of OF. More common on trades where currencies are volatile."},
-{name:"Peak Season Surcharge (PSS)",desc:"Applied during high-demand periods (typically Q3â€“Q4 for India-Europe/US trades). Lines announce PSS through GRI (General Rate Increase) notices."},
+{name:"Peak Season Surcharge (PSS)",desc:"Applied during high-demand periods (typically Q3–Q4 for India-Europe/US trades). Lines announce PSS through GRI (General Rate Increase) notices."},
 {name:"ISPS Surcharge",desc:"International Ship and Port Facility Security surcharge, mandated post-9/11. Applied at both origin and destination."},
 {name:"Seal Charge",desc:"For the high-security bolt seal applied to the container. Mandatory for all export containers."},
-{name:"Export Promotion Charges",desc:"Specific to Indian ports â€” charged by port authorities for export containers. Minimal amount but applies per container."},
+{name:"Export Promotion Charges",desc:"Specific to Indian ports — charged by port authorities for export containers. Minimal amount but applies per container."},
 ];
 
 return(
@@ -55,7 +55,7 @@ return(
 <section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
 <div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Knowledge Center</div>
 <h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Export <span style={{color:B.primary}}>Knowledge</span> Hub</h1>
-<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:640}}>Comprehensive guides on Incoterms, documentation, freight procedures, container types, and rate structures â€” tailored for Indian exporters.</p>
+<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:640}}>Comprehensive guides on Incoterms, documentation, freight procedures, container types, and rate structures — tailored for Indian exporters.</p>
 </div></section>
 <div style={st.sec}>
 <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:32}}>
@@ -63,7 +63,7 @@ return(
 </div>
 
 {tab==="incoterms"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Incoterms® 2020 â€” Complete Guide</h2>
+<h2 style={{...st.h2,textAlign:"left"}}>Incoterms® 2020 — Complete Guide</h2>
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Incoterms define who pays for what, where risk transfers, and who handles documentation between seller and buyer. Published by the International Chamber of Commerce (ICC), the 2020 edition has 11 rules: 7 for any transport mode and 4 for sea/inland waterway only.</p>
 <div style={{display:"grid",gap:16}}>
 {incoterms.map((ic,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`,padding:"20px 24px"}}>
@@ -91,7 +91,7 @@ return(
 ].map(([title,desc,file],i)=><div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}>
 <h3 style={{...st.h3,fontSize:16,marginBottom:8}}>{title}</h3>
 <p style={{fontSize:13,color:B.g5,lineHeight:1.6,marginBottom:12}}>{desc}</p>
-<div style={{fontSize:12,color:B.primary,fontWeight:600}}>{file.endsWith(".xlsx")?"ðŸ“¥ XLSX Template Available":"ðŸ“‹ "+file}</div>
+<div style={{fontSize:12,color:B.primary,fontWeight:600}}>{file.endsWith(".xlsx")?"📥 XLSX Template Available":"📋 "+file}</div>
 </div>)}
 </div>
 </div>)}
@@ -101,14 +101,14 @@ return(
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Full Container Load (FCL) means your cargo exclusively occupies an entire container. It's the most common method for Indian exports above 15 CBM volume. Here's the complete process:</p>
 <div style={{display:"grid",gap:16}}>
 {[["1. Booking Confirmation","Exporter (or freight forwarder) books space with the shipping line. Booking confirmation includes: vessel name, voyage number, sailing date, cut-off dates (documentation and cargo), and empty container pickup location."],
-["2. Empty Container Collection","Container is picked up from the shipping line's container yard or depot (typically near the port â€” JNPT has yards in Uran, Panvel, Bhiwandi). You receive empty equipment and a seal."],
+["2. Empty Container Collection","Container is picked up from the shipping line's container yard or depot (typically near the port — JNPT has yards in Uran, Panvel, Bhiwandi). You receive empty equipment and a seal."],
 ["3. Factory/Warehouse Stuffing","Container is transported to your factory or warehouse. Goods are loaded (stuffed) into the container following proper weight distribution. Photos of stuffing are taken for documentation. Container is sealed with a bolt seal."],
-["4. Transport to Port / ICD / CFS","Sealed container moves to the port (JNPT/Mundra), Inland Container Depot (ICD like Tumb, Khodiyar), or Container Freight Station (CFS). Must arrive before the cargo cut-off deadline (usually 24â€“48 hrs before sailing)."],
+["4. Transport to Port / ICD / CFS","Sealed container moves to the port (JNPT/Mundra), Inland Container Depot (ICD like Tumb, Khodiyar), or Container Freight Station (CFS). Must arrive before the cargo cut-off deadline (usually 24–48 hrs before sailing)."],
 ["5. Shipping Bill Filing","Customs broker files the Shipping Bill electronically through ICEGATE (Indian Customs EDI system). Documents include: Invoice, Packing List, IEC, AD Code, HS Classification, FOB value, buyer details."],
 ["6. Customs Examination","Customs may select the container for physical examination (based on risk management system) or grant Let Export Order (LEO) directly. If examined, container is opened at the port/CFS, cargo verified, and re-sealed."],
 ["7. Let Export Order (LEO)","Once customs is satisfied, LEO is granted. This authorizes the port to load the container onto the vessel. The Shipping Bill is stamped and EGM (Export General Manifest) is filed by the shipping line."],
 ["8. Vessel Loading","Container is loaded onto the designated vessel during the vessel's port call. Stowage position is determined by the vessel planner based on weight, destination, and cargo type (reefer, hazardous, etc.)."],
-["9. Ocean Transit","Vessel sails from Indian port to destination. Transit times: Gulf (5â€“10 days), Far East (12â€“20 days), Europe (18â€“25 days), USA East (25â€“35 days). You receive container tracking updates throughout."],
+["9. Ocean Transit","Vessel sails from Indian port to destination. Transit times: Gulf (5–10 days), Far East (12–20 days), Europe (18–25 days), USA East (25–35 days). You receive container tracking updates throughout."],
 ["10. Destination Arrival & Delivery","Container is discharged at destination port. Consignee handles import clearance, pays duties, and collects the container for delivery to their warehouse (door delivery if arranged)."],
 ].map(([title,desc],i)=><div key={i} style={{...st.cd,display:"grid",gridTemplateColumns:"auto 1fr",gap:16,alignItems:"start"}}>
 <div style={{width:40,height:40,borderRadius:10,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:B.primary,fontSize:15,fontFamily:FF}}>{i+1}</div>
@@ -137,7 +137,7 @@ return(
 </div>)}
 
 {tab==="containers"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Container Type Guide â€” Dimensions & Specifications</h2>
+<h2 style={{...st.h2,textAlign:"left"}}>Container Type Guide — Dimensions & Specifications</h2>
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Choosing the right container is critical for cost efficiency and cargo safety. Here's a detailed guide to every container type used in Indian export trade.</p>
 <div style={{display:"grid",gap:20}}>
 {containers.map((c,i)=><div key={i} style={{...st.cd,overflow:"hidden"}}>
@@ -156,7 +156,7 @@ return(
 </div>)}
 
 {tab==="rates"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Freight Rate Components â€” Indian Export Context</h2>
+<h2 style={{...st.h2,textAlign:"left"}}>Freight Rate Components — Indian Export Context</h2>
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Understanding what goes into a freight quote helps you compare rates accurately and avoid surprise charges. Here's every component explained in the Indian context with typical ranges.</p>
 <div style={{display:"grid",gap:16}}>
 {rateComp.map((r,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${i<5?B.primary:B.g3}`}}>
