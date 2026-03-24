@@ -28,6 +28,8 @@ import { st } from "./styles/sharedStyles";
 import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
+import { searchCargo } from "./utils/cargoSearch";
+import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
 /* EmailJS config */
 /* Responsive hook */
 /* Packing types */
@@ -49,47 +51,54 @@ import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session"
 /* Rate gate: email OTP verification */
 /* Quote page: instant rate lookup */
 
-/* ─── Search-as-you-type port combobox ─── */
-function PortCombo({label,value,onChange,options,error,placeholder}){
+/* ─── Search-as-you-type port combobox with user history ─── */
+function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) {
   const[q,setQ]=useState("");
   const[open,setOpen]=useState(false);
   const[focused,setFocused]=useState(false);
   const ref=React.useRef(null);
-  // Display text: if a code is selected show full label, else show search query
   const selected=options.find(o=>o.c===value);
   const display=focused?q:(selected?`${selected.n} (${selected.c})`:"");
-  const filtered=q.length>0?options.filter(o=>
-    o.n.toLowerCase().includes(q.toLowerCase())||
-    o.c.toLowerCase().includes(q.toLowerCase())
-  ).slice(0,12):[];
+
+  // Build dropdown: history first (if no query), then search results
+  let items=[];
+  if(q.length===0&&history.length>0){
+    const histItems=history
+      .map(code=>options.find(o=>o.c===code))
+      .filter(Boolean)
+      .map(o=>({...o,isHistory:true}));
+    items=histItems;
+  } else if(q.length>0){
+    items=options.filter(o=>
+      o.n.toLowerCase().includes(q.toLowerCase())||
+      o.c.toLowerCase().includes(q.toLowerCase())
+    ).slice(0,12);
+  }
+
   React.useEffect(()=>{
     const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
     document.addEventListener("mousedown",handler);
     return()=>document.removeEventListener("mousedown",handler);
   },[]);
   const pick=(code)=>{onChange(code);setQ("");setOpen(false);setFocused(false);};
-  const {B,st}=window._sattvaTheme||{};
+  const inp={width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"};
   return(
     <div ref={ref} style={{position:"relative"}}>
       <label style={{display:"block",fontSize:12,fontWeight:600,color:"#374151",marginBottom:6,textTransform:"uppercase",letterSpacing:.5}}>{label}</label>
-      <input
-        type="text"
-        value={display}
+      <input type="text" value={display}
         onChange={e=>{setQ(e.target.value);setOpen(true);if(!e.target.value)onChange("");}}
         onFocus={()=>{setFocused(true);setQ(selected?`${selected.n} (${selected.c})`:"");setOpen(true);}}
-        placeholder={placeholder}
-        style={{width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"}}
-        autoComplete="off"
-      />
+        placeholder={placeholder} style={inp} autoComplete="off"/>
       {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
-      {open&&filtered.length>0&&(
+      {open&&items.length>0&&(
         <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:240,overflowY:"auto",marginTop:2}}>
-          {filtered.map(o=>(
+          {items[0]?.isHistory&&<div style={{padding:"5px 14px",fontSize:10,fontWeight:700,color:"#6b7280",textTransform:"uppercase",letterSpacing:.5,borderBottom:"1px solid #f3f4f6",background:"#f9fafb"}}>Recent Ports</div>}
+          {items.map(o=>(
             <div key={o.c} onMouseDown={()=>pick(o.c)}
-              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,display:"flex",justifyContent:"space-between",borderBottom:"1px solid #f3f4f6"}}
-              onMouseEnter={e=>e.currentTarget.style.background="#f0f4ff"}
-              onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
-              <span>{o.n}</span>
+              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,display:"flex",justifyContent:"space-between",borderBottom:"1px solid #f3f4f6",background:o.isHistory?"#f0f7ff":"#fff"}}
+              onMouseEnter={e=>e.currentTarget.style.background="#e8f0ff"}
+              onMouseLeave={e=>e.currentTarget.style.background=o.isHistory?"#f0f7ff":"#fff"}>
+              <span>{o.n}{o.isHistory&&<span style={{marginLeft:6,fontSize:10,color:"#3b82f6"}}>★</span>}</span>
               <span style={{color:"#6b7280",fontSize:11,fontWeight:600}}>{o.c}</span>
             </div>
           ))}
@@ -99,41 +108,53 @@ function PortCombo({label,value,onChange,options,error,placeholder}){
   );
 }
 
-/* ─── Search-as-you-type cargo combobox ─── */
-function CargoCombo({label,value,onChange,options,error,placeholder}){
+/* ─── Search-as-you-type cargo combobox with HS code database + history ─── */
+function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[q,setQ]=useState("");
   const[open,setOpen]=useState(false);
   const[focused,setFocused]=useState(false);
+  const[results,setResults]=useState([]);
   const ref=React.useRef(null);
   const display=focused?q:(value||"");
-  const filtered=q.length>0?options.filter(o=>o.toLowerCase().includes(q.toLowerCase())).slice(0,10):[];
+
+  React.useEffect(()=>{
+    if(q.length<2){setResults([]);return;}
+    import("./utils/cargoSearch").then(m=>{
+      setResults(m.searchCargo(q,12));
+    });
+  },[q]);
+
+  // Show history when focused with no query
+  const showHistory=focused&&q.length===0&&history.length>0;
+
   React.useEffect(()=>{
     const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
     document.addEventListener("mousedown",handler);
     return()=>document.removeEventListener("mousedown",handler);
   },[]);
   const pick=(v)=>{onChange(v);setQ("");setOpen(false);setFocused(false);};
+  const inp={width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"};
+  const dropItems=showHistory
+    ?history.map(h=>({name:h,code:"",isHistory:true}))
+    :results;
   return(
     <div ref={ref} style={{position:"relative"}}>
       <label style={{display:"block",fontSize:12,fontWeight:600,color:"#374151",marginBottom:6,textTransform:"uppercase",letterSpacing:.5}}>{label}</label>
-      <input
-        type="text"
-        value={display}
+      <input type="text" value={display}
         onChange={e=>{setQ(e.target.value);onChange(e.target.value);setOpen(true);}}
         onFocus={()=>{setFocused(true);setQ(value||"");setOpen(true);}}
-        placeholder={placeholder}
-        style={{width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"}}
-        autoComplete="off"
-      />
+        placeholder={placeholder} style={inp} autoComplete="off"/>
       {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
-      {open&&filtered.length>0&&(
-        <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:220,overflowY:"auto",marginTop:2}}>
-          {filtered.map(o=>(
-            <div key={o} onMouseDown={()=>pick(o)}
-              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,borderBottom:"1px solid #f3f4f6"}}
-              onMouseEnter={e=>e.currentTarget.style.background="#f0f4ff"}
-              onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
-              {o}
+      {open&&dropItems.length>0&&(
+        <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:240,overflowY:"auto",marginTop:2}}>
+          {showHistory&&<div style={{padding:"5px 14px",fontSize:10,fontWeight:700,color:"#6b7280",textTransform:"uppercase",letterSpacing:.5,borderBottom:"1px solid #f3f4f6",background:"#f9fafb"}}>Recent Cargo</div>}
+          {dropItems.map((o,i)=>(
+            <div key={i} onMouseDown={()=>pick(o.name)}
+              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"1px solid #f3f4f6",background:o.isHistory?"#f0f7ff":"#fff"}}
+              onMouseEnter={e=>e.currentTarget.style.background="#e8f0ff"}
+              onMouseLeave={e=>e.currentTarget.style.background=o.isHistory?"#f0f7ff":"#fff"}>
+              <span>{o.name}{o.isHistory&&<span style={{marginLeft:6,fontSize:10,color:"#3b82f6"}}>★</span>}</span>
+              {o.code&&<span style={{color:"#6b7280",fontSize:10,fontWeight:600,marginLeft:8}}>HS {o.code}</span>}
             </div>
           ))}
         </div>
@@ -156,6 +177,8 @@ const[gateUser,setGateUser]=useState(()=>loadSession());
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
 const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);};
 const up=(k,v)=>setF(p=>({...p,[k]:v}));
+// Load history for this user
+const hist=gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]};
 const pods=f.podR?POD_R[f.podR]||[]:[];
 const rk=f.pol&&f.pod&&f.eq?`${f.pol}:${f.pod}:${f.eq}`:null;
 const rate=rk&&rates[rk]?rates[rk]:null;
@@ -212,6 +235,8 @@ const handleSubmit=async()=>{
     pol:params.pol,pod:params.pod,eq:f.eq,
     found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"
   });
+  // Save quote history for returning customer personalisation
+  saveQuoteHistory(gateUser.email, f.pol, f.pod, f.cargo);
   try{
     await emailjs.send(EJS.serviceId,EJS.templateId,params,EJS.publicKey);
     setDone(true);
@@ -238,12 +263,12 @@ return(
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
 {/* POL + POD side by side — search-as-you-type combobox */}
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
-<PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…"/>
-<PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…"/>
+<PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
+<PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…" history={hist.podHistory}/>
 </div>
 {/* Cargo Type + Equipment side by side */}
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
-<CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} options={CARGO} error={errs.cargo} placeholder="Search cargo type…"/>
+<CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} error={errs.cargo} placeholder="Search cargo type or HS code…" history={hist.cargoHistory}/>
 <div><label style={st.lb}>Equipment *</label><select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>{up("eq",e.target.value);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");}}><option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select><ErrMsg msg={errs.eq}/></div>
 </div>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18}}>
