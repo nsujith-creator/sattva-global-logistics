@@ -1,37 +1,30 @@
 ﻿import { useState, useEffect, useCallback } from "react";
-import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import emailjs from "@emailjs/browser";
+import { ErrMsg } from "./components/forms/ErrMsg";
+import { PhoneField } from "./components/forms/PhoneField";
+import { CTA } from "./components/layout/CTA";
+import { Footer } from "./components/layout/Footer";
+import { Nav } from "./components/layout/Nav";
+import { ScrollToTop } from "./components/routing/ScrollToTop";
+import { CarrierBadge } from "./components/shared/CarrierBadge";
+import { useIsMobile } from "./hooks/useIsMobile";
 import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
 import { EJS } from "./config/emailjs";
 import { CARRIERS } from "./data/carriers";
-import { COUNTRIES } from "./data/countries";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
 import { POL, POD_R, ALL_POD } from "./data/ports";
 import { B, F, FF } from "./theme/tokens";
-import { WA_NUM, waLink } from "./utils/links";
+import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
 import { isFreeEmail } from "./utils/validation";
-
 /* â•â•â• EMAILJS CONFIG â•â•â• */
 /* â•â•â• RESPONSIVE HOOK â•â•â• */
-function useIsMobile(bp=768){const[m,setM]=useState(()=>typeof window!=="undefined"&&window.innerWidth<bp);useEffect(()=>{const h=()=>setM(window.innerWidth<bp);window.addEventListener("resize",h);return()=>window.removeEventListener("resize",h);},[bp]);return m;}
-
 /* â•â•â• PACKING TYPES â•â•â• */
 /* â•â•â• BRAND â€” Sattva Brand Palette â•â•â• */
 /* â•â•â• PORT DATA â•â•â• */
-const CarrierBadge=({name,size="md"})=>{
-  const c=CARRIERS[name];if(!c)return null;
-  if(size==="sm") return <span style={{fontSize:9,padding:"3px 8px",borderRadius:4,background:c.color,color:"#fff",fontWeight:700,fontFamily:F,letterSpacing:.5,display:"inline-flex",alignItems:"center",gap:4}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.4 11.4 0 0020 17l-9-4-9 4c0 1.03.16 2.04.46 3"/></svg>{name}</span>;
-  return(
-    <div style={{background:"#fff",border:"1px solid #e5e7eb",borderRadius:10,padding:"8px 14px",display:"inline-flex",alignItems:"center",justifyContent:"center",minWidth:90,height:48}}>
-      <img src={c.logo} alt={name} style={{maxHeight:28,maxWidth:80,objectFit:"contain",display:"block"}}
-        onError={e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}/>
-      <span style={{display:"none",fontSize:11,fontWeight:700,color:c.color,alignItems:"center"}}>{name}</span>
-    </div>
-  );
-};
 /* â•â•â• GOOGLE SHEETS BACKEND â•â•â• */
 /* â•â•â• ICONS â•â•â• */
 const I={
@@ -73,65 +66,8 @@ lb:{fontSize:12,fontWeight:600,color:B.g7,marginBottom:5,display:"block",fontFam
 };
 
 /* â•â•â• NAV â•â•â• */
-function Nav(){const go=useNavigate();const loc=useLocation();const page=loc.pathname.replace('/','');const activePage=page||'home';
-const[sc,setSc]=useState(false);
-const[open,setOpen]=useState(false);
-const m=useIsMobile();
-useEffect(()=>{const h=()=>setSc(window.scrollY>20);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h);},[]);
-useEffect(()=>{if(!m)setOpen(false);},[m]);
-const lk=[["home","Home"],["about","About"],["services","Services"],["industries","Industries"],["knowledge","Knowledge"],["testimonials","Testimonials"]];
-return(
-<nav style={{position:"fixed",top:0,left:0,right:0,zIndex:1000,background:sc||open?"rgba(255,255,255,.97)":"rgba(255,255,255,.9)",backdropFilter:"blur(12px)",boxShadow:sc?"0 1px 10px rgba(0,0,0,.07)":"none",transition:"all .3s"}}>
-<div style={{maxWidth:1200,margin:"0 auto",padding:"0 24px",display:"flex",alignItems:"center",justifyContent:"space-between",height:68}}>
-<div style={{display:"flex",alignItems:"center",gap:10,cursor:"pointer"}} onClick={()=>{go("/");setOpen(false);}}>
-<img src="/sattva-logo.png" alt="Sattva Global Logistics" style={{height:56,width:"auto",display:"block"}}/>
-</div>
-{m?(
-<button onClick={()=>setOpen(o=>!o)} style={{background:"none",border:"none",cursor:"pointer",padding:8,display:"flex",flexDirection:"column",gap:5}}>
-<span style={{display:"block",width:22,height:2,background:B.dark,transition:"all .25s",transform:open?"rotate(45deg) translate(5px,5px)":"none"}}/>
-<span style={{display:"block",width:22,height:2,background:B.dark,transition:"all .25s",opacity:open?0:1}}/>
-<span style={{display:"block",width:22,height:2,background:B.dark,transition:"all .25s",transform:open?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
-</button>
-):(
-<div style={{display:"flex",alignItems:"center",gap:6}}>
-<ul style={{display:"flex",gap:22,listStyle:"none",margin:0,padding:0}}>
-{lk.map(([id,lb])=><li key={id}><span onClick={()=>go(id==="home"?"/":`/${id}`)} style={{color:(activePage===id||(!activePage&&id==='home'))?B.primary:B.g7,fontWeight:(activePage===id||(!activePage&&id==='home'))?700:500,fontSize:13,cursor:"pointer",fontFamily:F}}>{lb}</span></li>)}
-</ul>
-<button onClick={()=>go("/quote")} style={{...st.bp,padding:"9px 20px",fontSize:12,marginLeft:12}}>Get a Quote</button>
-</div>
-)}
-</div>
-{m&&open&&(
-<div style={{background:"rgba(255,255,255,.97)",borderTop:`1px solid ${B.g3}33`,padding:"8px 24px 24px"}}>
-{lk.map(([id,lb])=><div key={id} onClick={()=>{go(id==="home"?"/":`/${id}`);setOpen(false);}} style={{padding:"13px 0",fontSize:15,fontWeight:page===id?700:500,color:page===id?B.primary:B.dark,cursor:"pointer",borderBottom:`1px solid ${B.g1}`}}>{lb}</div>)}
-<button onClick={()=>{go("/quote");setOpen(false);}} style={{...st.bp,width:"100%",justifyContent:"center",marginTop:16}}>Get a Quote</button>
-</div>
-)}
-</nav>);}
-
 /* â•â•â• FOOTER â•â•â• */
-function Footer(){const go=useNavigate();return(
-<footer style={{background:B.dark,color:B.g3,padding:"56px 24px 28px"}}>
-<div style={{maxWidth:1200,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(200px, 1fr))",gap:36}}>
-<div><img src="/sattva-logo-white.png" alt="Sattva Global Logistics" onClick={()=>go("/")} style={{height:80,width:"auto",marginBottom:12,display:"block",cursor:"pointer"}}/><p style={{fontSize:13,lineHeight:1.7,color:B.g5}}>Reliable international freight forwarding from Mumbai to the world.</p></div>
-<div><h4 style={{color:"#fff",fontSize:13,fontWeight:600,marginBottom:14}}>Links</h4>{["home","about","services","industries","testimonials","quote"].map(id=><div key={id} onClick={()=>go(id==="home"?"/":`/${id}`)} style={{fontSize:13,color:B.g5,marginBottom:8,cursor:"pointer"}}>{id.charAt(0).toUpperCase()+id.slice(1)}</div>)}</div>
-<div><h4 style={{color:"#fff",fontSize:13,fontWeight:600,marginBottom:14}}>Services</h4>{["Export FCL Ocean Freight","Customs Clearance","Freight Forwarding","Inland Transport"].map(x=><div key={x} style={{fontSize:13,color:B.g5,marginBottom:8}}>{x}</div>)}</div>
-<div><h4 style={{color:"#fff",fontSize:13,fontWeight:600,marginBottom:14}}>Contact</h4><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13}}><I.Pi/> Mumbai, India</div><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13}}><I.Ma/> info@sattvaglobal.in</div><div style={{display:"flex",alignItems:"center",gap:8,fontSize:13}}><I.Ph/> +91 9136 121 123</div></div>
-</div>
-<div style={{maxWidth:1200,margin:"40px auto 0",paddingTop:20,borderTop:"1px solid #334155",display:"flex",justifyContent:"space-between",fontSize:12,color:B.g5}}>
-<span>Â© {new Date().getFullYear()} Sattva Global Logistics</span>
-<span onClick={()=>go("/admin")} style={{cursor:"pointer",opacity:.35,fontSize:11}}>Admin</span>
-</div></footer>);}
-
 /* â•â•â• CTA â•â•â• */
-function CTA({headline}){const go=useNavigate();return(
-<div style={{textAlign:"center",padding:"56px 24px",background:`linear-gradient(135deg,${B.primary}06,${B.primary}12)`,borderRadius:20,marginTop:56}}>
-<h3 style={{fontSize:26,fontWeight:700,color:B.dark,fontFamily:FF,marginBottom:22}}>{headline||"Ready to Ship with Confidence?"}</h3>
-<div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap"}}>
-<button onClick={()=>go("/quote")} style={st.bp}>Get a Freight Quote <I.Ar/></button>
-<button onClick={()=>go("/quote")} style={st.bs}>Speak to a Logistics Expert</button>
-</div></div>);}
-
 /* â•â•â• HOME â•â•â• */
 function HomePage(){const go=useNavigate();const m=useIsMobile();return(<><Helmet><title>Freight Forwarder Mumbai | Export to Middle East &amp; Africa | Sattva Global Logistics</title><meta name="description" content="Mumbai's most reliable freight forwarder for FCL exports to Middle East, Red Sea, and Africa. 20+ years experience. JNPT, Mundra, Chennai, Cochin." /><link rel="canonical" href="https://www.sattvaglobal.in/" /></Helmet>
 <section style={{minHeight:"100vh",display:"flex",alignItems:"center",position:"relative",overflow:"hidden",background:`linear-gradient(160deg,${B.lightBlue}55 0%,${B.w} 50%,${B.g1} 100%)`}}>
@@ -243,7 +179,7 @@ function HomePage(){const go=useNavigate();const m=useIsMobile();return(<><Helme
 <h4 style={{fontSize:14,fontWeight:700,color:B.g5,marginBottom:20}}>Typical Freight Forwarder</h4>
 {["Updates only when customer follows up","Higher paperwork error risk","Multiple contacts, inconsistent comm","Hidden or last-minute charges","Reactive, last-minute firefighting","Transaction-focused approach"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:14}}><div style={{flexShrink:0,marginTop:1}}><I.Wr/></div><span style={{fontSize:13,color:B.g5}}>{t}</span></div>)}
 </div></div>
-<CTA headline="Experience Logistics Done Right"/>
+<CTA headline="Experience Logistics Done Right" st={st} I={I}/>
 </div></section>
 
 {/* â”€â”€ Process â”€â”€ */}
@@ -258,7 +194,7 @@ function HomePage(){const go=useNavigate();const m=useIsMobile();return(<><Helme
 <h4 style={{fontSize:14,fontWeight:700,color:B.dark,marginBottom:6}}>{x.t}</h4>
 <p style={{fontSize:12,color:B.g5,lineHeight:1.6}}>{x.d}</p></div>))}
 </div>
-<CTA headline="Let's Plan Your Next Shipment"/>
+<CTA headline="Let's Plan Your Next Shipment" st={st} I={I}/>
 </div></section>
 </>);}
 
@@ -275,7 +211,7 @@ function AboutPage(){const go=useNavigate();return(
 {[{t:"Our Mission",d:"Documentation accuracy, transparent pricing, and proactive coordination â€” delivering freight forwarding that Indian exporters can depend on."},{t:"Mumbai Advantage",d:"Direct JNPT/Nhava Sheva access, strong carrier relationships, and deep Indian export regulation expertise built over 20+ years."},{t:"IMEA Network",d:"Partnerships across 40+ destinations in the Middle East, Red Sea corridor and Africa with shipping lines, overseas agents, and customs brokers."},{t:"Compliance First",d:"Systems designed to prevent documentation errors before they happen â€” zero BL amendments is our standard, not our target."}].map((x,i)=>
 <div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}><h3 style={{...st.h3,marginBottom:10}}>{x.t}</h3><p style={{...st.bd,fontSize:14}}>{x.d}</p></div>)}
 </div>
-<CTA headline="Partner with a Team That Delivers"/>
+<CTA headline="Partner with a Team That Delivers" st={st} I={I}/>
 </div></div>);}
 
 /* â•â•â• SERVICES â•â•â• */
@@ -299,7 +235,7 @@ return(
 <div><h3 style={{...st.h3,marginBottom:14}}>{x.t}</h3>
 {x.items.map((it,j)=><div key={j} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:8}}><div style={{flexShrink:0,marginTop:2}}><I.Ck/></div><span style={{fontSize:14,color:B.g7}}>{it}</span></div>)}
 </div></div>))}
-</div><CTA/></div></div>);}
+</div><CTA st={st} I={I}/></div></div>);}
 
 /* â•â•â• INDUSTRIES â•â•â• */
 function IndustriesPage(){const go=useNavigate();
@@ -313,7 +249,7 @@ return(
 <div style={st.sec}>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:20}}>
 {d.map((x,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`}}><h3 style={{...st.h3,fontSize:17,marginBottom:6}}>{x.t}</h3><p style={{...st.bd,fontSize:13}}>{x.d}</p></div>)}
-</div><CTA headline="Discuss Your Industry Needs"/></div></div>);}
+</div><CTA headline="Discuss Your Industry Needs" st={st} I={I}/></div></div>);}
 
 /* â•â•â• KNOWLEDGE â•â•â• */
 function KnowledgePage(){const go=useNavigate();
@@ -479,7 +415,7 @@ return(
 </div>
 </div>)}
 
-<CTA headline="Have Questions? Our Experts Are Ready"/></div></div>);}
+<CTA headline="Have Questions? Our Experts Are Ready" st={st} I={I}/></div></div>);}
 
 /* â•â•â• TESTIMONIALS â•â•â• */
 function TestimonialsPage(){const go=useNavigate();
@@ -547,90 +483,10 @@ return(
 </div>))}
 </div>
 </div>
-<CTA/>
+<CTA st={st} I={I}/>
 </div></div>);}
 
 /* â•â•â• COUNTRY PHONE DATA â•â•â• */
-function PhoneField({value,onChange,error,onError}){
-  const[sel,setSel]=useState(COUNTRIES[0]); // default India
-  const[num,setNum]=useState("");
-  const[open,setOpen]=useState(false);
-  const[search,setSearch]=useState("");
-  const[touched,setTouched]=useState(false);
-
-  const filtered=search?COUNTRIES.filter(c=>c.name.toLowerCase().includes(search.toLowerCase())||c.dial.includes(search)):COUNTRIES;
-
-  const validate=(n,country)=>{
-    if(!n) return "";
-    const digits=n.replace(/\s/g,"");
-    if(!country.pattern.test(digits)) return `Invalid ${country.name} number. Expected: ${country.hint}`;
-    return "";
-  };
-
-  const handleNum=(v)=>{
-    const clean=v.replace(/[^\d\s]/g,"");
-    setNum(clean);
-    setTouched(true);
-    const err=validate(clean,sel);
-    onError(err);
-    onChange(`${sel.dial} ${clean}`);
-  };
-
-  const handleCountry=(country)=>{
-    setSel(country);setOpen(false);setSearch("");
-    if(num){
-      const err=validate(num,country);
-      onError(err);
-      onChange(`${country.dial} ${num}`);
-    }
-  };
-
-  const fieldErr=touched?validate(num,sel):"";
-
-  return(
-  <div style={{position:"relative"}}>
-  <div style={{display:"flex",gap:0,border:`1.5px solid ${(error||fieldErr)?B.red:B.g3}`,borderRadius:8,overflow:"visible",background:"#fff"}}>
-    {/* Country selector */}
-    <button type="button" onClick={()=>setOpen(o=>!o)}
-      style={{display:"flex",alignItems:"center",gap:6,padding:"0 10px",background:"#f8fafc",border:"none",borderRight:`1px solid ${B.g3}`,cursor:"pointer",fontSize:13,fontFamily:F,fontWeight:600,color:B.dark,whiteSpace:"nowrap",minWidth:96,height:42,borderRadius:"7px 0 0 7px",flexShrink:0}}>
-      <span style={{fontSize:18,lineHeight:1}}>{sel.flag}</span>
-      <span style={{color:B.g5}}>{sel.dial}</span>
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{marginLeft:2,transform:open?"rotate(180deg)":"none",transition:"transform .2s"}}><path d="M2 3l3 4 3-4" stroke={B.g5} strokeWidth="1.5" strokeLinecap="round"/></svg>
-    </button>
-    {/* Number input */}
-    <input
-      type="tel"
-      value={num}
-      onChange={e=>handleNum(e.target.value)}
-      onBlur={()=>setTouched(true)}
-      placeholder={`${sel.hint}`}
-      style={{flex:1,border:"none",outline:"none",padding:"11px 12px",fontSize:14,fontFamily:F,background:"transparent",minWidth:0}}
-    />
-  </div>
-  {/* Dropdown */}
-  {open&&(
-  <div style={{position:"absolute",top:"100%",left:0,zIndex:9999,background:"#fff",border:`1px solid ${B.g3}`,borderRadius:10,boxShadow:"0 8px 24px rgba(0,0,0,.12)",width:280,maxHeight:280,overflow:"hidden",display:"flex",flexDirection:"column",marginTop:4}}>
-    <div style={{padding:"8px 10px",borderBottom:`1px solid ${B.g1}`}}>
-      <input autoFocus value={search} onChange={e=>setSearch(e.target.value)}
-        placeholder="Search country..." style={{...st.inp,fontSize:13,padding:"7px 10px"}}/>
-    </div>
-    <div style={{overflowY:"auto",flex:1}}>
-    {filtered.map(c=>(
-      <div key={c.c} onClick={()=>handleCountry(c)}
-        style={{display:"flex",alignItems:"center",gap:10,padding:"9px 14px",cursor:"pointer",background:sel.c===c.c?`${B.primary}08`:"#fff",fontSize:13,fontFamily:F}}
-        onMouseEnter={e=>e.currentTarget.style.background=`${B.primary}06`}
-        onMouseLeave={e=>e.currentTarget.style.background=sel.c===c.c?`${B.primary}08`:"#fff"}>
-        <span style={{fontSize:20,lineHeight:1,flexShrink:0}}>{c.flag}</span>
-        <span style={{flex:1,color:B.dark,fontWeight:500}}>{c.name}</span>
-        <span style={{color:B.g5,fontSize:12}}>{c.dial}</span>
-      </div>
-    ))}
-    </div>
-  </div>)}
-  {(error||fieldErr)&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{error||fieldErr}</div>}
-  </div>);
-}
-
 /* â•â•â• RATE GATE â€” email OTP verification â•â•â• */
 function RateGate({onUnlock,isMobile}){
 const[step,setStep]=useState("form");
@@ -711,12 +567,7 @@ if(step==="form") return(
 <div><label style={st.lb}>Company</label><input style={st.inp} value={g.company} onChange={e=>upg("company",e.target.value)} placeholder="Company name"/></div>
 <div><label style={st.lb}>Company Email *</label><input type="email" style={{...st.inp,borderColor:errs.email?B.red:undefined}} value={g.email} onChange={e=>{upg("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@yourcompany.com"/>{errs.email&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.email}</div>}</div>
 <div><label style={st.lb}>Phone *</label>
-<PhoneField
-  value={g.phone}
-  onChange={v=>{upg("phone",v);setErrs(p=>({...p,phone:""}));}}
-  error={errs.phone}
-  onError={e=>setPhoneErr(e)}
-/>
+<PhoneField value={g.phone} onChange={v=>{upg("phone",v);setErrs(p=>({...p,phone:""}));}} error={errs.phone} onError={e=>setPhoneErr(e)} st={st}/>
 </div>
 </div>
 <button onClick={sendOtp} disabled={sending} style={{...st.bp,marginTop:18,opacity:sending?.7:1}}>
@@ -756,8 +607,6 @@ A 6-digit code was sent to <strong>{g.email}</strong>. Enter it below to unlock 
 }
 
 /* â•â•â• QUOTE PAGE â€” with instant rate lookup â•â•â• */
-const ErrMsg=({msg})=>msg?<div style={{fontSize:11,color:B.red,marginTop:4}}>{msg}</div>:null;
-
 function QuotePage({rates}){const go=useNavigate();
 const m=useIsMobile();
 const[f,setF]=useState({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});
@@ -1108,8 +957,6 @@ return(
 </div></div>);}
 
 /* â•â•â• APP â•â•â• */
-function ScrollToTop(){const{pathname}=useLocation();useEffect(()=>{if("scrollRestoration" in history)history.scrollRestoration="manual";window.scrollTo({top:0,behavior:"instant"});},[pathname]);return null;}
-
 export default function App(){
 const[rates,setRates]=useState({});
 useEffect(()=>{lr().then(setRates);},[]);
@@ -1120,7 +967,7 @@ return(
 <ScrollToTop/>
 <div style={{fontFamily:F,color:B.g7,background:B.w,minHeight:"100vh",overflowX:"hidden",width:"100%"}}>
 <Routes>
-<Route path="/*" element={<><Nav/><Routes>
+<Route path="/*" element={<><Nav st={st}/><Routes>
 <Route path="/" element={<HomePage/>}/>
 <Route path="/about" element={<AboutPage/>}/>
 <Route path="/services" element={<ServicesPage/>}/>
@@ -1128,7 +975,7 @@ return(
 <Route path="/knowledge" element={<KnowledgePage/>}/>
 <Route path="/testimonials" element={<TestimonialsPage/>}/>
 <Route path="/quote" element={<QuotePage rates={rates}/>}/>
-</Routes><Footer/></>}/>
+</Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
 </Routes>
 {/* WhatsApp float â€” shown on all non-admin routes */}
@@ -1142,5 +989,7 @@ return(
 </div>
 </BrowserRouter>
 </HelmetProvider>);}
+
+
 
 
