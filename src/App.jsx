@@ -114,14 +114,17 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[open,setOpen]=useState(false);
   const[focused,setFocused]=useState(false);
   const[results,setResults]=useState([]);
+  const[loading,setLoading]=useState(false);
   const ref=React.useRef(null);
   const display=focused?q:(value||"");
 
   React.useEffect(()=>{
-    if(q.length<2){setResults([]);return;}
+    if(q.length<2){setResults([]);setLoading(false);return;}
+    setLoading(true);
     import("./utils/cargoSearch").then(m=>{
       setResults(m.searchCargo(q,12));
-    });
+      setLoading(false);
+    }).catch(()=>setLoading(false));
   },[q]);
 
   // Show history when focused with no query
@@ -145,9 +148,10 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
         onFocus={()=>{setFocused(true);setQ(value||"");setOpen(true);}}
         placeholder={placeholder} style={inp} autoComplete="off"/>
       {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
-      {open&&dropItems.length>0&&(
+      {open&&(loading||dropItems.length>0)&&(
         <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:240,overflowY:"auto",marginTop:2}}>
-          {showHistory&&<div style={{padding:"5px 14px",fontSize:10,fontWeight:700,color:"#6b7280",textTransform:"uppercase",letterSpacing:.5,borderBottom:"1px solid #f3f4f6",background:"#f9fafb"}}>Recent Cargo</div>}
+          {loading&&<div style={{padding:"12px 14px",fontSize:13,color:"#6b7280",display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:12,height:12,border:"2px solid #d1d5db",borderTopColor:"#3b82f6",borderRadius:"50%",animation:"spin .6s linear infinite"}}/>Searching cargo database…</div>}
+          {!loading&&showHistory&&<div style={{padding:"5px 14px",fontSize:10,fontWeight:700,color:"#6b7280",textTransform:"uppercase",letterSpacing:.5,borderBottom:"1px solid #f3f4f6",background:"#f9fafb"}}>Recent Cargo</div>}
           {dropItems.map((o,i)=>(
             <div key={i} onMouseDown={()=>pick(o.name)}
               style={{padding:"9px 14px",cursor:"pointer",fontSize:13,display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"1px solid #f3f4f6",background:o.isHistory?"#f0f7ff":"#fff"}}
@@ -163,7 +167,7 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   );
 }
 
-function QuotePage({rates}){const go=useNavigate();
+function QuotePage({rates,ratesErr}){const go=useNavigate();
 const m=useIsMobile();
 const[f,setF]=useState({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});
 const[done,setDone]=useState(false);
@@ -267,6 +271,7 @@ return(
 </div></section>
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
 <div style={{...st.cd,padding:m?20:36}}>
+{ratesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded — your network or a corporate proxy may be blocking the connection. You can still submit a quote request and we'll respond within 24 hours.</div>}
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
 {/* POL + POD side by side — search-as-you-type combobox */}
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
@@ -531,7 +536,15 @@ return(
 /* App */
 export default function App(){
 const[rates,setRates]=useState({});
-useEffect(()=>{lr().then(setRates);},[]);
+const[ratesErr,setRatesErr]=useState(false);
+useEffect(()=>{
+  lr().then(r=>{
+    setRates(r);
+    // If script URL is configured but returned empty, flag as potential load error
+    // (empty {} is fine for no rates, but worth surfacing in admin)
+    setRatesErr(false);
+  }).catch(()=>setRatesErr(true));
+},[]);
 const WA_FLOAT=`https://wa.me/919136121123?text=${encodeURIComponent("Hi, I'd like to enquire about freight forwarding services from Sattva Global Logistics.")}`;
 return(
 <HelmetProvider>
@@ -546,7 +559,7 @@ return(
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
 <Route path="/knowledge" element={<KnowledgePage st={st} I={I}/>}/>
 <Route path="/testimonials" element={<TestimonialsPage st={st} I={I}/>}/>
-<Route path="/quote" element={<QuotePage rates={rates}/>}/>
+<Route path="/quote" element={<QuotePage rates={rates} ratesErr={ratesErr}/>}/>
 </Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
 </Routes>

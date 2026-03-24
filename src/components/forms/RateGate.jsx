@@ -46,6 +46,10 @@ const validateForm=()=>{
 
 const sendOtp=async()=>{
   if(!validateForm()) return;
+  // Rate limit: max 3 OTP sends per email per session
+  const otpKey=`otp_count_${g.email}`;
+  const count=parseInt(sessionStorage.getItem(otpKey)||'0');
+  if(count>=3){setErrs(p=>({...p,email:"Too many OTP requests. Please email quotes@sattvaglobal.in directly."}));return;}
   setSending(true);
   const code=String(Math.floor(100000+Math.random()*900000));
   try{
@@ -55,12 +59,13 @@ const sendOtp=async()=>{
       otp: code
     }, EJS.publicKey);
     setSentOtp(code);
+    sessionStorage.setItem(otpKey, String(count+1));
     setExpiry(Date.now()+10*60*1000);
     setResendCooldown(60);
     setStep("verify");
   }catch(err){
     console.error(err);
-    setErrs(p=>({...p,email:"Failed to send OTP. Check your email and try again."}));
+    setErrs(p=>({...p,email:"Failed to send OTP. If this persists, your network may be blocking the request — email us directly at quotes@sattvaglobal.in"}));
   }finally{setSending(false);}
 };
 
@@ -99,6 +104,7 @@ if(step==="form") return(
 {sending?"Sending OTP…":"Send Verification Code →"}
 </button>
 <p style={{fontSize:11,color:B.g5,marginTop:10}}>🔐 Your details are kept confidential and used only for rate access purposes.</p>
+<p style={{fontSize:11,color:B.g5,marginTop:6}}>Having trouble? Email us at <a href="mailto:quotes@sattvaglobal.in" style={{color:B.primary}}>quotes@sattvaglobal.in</a></p>
 </div>);
 
 return(
