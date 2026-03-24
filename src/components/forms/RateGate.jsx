@@ -84,7 +84,7 @@ if(step==="form") return(
 <h4 style={{fontSize:15,fontWeight:700,color:B.dark,margin:0}}>Verify Your Identity to View Rates</h4>
 </div>
 <p style={{fontSize:12,color:B.g5,marginBottom:18,lineHeight:1.6}}>Enter your <strong>company email</strong> to receive a one-time access code. Personal email addresses (Gmail, Yahoo, etc.) are not accepted.</p>
-<div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:14}}>
+<div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(2,minmax(180px,1fr))",gap:14}}>
 <div><label style={st.lb}>Your Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} value={g.name} onChange={e=>{upg("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/>{errs.name&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.name}</div>}</div>
 <div><label style={st.lb}>Company</label><input style={st.inp} value={g.company} onChange={e=>upg("company",e.target.value)} placeholder="Company name"/></div>
 <div><label style={st.lb}>Company Email *</label><input type="email" style={{...st.inp,borderColor:errs.email?B.red:undefined}} value={g.email}

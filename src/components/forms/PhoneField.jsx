@@ -76,7 +76,7 @@ export function PhoneField({value,onChange,error,onError,st}){
     />
   </div>
   {open&&(
-  <div style={{position:"absolute",top:"100%",left:0,zIndex:9999,background:"#fff",border:`1px solid ${B.g3}`,borderRadius:10,boxShadow:"0 8px 24px rgba(0,0,0,.12)",width:280,maxHeight:280,overflow:"hidden",display:"flex",flexDirection:"column",marginTop:4}}>
+  <div style={{position:"absolute",top:"100%",left:0,zIndex:9999,background:"#fff",border:`1px solid ${B.g3}`,borderRadius:10,boxShadow:"0 8px 24px rgba(0,0,0,.12)",width:"min(280px,90vw)",maxHeight:280,overflow:"hidden",display:"flex",flexDirection:"column",marginTop:4}}>
     <div style={{padding:"8px 10px",borderBottom:`1px solid ${B.g1}`}}>
       <input autoFocus value={search} onChange={e=>setSearch(e.target.value)}
         placeholder="Search country..." style={{...st.inp,fontSize:13,padding:"7px 10px"}}/>

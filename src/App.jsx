@@ -30,6 +30,7 @@ import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
 import { searchCargo } from "./utils/cargoSearch";
 import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
+import { saveFormState, loadFormState, clearFormState } from "./utils/formState";
 /* EmailJS config */
 /* Responsive hook */
 /* Packing types */
@@ -169,7 +170,8 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
 
 function QuotePage({rates,ratesErr}){const go=useNavigate();
 const m=useIsMobile();
-const[f,setF]=useState({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});
+const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
+const[f,setF]=useState(()=>loadFormState()||BLANK_F);
 const[done,setDone]=useState(false);
 const[errs,setErrs]=useState({});
 const[sending,setSending]=useState(false);
@@ -181,7 +183,7 @@ const[gateUser,setGateUser]=useState(()=>loadSession());
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
 const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
 const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);setHist(getQuoteHistory(user.email));};
-const up=(k,v)=>setF(p=>({...p,[k]:v}));
+const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
 // Auto-save history whenever pol+pod+cargo are all selected
 React.useEffect(()=>{
   if(gateUser?.email&&f.pol&&f.pod&&f.cargo){
@@ -250,6 +252,7 @@ const handleSubmit=async()=>{
   setHist(getQuoteHistory(gateUser.email));
   try{
     await emailjs.send(EJS.serviceId,EJS.templateId,params,EJS.publicKey);
+    clearFormState();
     setDone(true);
   }catch(err){
     console.error("EmailJS error:",err);
@@ -260,7 +263,7 @@ const handleSubmit=async()=>{
   finally{setSending(false);}
 };
 const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} → POD: ${f.pod}\nCargo: ${f.cargo} | ${f.eq} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
-const resetForm=()=>{setDone(false);setF({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});setFiles([]);setErrs({});refreshCaptcha();};
+const resetForm=()=>{setDone(false);setF(BLANK_F);clearFormState();setFiles([]);setErrs({});refreshCaptcha();};
 if(done)return(<div style={{paddingTop:68,minHeight:"80vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"68px 24px 40px"}}><div style={{textAlign:"center",maxWidth:480}}><div style={{width:72,height:72,borderRadius:"50%",background:B.gBg,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h2 style={{...st.h2,fontSize:26}}>Quote Request Received!</h2><p style={{...st.bd,marginTop:14}}>Our team will respond within 24 hours with a competitive quotation.</p><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:28}}><button onClick={resetForm} style={st.bp}>Submit Another</button><button onClick={()=>go("/")} style={st.bs}>Back to Home</button></div></div></div>);
 return(
 <div style={{paddingTop:68}}><Helmet><title>Get a Freight Quote | Export FCL Rates from India | Sattva Global Logistics</title><meta name="description" content="Request a freight quote for FCL export from JNPT, Mundra, Chennai or Cochin to the Middle East, Red Sea, Africa, Europe or Americas. Instant rates for key trade lanes." /><link rel="canonical" href="https://www.sattvaglobal.in/quote" /></Helmet>
@@ -274,12 +277,12 @@ return(
 {ratesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded — your network or a corporate proxy may be blocking the connection. You can still submit a quote request and we'll respond within 24 hours.</div>}
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
 {/* POL + POD side by side — search-as-you-type combobox */}
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
 <PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…" history={hist.podHistory}/>
 </div>
 {/* Cargo Type + Equipment side by side */}
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} error={errs.cargo} placeholder="Search cargo type or HS code…" history={hist.cargoHistory}/>
 <div><label style={st.lb}>Equipment *</label><select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>{up("eq",e.target.value);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");}}><option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select><ErrMsg msg={errs.eq}/></div>
 </div>
