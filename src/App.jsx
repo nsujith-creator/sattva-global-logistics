@@ -12,7 +12,9 @@ import { CarrierBadge } from "./components/shared/CarrierBadge";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
 import { AboutPage } from "./pages/AboutPage";
+import { HomePage } from "./pages/HomePage";
 import { IndustriesPage } from "./pages/IndustriesPage";
+import { KnowledgePage } from "./pages/KnowledgePage";
 import { ServicesPage } from "./pages/ServicesPage";
 import { TestimonialsPage } from "./pages/TestimonialsPage";
 import { EJS } from "./config/emailjs";
@@ -73,304 +75,10 @@ lb:{fontSize:12,fontWeight:600,color:B.g7,marginBottom:5,display:"block",fontFam
 /* â•â•â• FOOTER â•â•â• */
 /* â•â•â• CTA â•â•â• */
 /* â•â•â• HOME â•â•â• */
-function HomePage(){const go=useNavigate();const m=useIsMobile();return(<><Helmet><title>Freight Forwarder Mumbai | Export to Middle East &amp; Africa | Sattva Global Logistics</title><meta name="description" content="Mumbai's most reliable freight forwarder for FCL exports to Middle East, Red Sea, and Africa. 20+ years experience. JNPT, Mundra, Chennai, Cochin." /><link rel="canonical" href="https://www.sattvaglobal.in/" /></Helmet>
-<section style={{minHeight:"100vh",display:"flex",alignItems:"center",position:"relative",overflow:"hidden",background:`linear-gradient(160deg,${B.lightBlue}55 0%,${B.w} 50%,${B.g1} 100%)`}}>
-<div style={{position:"absolute",top:-200,right:-200,width:600,height:600,borderRadius:"50%",background:`radial-gradient(circle,${B.primary}08,transparent 70%)`}}/>
-<div style={{...st.sec,display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:m?32:56,alignItems:"center",paddingTop:m?100:110}}>
-<div style={{minWidth:0}}>
-<div style={{fontSize:11,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:2,marginBottom:16,lineHeight:1.5}}>International Freight Forwarding from Mumbai</div>
-<h1 style={st.h1}>Mumbai's Most Reliable <span style={{color:B.primary}}>Middle East, Red Sea & Africa</span> Freight Forwarder</h1>
-<p style={{...st.bd,fontSize:m?15:17,marginTop:20,maxWidth:500}}>20+ years of export forwarding experience. FCL shipments from JNPT, Mundra, Chennai and Cochin to the Gulf, Red Sea and Africa â€” with documentation accuracy your buyers depend on.</p>
-<div style={{display:"flex",gap:12,marginTop:32,flexWrap:"wrap"}}>
-<button onClick={()=>go("/quote")} style={{...st.bp,fontSize:m?13:14}}>Get a Freight Quote <I.Ar/></button>
-<button onClick={()=>go("/testimonials")} style={{...st.bs,fontSize:m?13:14}}>Client Stories</button>
-</div>
-<div style={{display:"flex",gap:m?24:36,marginTop:40,flexWrap:"wrap"}}>
-{[["20+","Years Experience"],["1000+","Shipments Handled"],["40+","Destinations Served"]].map(([n,l])=><div key={l}><div style={{fontSize:m?24:30,fontWeight:800,color:B.primary,fontFamily:FF}}>{n}</div><div style={{fontSize:12,color:B.g5}}>{l}</div></div>)}
-</div>
-</div>
-{!m&&<div style={{display:"flex",justifyContent:"center"}}>
-<div style={{width:400,height:400,borderRadius:"50%",background:`linear-gradient(135deg,${B.primary}10,${B.accent}10)`,display:"flex",alignItems:"center",justifyContent:"center"}}>
-<div style={{width:300,height:300,borderRadius:"50%",background:`linear-gradient(135deg,${B.primary}16,${B.accent}16)`,display:"flex",alignItems:"center",justifyContent:"center"}}>
-<div style={{textAlign:"center"}}><svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1" opacity=".5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><div style={{fontSize:13,fontWeight:600,color:B.primary,marginTop:6}}>Mumbai â†’ Middle East Â· Africa</div></div>
-</div></div></div>}
-</div></section>
-
-{/* â”€â”€ Trade Lane Map with Transit Times â”€â”€ */}
-<section style={{background:B.dark,padding:m?"48px 20px":"64px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{textAlign:"center",marginBottom:40}}>
-<div style={{fontSize:12,fontWeight:600,color:B.accent,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Trade Lanes We Serve</div>
-<h2 style={{...st.h2,color:"#fff",margin:0}}>Direct Services to Your Market</h2>
-</div>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(3,1fr)",gap:16}}>
-{[
-{region:"Middle East & Upper Gulf",color:B.accent,lanes:[["JNPT â†’ Jebel Ali","Direct Â· 8â€“10 days"],["Mundra â†’ Jebel Ali","Direct Â· 7â€“9 days"],["JNPT â†’ Dammam","Direct Â· 10â€“12 days"],["JNPT â†’ Jeddah","Direct Â· 12â€“14 days"],["Mundra â†’ Sohar","Direct Â· 8â€“10 days"]]},
-{region:"Red Sea & East Africa",color:"#10b981",lanes:[["JNPT â†’ Mombasa","Direct Â· 14â€“16 days"],["Mundra â†’ Mombasa","Direct Â· 14â€“16 days"],["JNPT â†’ Dar es Salaam","Direct Â· 16â€“18 days"],["JNPT â†’ Port Sudan","Via hub Â· 18â€“22 days"],["JNPT â†’ Djibouti","Via hub Â· 16â€“20 days"]]},
-{region:"Southern & West Africa",color:"#f59e0b",lanes:[["JNPT â†’ Durban","Direct Â· 18â€“22 days"],["JNPT â†’ Lagos","Via hub Â· 22â€“26 days"],["Mundra â†’ Lagos","Via hub Â· 22â€“26 days"],["JNPT â†’ Tema (Ghana)","Via hub Â· 24â€“28 days"],["JNPT â†’ Maputo","Via hub Â· 20â€“24 days"]]},
-].map((r,i)=>(
-<div key={i} style={{background:"rgba(255,255,255,.05)",borderRadius:12,padding:24,border:`1px solid rgba(255,255,255,.1)`}}>
-<div style={{fontSize:11,fontWeight:700,color:r.color,textTransform:"uppercase",letterSpacing:2,marginBottom:16}}>{r.region}</div>
-{r.lanes.map(([lane,time],j)=>(
-<div key={j} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,.07)"}}>
-<span style={{fontSize:13,color:"rgba(255,255,255,.85)"}}>{lane}</span>
-<span style={{fontSize:11,color:"rgba(255,255,255,.45)",whiteSpace:"nowrap",marginLeft:8}}>{time}</span>
-</div>))}
-</div>))}
-</div>
-</div></section>
-
-{/* â”€â”€ Recent Shipments â”€â”€ */}
-<section style={{background:B.g1}}><div style={st.sec}>
-<div style={{textAlign:"center",marginBottom:40}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Shipment Activity</div>
-<h2 style={st.h2}>Recent Export Shipments</h2>
-<p style={st.sub}>A snapshot of cargo we have recently moved for Indian exporters.</p>
-</div>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":m?"1fr":"repeat(3,1fr)",gap:16}}>
-{[
-{cargo:"Readymade Garments",route:"JNPT â†’ Jeddah",eq:"2 Ã— 40HC",transit:"Direct Â· 12 days",tag:"Textiles"},
-{cargo:"Pharma API / Chemicals",route:"JNPT â†’ Mombasa",eq:"7 Ã— 20GP",transit:"Direct Â· 15 days",tag:"Pharmaceuticals"},
-{cargo:"Engineering Goods",route:"JNPT â†’ Dammam",eq:"3 Ã— 40HC",transit:"Direct Â· 11 days",tag:"Engineering"},
-{cargo:"Ceramic Tiles",route:"Mundra â†’ Jebel Ali",eq:"6 Ã— 40HC",transit:"Direct Â· 8 days",tag:"Building Materials"},
-{cargo:"Food Products / FMCG",route:"Mundra â†’ Mombasa",eq:"4 Ã— 20GP",transit:"Direct Â· 14 days",tag:"Food & FMCG"},
-{cargo:"Auto Components",route:"Chennai â†’ Durban",eq:"2 Ã— 40HC",transit:"Direct Â· 18 days",tag:"Automotive"},
-].map((s,i)=>(
-<div key={i} style={{...st.cd,padding:20}}>
-<div style={{fontSize:10,fontWeight:700,color:B.primary,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8,background:`${B.primary}10`,display:"inline-block",padding:"3px 8px",borderRadius:4}}>{s.tag}</div>
-<h4 style={{fontSize:15,fontWeight:600,color:B.dark,margin:"8px 0 4px"}}>{s.cargo}</h4>
-<div style={{fontSize:13,color:B.primary,fontWeight:600,marginBottom:6}}>{s.route}</div>
-<div style={{display:"flex",gap:16}}>
-<span style={{fontSize:12,color:B.g5}}>{s.eq}</span>
-<span style={{fontSize:12,color:B.g5}}>{s.transit}</span>
-</div>
-</div>))}
-</div>
-</div></section>
-
-{/* â”€â”€ Core Services â”€â”€ */}
-<section><div style={st.sec}>
-<h2 style={st.h2}>Core Services</h2><p style={st.sub}>Full-service export logistics for Indian exporters shipping to the Gulf, Red Sea and Africa.</p>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:28,marginTop:48}}>
-{[{icon:<I.Sh/>,t:"Export FCL Ocean Freight",d:"Full container load from JNPT, Mundra, Chennai and Cochin. Competitive rates on weekly services to the Gulf and Africa."},{icon:<I.Sd/>,t:"Customs Clearance & Documentation",d:"Expert handling of export documentation, customs procedures, and regulatory compliance â€” zero BL amendments."},{icon:<I.Gl/>,t:"End-to-End Freight Forwarding",d:"Complete logistics from factory to destination â€” inland transport, port handling, and destination delivery coordination."},{icon:<I.Tr/>,t:"Inland Transportation",d:"Factory-to-port pickup across Maharashtra, Gujarat and Tamil Nadu. GPS-tracked, timely vessel cut-off delivery."}].map((x,i)=>(
-<div key={i} style={{...st.cd,textAlign:"center",padding:"40px 28px"}}>
-<div style={{width:64,height:64,borderRadius:14,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}>{x.icon}</div>
-<h3 style={{...st.h3,fontSize:18,marginBottom:10}}>{x.t}</h3><p style={{...st.bd,fontSize:14}}>{x.d}</p></div>))}
-</div></div></section>
-
-{/* â”€â”€ Carrier Network â”€â”€ */}
-<section style={{background:B.g1}}><div style={st.sec}>
-<div style={{textAlign:"center",marginBottom:40}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>Carrier Network</div>
-<h2 style={st.h2}>Shipping Lines We Work With</h2>
-<p style={st.sub}>Direct access to Tier-1 ocean carriers for competitive rates and reliable space on Gulf and Africa trade lanes.</p>
-</div>
-<div style={{display:"flex",flexWrap:"wrap",gap:14,justifyContent:"center",marginBottom:40}}>
-{Object.entries(CARRIERS).map(([name])=><CarrierBadge key={name} name={name} size="md"/>)}
-</div>
-</div></section>
-
-{/* â”€â”€ Why Exporters Choose Sattva â”€â”€ */}
-<section><div style={st.sec}>
-<h2 style={st.h2}>Why Exporters Choose Sattva</h2>
-<p style={st.sub}>Precision, compliance, and long-term reliability â€” not just freight rates.</p>
-<p style={{textAlign:"center",fontStyle:"italic",color:B.g7,marginTop:20,fontSize:14}}>"In international logistics, small mistakes cause big delays. Our systems prevent them."</p>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:0,marginTop:40,borderRadius:14,overflow:"hidden",boxShadow:"0 4px 20px rgba(0,0,0,.05)"}}>
-<div style={{background:`${B.primary}05`,padding:36}}>
-<h4 style={{fontSize:14,fontWeight:700,color:B.primary,marginBottom:20}}>Sattva Global Logistics</h4>
-{["Proactive tracking & regular updates","Documentation accuracy & compliance","Single point of contact","Transparent pricing","Structured pickup-to-vessel coordination","Long-term partnership mindset"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:14}}><div style={{flexShrink:0,marginTop:1}}><I.Ck/></div><span style={{fontSize:13,color:B.g7}}>{t}</span></div>)}
-</div>
-<div style={{background:"#fff",padding:36}}>
-<h4 style={{fontSize:14,fontWeight:700,color:B.g5,marginBottom:20}}>Typical Freight Forwarder</h4>
-{["Updates only when customer follows up","Higher paperwork error risk","Multiple contacts, inconsistent comm","Hidden or last-minute charges","Reactive, last-minute firefighting","Transaction-focused approach"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:14}}><div style={{flexShrink:0,marginTop:1}}><I.Wr/></div><span style={{fontSize:13,color:B.g5}}>{t}</span></div>)}
-</div></div>
-<CTA headline="Experience Logistics Done Right" st={st} I={I}/>
-</div></section>
-
-{/* â”€â”€ Process â”€â”€ */}
-<section style={{background:B.g1}}><div style={st.sec}>
-<h2 style={st.h2}>Our Process â€” Step-by-Step Export Flow</h2>
-<p style={st.sub}>A structured approach from booking to departure.</p>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:28,marginTop:48}}>
-{[{icon:<I.Cb/>,n:"01",t:"Assessment",d:"Cargo details, destination & planning."},{icon:<I.Sh/>,n:"02",t:"Booking",d:"Space secured with reliable carriers."},{icon:<I.Dc/>,n:"03",t:"Documentation",d:"Export docs verified for compliance."},{icon:<I.Tr/>,n:"04",t:"Pickup",d:"Safe movement to port/ICD."},{icon:<I.Sd/>,n:"05",t:"Customs",d:"Efficient clearance procedures."},{icon:<I.Gl/>,n:"06",t:"Departure",d:"On-schedule with tracking."}].map((x,i)=>(
-<div key={i} style={{textAlign:"center"}}>
-<div style={{width:44,height:44,borderRadius:"50%",background:B.primary,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,fontWeight:700,margin:"0 auto 14px"}}>{x.n}</div>
-<div style={{width:64,height:64,borderRadius:14,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 14px"}}>{x.icon}</div>
-<h4 style={{fontSize:14,fontWeight:700,color:B.dark,marginBottom:6}}>{x.t}</h4>
-<p style={{fontSize:12,color:B.g5,lineHeight:1.6}}>{x.d}</p></div>))}
-</div>
-<CTA headline="Let's Plan Your Next Shipment" st={st} I={I}/>
-</div></section>
-</>);}
-
 /* â•â•â• ABOUT â•â•â• */
 /* â•â•â• SERVICES â•â•â• */
 /* â•â•â• INDUSTRIES â•â•â• */
 /* â•â•â• KNOWLEDGE â•â•â• */
-function KnowledgePage(){const go=useNavigate();
-const[tab,setTab]=useState("incoterms");
-const tabs=[["incoterms","Incoterms 2020"],["docs","Export Documents"],["fcl","FCL Ocean Freight"],["customs","Customs Clearance"],["containers","Container Guide"],["rates","Rate Components"]];
-
-const incoterms=[
-{code:"EXW",name:"Ex Works",risk:"Buyer bears all risk from seller's premises.",desc:"Seller makes goods available at their facility. Buyer handles everything: pickup, export clearance, freight, insurance, import clearance. Rarely used in Indian exports as seller can't control export compliance."},
-{code:"FCA",name:"Free Carrier",risk:"Risk transfers when goods are handed to carrier.",desc:"Seller delivers goods cleared for export to the carrier nominated by buyer. Most flexible Incoterm. If delivery at seller's premises, seller loads. If elsewhere, seller delivers but unloading is buyer's responsibility."},
-{code:"CPT",name:"Carriage Paid To",risk:"Risk transfers at origin, but seller pays freight to destination.",desc:"Seller pays freight to the named destination but risk transfers when goods are handed to the first carrier at origin. Buyer needs cargo insurance. Common in Indian export contracts."},
-{code:"CIP",name:"Carriage & Insurance Paid To",risk:"Like CPT but seller must also arrange insurance.",desc:"Same as CPT but seller must obtain cargo insurance (minimum ICC-A coverage under Incoterms 2020). Cost is on seller. Risk still transfers at origin. Preferred when buyer wants insurance arranged by seller."},
-{code:"DAP",name:"Delivered at Place",risk:"Seller bears risk until goods arrive at destination.",desc:"Seller delivers goods to a named destination, ready for unloading. Seller bears all transport risk and cost. Import clearance and duties are buyer's responsibility. Common for door-to-door contracts."},
-{code:"DPU",name:"Delivered at Place Unloaded",risk:"Seller bears risk until goods are unloaded at destination.",desc:"Replaced DAT in Incoterms 2020. Seller delivers and unloads at the named destination. Only Incoterm where seller is responsible for unloading. Used for specific terminal/warehouse deliveries."},
-{code:"DDP",name:"Delivered Duty Paid",risk:"Seller bears all risk and cost including import duties.",desc:"Maximum obligation on seller. Seller handles everything including import clearance and duties at destination. Most expensive for Indian exporters but simplifies life for foreign buyers. Be cautious of unknown import duty costs."},
-{code:"FAS",name:"Free Alongside Ship",risk:"Risk transfers when goods are placed alongside the vessel.",desc:"Maritime only. Seller delivers goods alongside the vessel at the port of loading. Buyer handles loading, freight, insurance. Rarely used in Indian container trade; more common for bulk cargo."},
-{code:"FOB",name:"Free on Board",risk:"Risk transfers when goods pass the ship's rail at loading port.",desc:"The most popular Incoterm in Indian exports. Seller delivers goods on board the vessel and handles export clearance. Buyer arranges and pays ocean freight and insurance. Clear risk transfer point at Indian port."},
-{code:"CFR",name:"Cost and Freight",risk:"Risk transfers at loading port, but seller pays freight.",desc:"Seller pays ocean freight to destination port but risk transfers when goods are loaded on vessel at origin. Buyer should arrange cargo insurance. Very common in Indian textile and commodity exports."},
-{code:"CIF",name:"Cost, Insurance & Freight",risk:"Like CFR but seller arranges marine insurance.",desc:"Seller pays freight and insurance to destination port. Under Incoterms 2020, minimum insurance is ICC-C (most basic). Risk still transfers at loading port. Popular in Indian export contracts but insurance coverage may be limited."},
-];
-
-const containers=[
-{type:"20GP",name:"20' Standard",dim:"L: 5.9m Ã— W: 2.35m Ã— H: 2.39m",door:"W: 2.34m Ã— H: 2.28m",cap:"33.2 CBM / 28,200 kg",desc:"Most common. Ideal for heavy cargo like steel, chemicals, machinery, rice bags. Max payload ~21.7 tonnes due to road weight limits in India.",cargo:"Rice, chemicals, steel coils, machinery parts, cement bags"},
-{type:"40GP",name:"40' Standard",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.39m",door:"W: 2.34m Ã— H: 2.28m",cap:"67.7 CBM / 26,680 kg",desc:"Double the length of 20GP. Good for voluminous goods with moderate weight. Standard for most FCL shipments from India.",cargo:"Textiles, garments, furniture, auto parts, packaged food"},
-{type:"40HC",name:"40' High Cube",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.69m",door:"W: 2.34m Ã— H: 2.58m",cap:"76.3 CBM / 26,460 kg",desc:"Extra 30cm height vs 40GP. Most popular for voluminous cargo. Slightly higher freight but much better cube utilization. The go-to container for Indian garment exporters.",cargo:"Garments on hangers, cotton bales, voluminous goods, furniture"},
-{type:"20RF",name:"20' Reefer",dim:"L: 5.44m Ã— W: 2.29m Ã— H: 2.27m",door:"W: 2.29m Ã— H: 2.26m",cap:"28.3 CBM / 27,400 kg",desc:"Temperature-controlled (-30Â°C to +30Â°C). Built-in refrigeration unit needs power (ship provides). Smaller internal dimensions due to insulation.",cargo:"Pharma products, frozen seafood, dairy, temperature-sensitive chemicals"},
-{type:"40RH",name:"40' Reefer HC",dim:"L: 11.56m Ã— W: 2.29m Ã— H: 2.55m",door:"W: 2.29m Ã— H: 2.44m",cap:"67.5 CBM / 26,280 kg",desc:"Large reefer with high-cube height. Standard for perishable Indian exports. Requires pre-cooling and temperature monitoring throughout transit.",cargo:"Fresh fruits (grapes, mangoes), frozen shrimp, meat, pharma, flowers"},
-{type:"20OT",name:"20' Open Top",dim:"L: 5.9m Ã— W: 2.35m Ã— H: 2.35m",door:"W: 2.34m Ã— H: 2.28m",cap:"32.5 CBM / 28,130 kg",desc:"Removable tarpaulin roof. Allows top-loading with crane. Used for tall cargo that won't fit through standard doors. Higher freight rates.",cargo:"Machinery, marble slabs, tall industrial equipment, project cargo"},
-{type:"40OT",name:"40' Open Top",dim:"L: 12.03m Ã— W: 2.35m Ã— H: 2.35m",door:"W: 2.34m Ã— H: 2.28m",cap:"65.9 CBM / 26,630 kg",desc:"Longer open-top for oversized cargo. Crane-loadable. May incur Over-Height surcharges if cargo extends above container wall.",cargo:"Large machinery, long pipes, wind turbine components"},
-{type:"20FR",name:"20' Flat Rack",dim:"L: 5.62m Ã— W: 2.24m Ã— H: 2.23m",door:"Open sides",cap:"N/A / 31,250 kg",desc:"Collapsible end walls, no sides or roof. For heavy, oversized cargo. Can be stacked when empty. Requires special lashing and securing.",cargo:"Trucks, bulldozers, transformers, heavy machinery, boats"},
-{type:"40FR",name:"40' Flat Rack",dim:"L: 12.08m Ã— W: 2.42m Ã— H: 2.10m",door:"Open sides",cap:"N/A / 39,200 kg",desc:"Large flat rack for very heavy project cargo. Often used with Over-Dimensional Cargo (ODC) surcharges. Popular for Indian engineering/infrastructure exports.",cargo:"Generators, heavy vehicles, construction equipment, large fabrications"},
-{type:"ISO Tank",name:"ISO Tank Container",dim:"L: 6.06m Ã— Ã˜: 1.52m",door:"Valve openings",cap:"21,000-26,000 litres",desc:"Stainless steel tank in ISO frame for liquid bulk. Can carry hazardous and non-hazardous liquids. Temperature control options available. Reusable.",cargo:"Chemicals, food-grade oils, wine, latex, pharmaceutical liquids"},
-];
-
-const rateComp=[
-{name:"Ocean Freight (OF)",desc:"The base rate charged by the shipping line for transporting your container from origin port to destination port. Varies by trade lane, season, demand, and container type."},
-{name:"Terminal Handling Charges â€“ Origin (THC-O)",desc:"Charged at the Indian port (JNPT, Mundra, etc.) for receiving the container, yard handling, and loading onto the vessel. Quoted in INR but converted to USD in freight quotes."},
-{name:"Terminal Handling Charges â€“ Destination (THC-D)",desc:"Same as THC-O but at the destination port. Charged to the consignee/buyer in most cases. Varies significantly by country and port."},
-{name:"Bill of Lading Fee (BL/DOC)",desc:"Shipping line's documentation fee for issuing the Bill of Lading. Some lines charge separately for surrender BL, telex release, or switch BL services."},
-{name:"Container Freight Station (CFS) Charges",desc:"If your cargo goes through a CFS (common at JNPT), charges include: handling, storage, seal charges, and documentation at the CFS. Avoided if you do direct port delivery (DPD) or use ICD."},
-{name:"Inland Haulage / Transport",desc:"Cost of moving the container from your factory/warehouse to the port, ICD, or CFS. Depends on distance, route, and vehicle type required."},
-{name:"Customs Broker Fee",desc:"Your customs broker's professional fee for filing the Shipping Bill, managing customs examination, and ensuring compliance. Separate from ICEGATE filing fees."},
-{name:"BAF/Bunker Adjustment Factor",desc:"Fuel surcharge to cover fluctuating bunker fuel costs. Applied as a fixed amount per container or as a percentage of ocean freight. Fluctuates monthly with oil prices. Currently a significant component of total freight."},
-{name:"CAF/Currency Adjustment Factor",desc:"Protects the shipping line from currency exchange fluctuations. Applied as a percentage of OF. More common on trades where currencies are volatile."},
-{name:"Peak Season Surcharge (PSS)",desc:"Applied during high-demand periods (typically Q3â€“Q4 for India-Europe/US trades). Lines announce PSS through GRI (General Rate Increase) notices."},
-{name:"ISPS Surcharge",desc:"International Ship and Port Facility Security surcharge, mandated post-9/11. Applied at both origin and destination."},
-{name:"Seal Charge",desc:"For the high-security bolt seal applied to the container. Mandatory for all export containers."},
-{name:"Export Promotion Charges",desc:"Specific to Indian ports â€” charged by port authorities for export containers. Minimal amount but applies per container."},
-];
-
-return(
-<div style={{paddingTop:68}}><Helmet><title>Export Knowledge Hub | Incoterms, FCL Guide, Container Types | Sattva Global Logistics</title><meta name="description" content="Comprehensive guides on Incoterms 2020, export documentation, FCL ocean freight process, customs clearance, container types, and freight rate components for Indian exporters." /><link rel="canonical" href="https://www.sattvaglobal.in/knowledge" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Knowledge Center</div>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Export <span style={{color:B.primary}}>Knowledge</span> Hub</h1>
-<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:640}}>Comprehensive guides on Incoterms, documentation, freight procedures, container types, and rate structures â€” tailored for Indian exporters.</p>
-</div></section>
-<div style={st.sec}>
-<div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:32}}>
-{tabs.map(([id,lb])=><button key={id} onClick={()=>setTab(id)} style={{padding:"10px 20px",borderRadius:8,border:"none",cursor:"pointer",fontWeight:600,fontSize:13,fontFamily:F,background:tab===id?B.primary:"#fff",color:tab===id?"#fff":B.g5,boxShadow:tab===id?`0 2px 8px ${B.primary}33`:"0 1px 3px rgba(0,0,0,.06)"}}>{lb}</button>)}
-</div>
-
-{tab==="incoterms"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>IncotermsÂ® 2020 â€” Complete Guide</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>Incoterms define who pays for what, where risk transfers, and who handles documentation between seller and buyer. Published by the International Chamber of Commerce (ICC), the 2020 edition has 11 rules: 7 for any transport mode and 4 for sea/inland waterway only.</p>
-<div style={{display:"grid",gap:16}}>
-{incoterms.map((ic,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`,padding:"20px 24px"}}>
-<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-<div><span style={{fontSize:20,fontWeight:800,color:B.primary,fontFamily:FF}}>{ic.code}</span><span style={{fontSize:15,fontWeight:600,color:B.dark,marginLeft:10}}>{ic.name}</span></div>
-{null}
-</div>
-<p style={{fontSize:13,color:B.amber,fontWeight:600,margin:"4px 0 8px"}}>{ic.risk}</p>
-<p style={{...st.bd,fontSize:13}}>{ic.desc}</p>
-</div>)}
-</div>
-</div>)}
-
-{tab==="docs"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Export Document Templates</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>Every export shipment requires a set of documents. We provide branded templates for your use. Download the XLSX templates, fill in your shipment details, and print.</p>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16}}>
-{[["Commercial Invoice","The primary document for customs and payment. Lists goods, values, HS codes, buyer/seller details, Incoterms, and payment terms. Required for every export shipment.","Sattva_Export_Invoice_Template.xlsx"],
-["Packing List","Details container contents: item descriptions, gross/net weights, dimensions, CBM, package counts. Used by customs and for cargo verification.","Sattva_Export_Packing_List_Template.xlsx"],
-["Bill of Lading (BL Draft)","The title document for ocean cargo. Proves shipment, acts as receipt, and can be negotiable. Our draft template helps you verify BL details before finalization with the shipping line.","Sattva_BL_Draft_Template.xlsx"],
-["Certificate of Origin","Certifies the country of manufacture. Required for preferential duty rates under trade agreements. Issued by local Chamber of Commerce or Export Promotion Council.","Sattva_Certificate_of_Origin_Draft.xlsx"],
-["MSDS (Material Safety Data Sheet)","Mandatory for chemical/hazardous cargo. Provides 16-section safety information. Must accompany IMO-classified goods. Our template follows GHS format.","Sattva_MSDS_Template.xlsx"],
-["Phytosanitary Certificate","Required for agricultural products, food items, and plant-based materials. Issued by the Plant Quarantine Authority of India before export.","Issued by govt authority"],
-["FSSAI Certificate","Required for food product exports. Ensures compliance with food safety standards. Applied for through FSSAI portal.","Issued by FSSAI"],
-].map(([title,desc,file],i)=><div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}>
-<h3 style={{...st.h3,fontSize:16,marginBottom:8}}>{title}</h3>
-<p style={{fontSize:13,color:B.g5,lineHeight:1.6,marginBottom:12}}>{desc}</p>
-<div style={{fontSize:12,color:B.primary,fontWeight:600}}>{file.endsWith(".xlsx")?"ðŸ“¥ XLSX Template Available":"ðŸ“‹ "+file}</div>
-</div>)}
-</div>
-</div>)}
-
-{tab==="fcl"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>How FCL Ocean Freight Works</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>Full Container Load (FCL) means your cargo exclusively occupies an entire container. It's the most common method for Indian exports above 15 CBM volume. Here's the complete process:</p>
-<div style={{display:"grid",gap:16}}>
-{[["1. Booking Confirmation","Exporter (or freight forwarder) books space with the shipping line. Booking confirmation includes: vessel name, voyage number, sailing date, cut-off dates (documentation and cargo), and empty container pickup location."],
-["2. Empty Container Collection","Container is picked up from the shipping line's container yard or depot (typically near the port â€” JNPT has yards in Uran, Panvel, Bhiwandi). You receive empty equipment and a seal."],
-["3. Factory/Warehouse Stuffing","Container is transported to your factory or warehouse. Goods are loaded (stuffed) into the container following proper weight distribution. Photos of stuffing are taken for documentation. Container is sealed with a bolt seal."],
-["4. Transport to Port / ICD / CFS","Sealed container moves to the port (JNPT/Mundra), Inland Container Depot (ICD like Tumb, Khodiyar), or Container Freight Station (CFS). Must arrive before the cargo cut-off deadline (usually 24â€“48 hrs before sailing)."],
-["5. Shipping Bill Filing","Customs broker files the Shipping Bill electronically through ICEGATE (Indian Customs EDI system). Documents include: Invoice, Packing List, IEC, AD Code, HS Classification, FOB value, buyer details."],
-["6. Customs Examination","Customs may select the container for physical examination (based on risk management system) or grant Let Export Order (LEO) directly. If examined, container is opened at the port/CFS, cargo verified, and re-sealed."],
-["7. Let Export Order (LEO)","Once customs is satisfied, LEO is granted. This authorizes the port to load the container onto the vessel. The Shipping Bill is stamped and EGM (Export General Manifest) is filed by the shipping line."],
-["8. Vessel Loading","Container is loaded onto the designated vessel during the vessel's port call. Stowage position is determined by the vessel planner based on weight, destination, and cargo type (reefer, hazardous, etc.)."],
-["9. Ocean Transit","Vessel sails from Indian port to destination. Transit times: Gulf (5â€“10 days), Far East (12â€“20 days), Europe (18â€“25 days), USA East (25â€“35 days). You receive container tracking updates throughout."],
-["10. Destination Arrival & Delivery","Container is discharged at destination port. Consignee handles import clearance, pays duties, and collects the container for delivery to their warehouse (door delivery if arranged)."],
-].map(([title,desc],i)=><div key={i} style={{...st.cd,display:"grid",gridTemplateColumns:"auto 1fr",gap:16,alignItems:"start"}}>
-<div style={{width:40,height:40,borderRadius:10,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:B.primary,fontSize:15,fontFamily:FF}}>{i+1}</div>
-<div><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:6}}>{title.replace(/^\d+\.\s/,"")}</h4><p style={{fontSize:13,color:B.g5,lineHeight:1.7}}>{desc}</p></div>
-</div>)}
-</div>
-</div>)}
-
-{tab==="customs"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Export Customs Clearance in India</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>All goods leaving India must be cleared through Indian Customs. The process is electronic (paperless) through the ICEGATE system. Here's the step-by-step process:</p>
-<div style={{display:"grid",gap:16}}>
-{[["Prerequisites","IEC (Import Export Code) from DGFT, AD Code registered with your bank, GST registration, Authorized Dealer bank account. Your customs broker must be licensed (CHA license from CBIC)."],
-["Shipping Bill Filing via ICEGATE","Your CHA files the Shipping Bill electronically. It includes: exporter IEC, HS Code classification, FOB value in INR, quantity/weight, buyer details, port codes, Incoterms, IGST payment details (if applicable), and MEIS/RoDTEP scheme codes."],
-["Document Submission","Supporting documents uploaded to ICEGATE: Commercial Invoice, Packing List, Export Contract/PO, Letter of Credit (if applicable), ARE-1 (for excisable goods), any product-specific certificates (FSSAI, drug license, CPCB NOC for hazardous)."],
-["Risk Management System (RMS)","Customs' automated system evaluates the Shipping Bill. Based on risk parameters, it assigns: GREEN channel (no examination, direct LEO), YELLOW channel (document check only), or RED channel (physical examination required). ~80% of export Shipping Bills get green channel."],
-["Physical Examination (if RED)","Container is opened at the port/CFS under customs supervision. Cargo is verified against documents: correct goods, correct quantity, no prohibited items, proper marking. After verification, container is re-sealed with a new customs seal."],
-["Let Export Order (LEO)","Once cleared, customs grants LEO. This is the official permission for the cargo to leave India. The Shipping Bill status updates on ICEGATE. Port/CFS can now accept the container for loading."],
-["Drawback & Incentives","After LEO, you can claim duty drawback (refund of customs/excise duties on inputs). Filed through ICEGATE. Amount credited to your bank account. Also: IGST refund for zero-rated exports, RoDTEP benefits."],
-["Export General Manifest (EGM)","Filed by the shipping line/airline after vessel departure. Lists all cargo on board. Must match Shipping Bill details. EGM filing triggers the DBK (drawback) processing cycle."],
-].map(([title,desc],i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${i<3?B.primary:B.green}`}}>
-<h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:8}}>{title}</h4>
-<p style={{fontSize:13,color:B.g5,lineHeight:1.7}}>{desc}</p>
-</div>)}
-</div>
-</div>)}
-
-{tab==="containers"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Container Type Guide â€” Dimensions & Specifications</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>Choosing the right container is critical for cost efficiency and cargo safety. Here's a detailed guide to every container type used in Indian export trade.</p>
-<div style={{display:"grid",gap:20}}>
-{containers.map((c,i)=><div key={i} style={{...st.cd,overflow:"hidden"}}>
-<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12,flexWrap:"wrap",gap:8}}>
-<div><span style={{fontSize:11,padding:"4px 10px",borderRadius:4,background:B.primary,color:"#fff",fontWeight:700,marginRight:8}}>{c.type}</span><span style={{fontSize:17,fontWeight:700,color:B.dark,fontFamily:FF}}>{c.name}</span></div>
-</div>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:10,marginBottom:14}}>
-<div style={{background:B.g1,padding:10,borderRadius:8}}><div style={{fontSize:10,fontWeight:600,color:B.g5,textTransform:"uppercase"}}>Internal Dimensions</div><div style={{fontSize:13,fontWeight:600,color:B.dark,marginTop:4}}>{c.dim}</div></div>
-<div style={{background:B.g1,padding:10,borderRadius:8}}><div style={{fontSize:10,fontWeight:600,color:B.g5,textTransform:"uppercase"}}>Door Opening</div><div style={{fontSize:13,fontWeight:600,color:B.dark,marginTop:4}}>{c.door}</div></div>
-<div style={{background:B.g1,padding:10,borderRadius:8}}><div style={{fontSize:10,fontWeight:600,color:B.g5,textTransform:"uppercase"}}>Capacity</div><div style={{fontSize:13,fontWeight:600,color:B.dark,marginTop:4}}>{c.cap}</div></div>
-</div>
-<p style={{fontSize:13,color:B.g5,lineHeight:1.7,marginBottom:8}}>{c.desc}</p>
-<div style={{fontSize:12,color:B.primary,fontWeight:600}}>Common cargo: <span style={{color:B.g7,fontWeight:400}}>{c.cargo}</span></div>
-</div>)}
-</div>
-</div>)}
-
-{tab==="rates"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>Freight Rate Components â€” Indian Export Context</h2>
-<p style={{...st.bd,marginTop:10,marginBottom:28}}>Understanding what goes into a freight quote helps you compare rates accurately and avoid surprise charges. Here's every component explained in the Indian context with typical ranges.</p>
-<div style={{display:"grid",gap:16}}>
-{rateComp.map((r,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${i<5?B.primary:B.g3}`}}>
-<h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:8}}>{r.name}</h4>
-<p style={{fontSize:13,color:B.g5,lineHeight:1.7}}>{r.desc}</p>
-</div>)}
-</div>
-</div>)}
-
-<CTA headline="Have Questions? Our Experts Are Ready" st={st} I={I}/></div></div>);}
-
 /* â•â•â• TESTIMONIALS â•â•â• */
 /* â•â•â• COUNTRY PHONE DATA â•â•â• */
 /* â•â•â• RATE GATE â€” email OTP verification â•â•â• */
@@ -854,11 +562,11 @@ return(
 <div style={{fontFamily:F,color:B.g7,background:B.w,minHeight:"100vh",overflowX:"hidden",width:"100%"}}>
 <Routes>
 <Route path="/*" element={<><Nav st={st}/><Routes>
-<Route path="/" element={<HomePage/>}/>
+<Route path="/" element={<HomePage st={st} I={I}/>}/>
 <Route path="/about" element={<AboutPage st={st} I={I}/>}/>
 <Route path="/services" element={<ServicesPage st={st} I={I}/>}/>
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
-<Route path="/knowledge" element={<KnowledgePage/>}/>
+<Route path="/knowledge" element={<KnowledgePage st={st} I={I}/>}/>
 <Route path="/testimonials" element={<TestimonialsPage st={st} I={I}/>}/>
 <Route path="/quote" element={<QuotePage rates={rates}/>}/>
 </Routes><Footer I={I}/></>}/>
@@ -875,6 +583,9 @@ return(
 </div>
 </BrowserRouter>
 </HelmetProvider>);}
+
+
+
 
 
 
