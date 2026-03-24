@@ -175,10 +175,16 @@ const[fileErr,setFileErr]=useState("");
 const[captcha,setCaptcha]=useState(()=>{const a=Math.ceil(Math.random()*9),b=Math.ceil(Math.random()*9);return{a,b,ans:a+b};});
 const[gateUser,setGateUser]=useState(()=>loadSession());
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
-const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);};
+const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
+const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);setHist(getQuoteHistory(user.email));};
 const up=(k,v)=>setF(p=>({...p,[k]:v}));
-// Load history for this user
-const hist=gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]};
+// Auto-save history whenever pol+pod+cargo are all selected
+React.useEffect(()=>{
+  if(gateUser?.email&&f.pol&&f.pod&&f.cargo){
+    saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);
+    setHist(getQuoteHistory(gateUser.email));
+  }
+},[f.pol,f.pod,f.cargo,gateUser?.email]);
 const pods=f.podR?POD_R[f.podR]||[]:[];
 const rk=f.pol&&f.pod&&f.eq?`${f.pol}:${f.pod}:${f.eq}`:null;
 const rate=rk&&rates[rk]?rates[rk]:null;
@@ -237,6 +243,7 @@ const handleSubmit=async()=>{
   });
   // Save quote history for returning customer personalisation
   saveQuoteHistory(gateUser.email, f.pol, f.pod, f.cargo);
+  setHist(getQuoteHistory(gateUser.email));
   try{
     await emailjs.send(EJS.serviceId,EJS.templateId,params,EJS.publicKey);
     setDone(true);
