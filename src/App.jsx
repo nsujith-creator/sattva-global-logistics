@@ -116,6 +116,7 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[focused,setFocused]=useState(false);
   const[results,setResults]=useState([]);
   const[loading,setLoading]=useState(false);
+  const[chunkErr,setChunkErr]=useState(false);  // FAIL-25
   const ref=React.useRef(null);
   const display=focused?q:(value||"");
 
@@ -125,7 +126,8 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
     import("./utils/cargoSearch").then(m=>{
       setResults(m.searchCargo(q,12));
       setLoading(false);
-    }).catch(()=>setLoading(false));
+      setChunkErr(false);
+    }).catch(()=>{setLoading(false);setChunkErr(true);});
   },[q]);
 
   // Show history when focused with no query
@@ -149,9 +151,10 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
         onFocus={()=>{setFocused(true);setQ(value||"");setOpen(true);}}
         placeholder={placeholder} style={inp} autoComplete="off"/>
       {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
-      {open&&(loading||dropItems.length>0)&&(
+      {open&&(loading||chunkErr||dropItems.length>0)&&(
         <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:240,overflowY:"auto",marginTop:2}}>
           {loading&&<div style={{padding:"12px 14px",fontSize:13,color:"#6b7280",display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:12,height:12,border:"2px solid #d1d5db",borderTopColor:"#3b82f6",borderRadius:"50%",animation:"spin .6s linear infinite"}}/>Searching cargo database…</div>}
+          {chunkErr&&<div style={{padding:"12px 14px",fontSize:13,color:"#dc2626"}}>⚠ Search unavailable — type your cargo description manually</div>}
           {!loading&&showHistory&&<div style={{padding:"5px 14px",fontSize:10,fontWeight:700,color:"#6b7280",textTransform:"uppercase",letterSpacing:.5,borderBottom:"1px solid #f3f4f6",background:"#f9fafb"}}>Recent Cargo</div>}
           {dropItems.map((o,i)=>(
             <div key={i} onMouseDown={()=>pick(o.name)}
@@ -168,7 +171,12 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   );
 }
 
-function QuotePage({rates,ratesErr}){const go=useNavigate();
+function QuotePage({rates:ratesProp,ratesErr:ratesErrProp,setRates,setRatesErr}){const go=useNavigate();
+// Lazy-load rates on /quote mount only
+React.useEffect(()=>{
+  lr().then(r=>{setRates(r);setRatesErr(false);})
+    .catch(()=>setRatesErr(true));
+},[]);
 const m=useIsMobile();
 const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
 const[f,setF]=useState(()=>loadFormState()||BLANK_F);
@@ -225,6 +233,7 @@ const validate=()=>{
   setErrs(e);return Object.keys(e).length===0;
 };
 const handleSubmit=async()=>{
+  if(sending){return;}  // FAIL-21: hard guard against double-click/double-tap
   if(!gateUser){setSendErr("Please select your route and verify your identity first.");return;}
   if(!validate())return;
   setSending(true);setSendErr("");
@@ -237,7 +246,7 @@ const handleSubmit=async()=>{
     cargo:f.cargo,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:f.vol,
     dimensions:isOTFR?`L:${f.dimL}m x W:${f.dimW}m x H:${f.dimH}m`:"N/A",
     packing:isOTFR?f.packType:"N/A",
-    attachments:files.length?files.map(x=>x.name).join(", "):"None",
+    attachments:"(not supported — email us directly with supporting documents)",
     notes:f.msg||"(none)",reply_to:gateUser.email
   };
   // Always log to Google Sheets regardless of email success
@@ -298,7 +307,7 @@ return(
 </div>
 {errs.dims&&<div style={{fontSize:11,color:B.red,marginBottom:10}}>{errs.dims}</div>}
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
-<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.green,marginTop:6}}>✓ {files.length} file(s) selected: {files.map(x=>x.name).join(", ")}</div>}</div>
+<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.amber,marginTop:6}}>⚠ {files.length} file(s) selected. Note: files cannot be attached to quote emails — please send them separately to <a href="mailto:quotes@sattvaglobal.in">quotes@sattvaglobal.in</a> quoting your submission.</div>}</div>
 </div>)}
 {rk&&!gateUser&&<RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>}
 {gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
@@ -540,14 +549,7 @@ return(
 export default function App(){
 const[rates,setRates]=useState({});
 const[ratesErr,setRatesErr]=useState(false);
-useEffect(()=>{
-  lr().then(r=>{
-    setRates(r);
-    // If script URL is configured but returned empty, flag as potential load error
-    // (empty {} is fine for no rates, but worth surfacing in admin)
-    setRatesErr(false);
-  }).catch(()=>setRatesErr(true));
-},[]);
+// Rates loaded lazily inside QuotePage — removed from App mount
 const WA_FLOAT=`https://wa.me/919136121123?text=${encodeURIComponent("Hi, I'd like to enquire about freight forwarding services from Sattva Global Logistics.")}`;
 return(
 <HelmetProvider>
@@ -562,7 +564,8 @@ return(
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
 <Route path="/knowledge" element={<KnowledgePage st={st} I={I}/>}/>
 <Route path="/testimonials" element={<TestimonialsPage st={st} I={I}/>}/>
-<Route path="/quote" element={<QuotePage rates={rates} ratesErr={ratesErr}/>}/>
+<Route path="/quote" element={<QuotePage rates={rates} ratesErr={ratesErr} setRates={setRates} setRatesErr={setRatesErr}/>}/>
+<Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p><button onClick={()=>go("/")} style={st.bp}>Back to Home</button></div>}/>
 </Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
 </Routes>

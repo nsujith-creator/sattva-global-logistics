@@ -9,6 +9,21 @@ export function PhoneField({value,onChange,error,onError,st}){
   const[search,setSearch]=useState("");
   const[touched,setTouched]=useState(false);
 
+  // FAIL-09: sync from parent value prop (handles form-state restore, autofill, session restore)
+  const prevValue = React.useRef("");
+  React.useEffect(()=>{
+    if(!value || value === prevValue.current) return;
+    prevValue.current = value;
+    // value format is "{dial} {number}" e.g. "+91 9136121123"
+    const spaceIdx = value.indexOf(" ");
+    if(spaceIdx === -1) return;
+    const dial = value.substring(0, spaceIdx);
+    const number = value.substring(spaceIdx + 1);
+    const country = COUNTRIES.find(c => c.dial === dial);
+    if(country) setSel(country);
+    if(number) setNum(number);
+  },[value]);
+
   const filtered=search?COUNTRIES.filter(c=>c.name.toLowerCase().includes(search.toLowerCase())||c.dial.includes(search)):COUNTRIES;
 
   const validate=(n,country,isBlur=false)=>{

@@ -46,8 +46,9 @@ const validateForm=()=>{
 
 const sendOtp=async()=>{
   if(!validateForm()) return;
-  // Rate limit: max 3 OTP sends per email per session
-  const otpKey=`otp_count_${g.email}`;
+  // Rate limit: max 3 OTP sends per email per session — normalise email first (FAIL-06)
+  const normEmail=g.email.trim().toLowerCase();
+  const otpKey=`otp_count_${normEmail}`;
   const count=parseInt(sessionStorage.getItem(otpKey)||'0');
   if(count>=3){setErrs(p=>({...p,email:"Too many OTP requests. Please email quotes@sattvaglobal.in directly."}));return;}
   setSending(true);

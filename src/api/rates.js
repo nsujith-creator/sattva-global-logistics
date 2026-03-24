@@ -2,14 +2,12 @@
 
 export async function lr(){
   if(!SCRIPT_URL||SCRIPT_URL==="PASTE_YOUR_SCRIPT_URL_HERE") return {};
-  try{
-    const ctrl=new AbortController();
-    const tid=setTimeout(()=>ctrl.abort(),5000);
-    const r=await fetch(`${SCRIPT_URL}?action=getRates&_=${Date.now()}`,{signal:ctrl.signal});
-    clearTimeout(tid);
-    const d=await r.json();
-    return d.rates||{};
-  }catch(e){console.warn("Could not load rates from Sheets:",e);return{};}
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),5000);
+  const r=await fetch(`${SCRIPT_URL}?action=getRates&_=${Date.now()}`,{signal:ctrl.signal});
+  clearTimeout(tid);
+  const d=await r.json();
+  return d.rates||{};
 }
 
 export async function saveRateAPI(key,entry){
