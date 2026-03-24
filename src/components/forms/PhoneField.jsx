@@ -11,9 +11,22 @@ export function PhoneField({value,onChange,error,onError,st}){
 
   const filtered=search?COUNTRIES.filter(c=>c.name.toLowerCase().includes(search.toLowerCase())||c.dial.includes(search)):COUNTRIES;
 
-  const validate=(n,country)=>{
+  const validate=(n,country,isBlur=false)=>{
     if(!n) return "";
     const digits=n.replace(/\s/g,"");
+    if(!digits) return "";
+
+    // India-specific logic: only error immediately if starts with 0-5
+    // Otherwise wait for blur to check full length
+    if(country.dial==="+91"){
+      if(/^[0-5]/.test(digits)) return "Indian numbers must start with 6, 7, 8 or 9";
+      if(isBlur && digits.length>0 && digits.length!==10) return "Invalid India number. Expected: 10 digits starting with 6-9";
+      if(isBlur && digits.length===10 && !country.pattern.test(digits)) return `Invalid ${country.name} number. Expected: ${country.hint}`;
+      return "";
+    }
+
+    // For other countries: only validate on blur
+    if(!isBlur) return "";
     if(!country.pattern.test(digits)) return `Invalid ${country.name} number. Expected: ${country.hint}`;
     return "";
   };
@@ -22,7 +35,7 @@ export function PhoneField({value,onChange,error,onError,st}){
     const clean=v.replace(/[^\d\s]/g,"");
     setNum(clean);
     setTouched(true);
-    const err=validate(clean,sel);
+    const err=validate(clean,sel,false); // not blur — only catch starts-with-0-5
     onError(err);
     onChange(`${sel.dial} ${clean}`);
   };
@@ -30,13 +43,19 @@ export function PhoneField({value,onChange,error,onError,st}){
   const handleCountry=(country)=>{
     setSel(country);setOpen(false);setSearch("");
     if(num){
-      const err=validate(num,country);
+      const err=validate(num,country,false);
       onError(err);
       onChange(`${country.dial} ${num}`);
     }
   };
 
-  const fieldErr=touched?validate(num,sel):"";
+  const handleBlur=()=>{
+    setTouched(true);
+    const err=validate(num,sel,true); // blur — check full validation
+    onError(err);
+  };
+
+  const fieldErr=touched?validate(num,sel,false):"";
 
   return(
   <div style={{position:"relative"}}>
@@ -51,7 +70,7 @@ export function PhoneField({value,onChange,error,onError,st}){
       type="tel"
       value={num}
       onChange={e=>handleNum(e.target.value)}
-      onBlur={()=>setTouched(true)}
+      onBlur={handleBlur}
       placeholder={`${sel.hint}`}
       style={{flex:1,border:"none",outline:"none",padding:"11px 12px",fontSize:14,fontFamily:F,background:"transparent",minWidth:0}}
     />
