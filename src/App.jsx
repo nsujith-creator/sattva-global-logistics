@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import emailjs from "@emailjs/browser";
@@ -48,6 +48,100 @@ import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session"
 /* Country phone data */
 /* Rate gate: email OTP verification */
 /* Quote page: instant rate lookup */
+
+/* ─── Search-as-you-type port combobox ─── */
+function PortCombo({label,value,onChange,options,error,placeholder}){
+  const[q,setQ]=useState("");
+  const[open,setOpen]=useState(false);
+  const[focused,setFocused]=useState(false);
+  const ref=React.useRef(null);
+  // Display text: if a code is selected show full label, else show search query
+  const selected=options.find(o=>o.c===value);
+  const display=focused?q:(selected?`${selected.n} (${selected.c})`:"");
+  const filtered=q.length>0?options.filter(o=>
+    o.n.toLowerCase().includes(q.toLowerCase())||
+    o.c.toLowerCase().includes(q.toLowerCase())
+  ).slice(0,12):[];
+  React.useEffect(()=>{
+    const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
+    document.addEventListener("mousedown",handler);
+    return()=>document.removeEventListener("mousedown",handler);
+  },[]);
+  const pick=(code)=>{onChange(code);setQ("");setOpen(false);setFocused(false);};
+  const {B,st}=window._sattvaTheme||{};
+  return(
+    <div ref={ref} style={{position:"relative"}}>
+      <label style={{display:"block",fontSize:12,fontWeight:600,color:"#374151",marginBottom:6,textTransform:"uppercase",letterSpacing:.5}}>{label}</label>
+      <input
+        type="text"
+        value={display}
+        onChange={e=>{setQ(e.target.value);setOpen(true);if(!e.target.value)onChange("");}}
+        onFocus={()=>{setFocused(true);setQ(selected?`${selected.n} (${selected.c})`:"");setOpen(true);}}
+        placeholder={placeholder}
+        style={{width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"}}
+        autoComplete="off"
+      />
+      {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
+      {open&&filtered.length>0&&(
+        <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:240,overflowY:"auto",marginTop:2}}>
+          {filtered.map(o=>(
+            <div key={o.c} onMouseDown={()=>pick(o.c)}
+              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,display:"flex",justifyContent:"space-between",borderBottom:"1px solid #f3f4f6"}}
+              onMouseEnter={e=>e.currentTarget.style.background="#f0f4ff"}
+              onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
+              <span>{o.n}</span>
+              <span style={{color:"#6b7280",fontSize:11,fontWeight:600}}>{o.c}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Search-as-you-type cargo combobox ─── */
+function CargoCombo({label,value,onChange,options,error,placeholder}){
+  const[q,setQ]=useState("");
+  const[open,setOpen]=useState(false);
+  const[focused,setFocused]=useState(false);
+  const ref=React.useRef(null);
+  const display=focused?q:(value||"");
+  const filtered=q.length>0?options.filter(o=>o.toLowerCase().includes(q.toLowerCase())).slice(0,10):[];
+  React.useEffect(()=>{
+    const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
+    document.addEventListener("mousedown",handler);
+    return()=>document.removeEventListener("mousedown",handler);
+  },[]);
+  const pick=(v)=>{onChange(v);setQ("");setOpen(false);setFocused(false);};
+  return(
+    <div ref={ref} style={{position:"relative"}}>
+      <label style={{display:"block",fontSize:12,fontWeight:600,color:"#374151",marginBottom:6,textTransform:"uppercase",letterSpacing:.5}}>{label}</label>
+      <input
+        type="text"
+        value={display}
+        onChange={e=>{setQ(e.target.value);onChange(e.target.value);setOpen(true);}}
+        onFocus={()=>{setFocused(true);setQ(value||"");setOpen(true);}}
+        placeholder={placeholder}
+        style={{width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"}}
+        autoComplete="off"
+      />
+      {error&&<div style={{fontSize:11,color:"#ef4444",marginTop:3}}>{error}</div>}
+      {open&&filtered.length>0&&(
+        <div style={{position:"absolute",top:"100%",left:0,right:0,zIndex:999,background:"#fff",border:"1.5px solid #d1d5db",borderRadius:8,boxShadow:"0 8px 24px rgba(0,0,0,.12)",maxHeight:220,overflowY:"auto",marginTop:2}}>
+          {filtered.map(o=>(
+            <div key={o} onMouseDown={()=>pick(o)}
+              style={{padding:"9px 14px",cursor:"pointer",fontSize:13,borderBottom:"1px solid #f3f4f6"}}
+              onMouseEnter={e=>e.currentTarget.style.background="#f0f4ff"}
+              onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
+              {o}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function QuotePage({rates}){const go=useNavigate();
 const m=useIsMobile();
 const[f,setF]=useState({pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""});
@@ -142,12 +236,17 @@ return(
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
 <div style={{...st.cd,padding:m?20:36}}>
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18}}>
-<div><label style={st.lb}>POL *</label><select style={{...st.inp,borderColor:errs.pol?B.red:undefined}} value={f.pol} onChange={e=>{up("pol",e.target.value);setErrs(p=>({...p,pol:""}));}}><option value="">Select</option>{POL.map(p=><option key={p.c} value={p.c}>{p.n} ({p.c})</option>)}</select><ErrMsg msg={errs.pol}/></div>
-<div><label style={st.lb}>Region *</label><select style={st.inp} value={f.podR} onChange={e=>{up("podR",e.target.value);up("pod","");}}><option value="">Select</option>{Object.keys(POD_R).map(r=><option key={r} value={r}>{r}</option>)}</select></div>
-<div><label style={st.lb}>POD *</label><select style={{...st.inp,borderColor:errs.pod?B.red:undefined}} value={f.pod} onChange={e=>{up("pod",e.target.value);setErrs(p=>({...p,pod:""}));}} disabled={!f.podR}><option value="">Select</option>{pods.map(p=><option key={p.c} value={p.c}>{p.n} ({p.c})</option>)}</select><ErrMsg msg={errs.pod}/></div>
-<div><label style={st.lb}>Cargo Type *</label><select style={{...st.inp,borderColor:errs.cargo?B.red:undefined}} value={f.cargo} onChange={e=>{up("cargo",e.target.value);setErrs(p=>({...p,cargo:""}));}}><option value="">Select</option>{CARGO.map(c=><option key={c} value={c}>{c}</option>)}</select><ErrMsg msg={errs.cargo}/></div>
+{/* POL + POD side by side — search-as-you-type combobox */}
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
+<PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…"/>
+<PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…"/>
+</div>
+{/* Cargo Type + Equipment side by side */}
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18,marginBottom:18}}>
+<CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} options={CARGO} error={errs.cargo} placeholder="Search cargo type…"/>
 <div><label style={st.lb}>Equipment *</label><select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>{up("eq",e.target.value);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");}}><option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select><ErrMsg msg={errs.eq}/></div>
+</div>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18}}>
 <div><label style={st.lb}>Containers</label><input type="number" style={st.inp} value={f.vol} onChange={e=>up("vol",e.target.value)} min="1"/></div>
 </div>
 {isOTFR&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:`${B.primary}05`,border:`1.5px solid ${B.primary}22`}}>
