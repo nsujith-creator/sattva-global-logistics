@@ -81,17 +81,22 @@ return(
 <h2 style={{...st.h2,textAlign:"left"}}>Export Document Templates</h2>
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Every export shipment requires a set of documents. We provide branded templates for your use. Download the XLSX templates, fill in your shipment details, and print.</p>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16}}>
-{[["Commercial Invoice","The primary document for customs and payment. Lists goods, values, HS codes, buyer/seller details, Incoterms, and payment terms. Required for every export shipment.","Sattva_Export_Invoice_Template.xlsx"],
-["Packing List","Details container contents: item descriptions, gross/net weights, dimensions, CBM, package counts. Used by customs and for cargo verification.","Sattva_Export_Packing_List_Template.xlsx"],
-["Bill of Lading (BL Draft)","The title document for ocean cargo. Proves shipment, acts as receipt, and can be negotiable. Our draft template helps you verify BL details before finalization with the shipping line.","Sattva_BL_Draft_Template.xlsx"],
-["Certificate of Origin","Certifies the country of manufacture. Required for preferential duty rates under trade agreements. Issued by local Chamber of Commerce or Export Promotion Council.","Sattva_Certificate_of_Origin_Draft.xlsx"],
-["MSDS (Material Safety Data Sheet)","Mandatory for chemical/hazardous cargo. Provides 16-section safety information. Must accompany IMO-classified goods. Our template follows GHS format.","Sattva_MSDS_Template.xlsx"],
+{[["Commercial Invoice","The primary document for customs and payment. Lists goods, values, HS codes, buyer/seller details, Incoterms, and payment terms. Required for every export shipment.","commercial_invoice_sattva.xlsx"],
+["Packing List","Details container contents: item descriptions, gross/net weights, dimensions, CBM, package counts. Used by customs and for cargo verification.","packing_list_sattva.xlsx"],
+["Bill of Lading (BL Draft)","The title document for ocean cargo. Proves shipment, acts as receipt, and can be negotiable. Our draft template helps you verify BL details before finalization with the shipping line.","bl_draft_checker_sattva.xlsx"],
+["Certificate of Origin","Certifies the country of manufacture. Required for preferential duty rates under trade agreements. Issued by local Chamber of Commerce or Export Promotion Council.","certificate_of_origin_sattva.xlsx"],
+["MSDS (Material Safety Data Sheet)","Mandatory for chemical/hazardous cargo. Provides 16-section safety information. Must accompany IMO-classified goods. Our template follows GHS format.","msds_sattva.xlsx"],
 ["Phytosanitary Certificate","Required for agricultural products, food items, and plant-based materials. Issued by the Plant Quarantine Authority of India before export.","Issued by govt authority"],
 ["FSSAI Certificate","Required for food product exports. Ensures compliance with food safety standards. Applied for through FSSAI portal.","Issued by FSSAI"],
 ].map(([title,desc,file],i)=><div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}>
 <h3 style={{...st.h3,fontSize:16,marginBottom:8}}>{title}</h3>
 <p style={{fontSize:13,color:B.g5,lineHeight:1.6,marginBottom:12}}>{desc}</p>
-<div style={{fontSize:12,color:B.primary,fontWeight:600}}>{file.endsWith(".xlsx")?"📥 XLSX Template Available":"📋 "+file}</div>
+{file.endsWith(".xlsx")
+  ? <a href={`/templates/${file}`} download style={{display:"inline-flex",alignItems:"center",gap:6,fontSize:12,color:B.primary,fontWeight:600,textDecoration:"none",padding:"6px 12px",border:`1px solid ${B.primary}`,borderRadius:6,background:"#EEF2FF"}}>
+      <span>📥</span> Download XLSX Template
+    </a>
+  : <div style={{fontSize:12,color:B.g5,fontWeight:600}}>📋 {file}</div>
+}
 </div>)}
 </div>
 </div>)}
