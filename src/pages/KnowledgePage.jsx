@@ -92,7 +92,7 @@ return(
 <h3 style={{...st.h3,fontSize:16,marginBottom:8}}>{title}</h3>
 <p style={{fontSize:13,color:B.g5,lineHeight:1.6,marginBottom:12}}>{desc}</p>
 {file.endsWith(".xlsx")
-  ? <a href={`/templates/${file}`} download style={{display:"inline-flex",alignItems:"center",gap:6,fontSize:12,color:B.primary,fontWeight:600,textDecoration:"none",padding:"6px 12px",border:`1px solid ${B.primary}`,borderRadius:6,background:"#EEF2FF"}}>
+  ? <a href={`/templates/${file}?v=20260325`} download style={{display:"inline-flex",alignItems:"center",gap:6,fontSize:12,color:B.primary,fontWeight:600,textDecoration:"none",padding:"6px 12px",border:`1px solid ${B.primary}`,borderRadius:6,background:"#EEF2FF"}}>
       <span>📥</span> Download XLSX Template
     </a>
   : <div style={{fontSize:12,color:B.g5,fontWeight:600}}>📋 {file}</div>

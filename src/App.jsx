@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+﻿// FAIL-24: Route-level code splitting — pages loaded only when route is visited
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import emailjs from "@emailjs/browser";
@@ -16,9 +17,10 @@ import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
 import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { IndustriesPage } from "./pages/IndustriesPage";
-import { KnowledgePage } from "./pages/KnowledgePage";
 import { ServicesPage } from "./pages/ServicesPage";
-import { TestimonialsPage } from "./pages/TestimonialsPage";
+// Heavy pages lazy-loaded — only fetched when route is visited
+const KnowledgePage   = lazy(()=>import("./pages/KnowledgePage").then(m=>({default:m.KnowledgePage})));
+const TestimonialsPage = lazy(()=>import("./pages/TestimonialsPage").then(m=>({default:m.TestimonialsPage})));
 import { EJS } from "./config/emailjs";
 import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
@@ -191,6 +193,18 @@ const[gateUser,setGateUser]=useState(()=>loadSession());
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
 const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
 const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);setHist(getQuoteHistory(user.email));};
+// FAIL-13: sync session across tabs via storage event
+React.useEffect(()=>{
+  const handler=(e)=>{
+    if(e.key==="sattva-verified-user"){
+      const u=loadSession();
+      setGateUser(u);
+      if(u) setHist(getQuoteHistory(u.email));
+    }
+  };
+  window.addEventListener("storage",handler);
+  return()=>window.removeEventListener("storage",handler);
+},[]);
 const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
 // Auto-save history whenever pol+pod+cargo are all selected
 React.useEffect(()=>{
@@ -562,8 +576,8 @@ return(
 <Route path="/about" element={<AboutPage st={st} I={I}/>}/>
 <Route path="/services" element={<ServicesPage st={st} I={I}/>}/>
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
-<Route path="/knowledge" element={<KnowledgePage st={st} I={I}/>}/>
-<Route path="/testimonials" element={<TestimonialsPage st={st} I={I}/>}/>
+<Route path="/knowledge" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense>}/>
+<Route path="/testimonials" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense>}/>
 <Route path="/quote" element={<QuotePage rates={rates} ratesErr={ratesErr} setRates={setRates} setRatesErr={setRatesErr}/>}/>
 <Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p><button onClick={()=>go("/")} style={st.bp}>Back to Home</button></div>}/>
 </Routes><Footer I={I}/></>}/>
