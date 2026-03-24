@@ -11,6 +11,10 @@ import { ScrollToTop } from "./components/routing/ScrollToTop";
 import { CarrierBadge } from "./components/shared/CarrierBadge";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
+import { AboutPage } from "./pages/AboutPage";
+import { IndustriesPage } from "./pages/IndustriesPage";
+import { ServicesPage } from "./pages/ServicesPage";
+import { TestimonialsPage } from "./pages/TestimonialsPage";
 import { EJS } from "./config/emailjs";
 import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
@@ -199,58 +203,8 @@ function HomePage(){const go=useNavigate();const m=useIsMobile();return(<><Helme
 </>);}
 
 /* â•â•â• ABOUT â•â•â• */
-function AboutPage(){const go=useNavigate();return(
-<div style={{paddingTop:68}}><Helmet><title>About Us | Sattva Global Logistics Mumbai</title><meta name="description" content="20+ years of export logistics experience. Sattva Global Logistics specialises in FCL shipments from Indian ports to the Middle East, Red Sea and Africa." /><link rel="canonical" href="https://www.sattvaglobal.in/about" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>About Us</div>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Built on <span style={{color:B.primary}}>Reliability</span>, Driven by <span style={{color:B.primary}}>Precision</span></h1>
-<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:660}}>Sattva Global Logistics is an international freight forwarding company headquartered in Mumbai, with 20+ years of export logistics experience. We specialise in FCL shipments from Indian ports to the Middle East, Red Sea and Africa.</p>
-</div></section>
-<div style={st.sec}>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:28}}>
-{[{t:"Our Mission",d:"Documentation accuracy, transparent pricing, and proactive coordination â€” delivering freight forwarding that Indian exporters can depend on."},{t:"Mumbai Advantage",d:"Direct JNPT/Nhava Sheva access, strong carrier relationships, and deep Indian export regulation expertise built over 20+ years."},{t:"IMEA Network",d:"Partnerships across 40+ destinations in the Middle East, Red Sea corridor and Africa with shipping lines, overseas agents, and customs brokers."},{t:"Compliance First",d:"Systems designed to prevent documentation errors before they happen â€” zero BL amendments is our standard, not our target."}].map((x,i)=>
-<div key={i} style={{...st.cd,borderTop:`3px solid ${B.primary}`}}><h3 style={{...st.h3,marginBottom:10}}>{x.t}</h3><p style={{...st.bd,fontSize:14}}>{x.d}</p></div>)}
-</div>
-<CTA headline="Partner with a Team That Delivers" st={st} I={I}/>
-</div></div>);}
-
 /* â•â•â• SERVICES â•â•â• */
-function ServicesPage(){const go=useNavigate();
-const data=[
-{icon:<I.Sh/>,t:"Export FCL Ocean Freight",items:["Full container load from all major Indian ports","Competitive rates with Tier-1 shipping lines","Regular sailings to Gulf, Far East, Europe, Americas, Africa","Real-time container tracking","Equipment: GP, HC, Reefer, OT, FR, ISO Tank"]},
-{icon:<I.Sd/>,t:"Customs Clearance & Documentation",items:["Complete export customs clearance at JNPT+","Shipping Bill, BL, Certificate of Origin","DGFT, Customs, FSSAI, BIS compliance","GST/IGST refund documentation","IMO hazardous cargo docs"]},
-{icon:<I.Gl/>,t:"End-to-End Freight Forwarding",items:["Door-to-port and door-to-door","Multi-modal coordination","Cargo insurance","Destination clearance with overseas partners","Single point of contact"]},
-{icon:<I.Tr/>,t:"Inland Transportation",items:["Factory to port/ICD/CFS pickup","Containerized + break-bulk transport","Trailer & flatbed arrangements","GPS-tracked vehicles","Timely vessel cut-off delivery"]},
-];
-return(
-<div style={{paddingTop:68}}><Helmet><title>Export Freight Services | FCL Ocean Freight from India | Sattva Global Logistics</title><meta name="description" content="Export FCL ocean freight, customs clearance, end-to-end freight forwarding, and inland transportation from JNPT, Mundra, Chennai and Cochin." /><link rel="canonical" href="https://www.sattvaglobal.in/services" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Our Services</div>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Comprehensive <span style={{color:B.primary}}>Export Logistics</span></h1>
-</div></section>
-<div style={st.sec}><div style={{display:"grid",gap:32}}>
-{data.map((x,i)=>(
-<div key={i} style={{...st.cd,display:"grid",gridTemplateColumns:"auto 1fr",gap:28,alignItems:"start"}}>
-<div style={{width:72,height:72,borderRadius:18,background:`${B.primary}08`,display:"flex",alignItems:"center",justifyContent:"center"}}>{x.icon}</div>
-<div><h3 style={{...st.h3,marginBottom:14}}>{x.t}</h3>
-{x.items.map((it,j)=><div key={j} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:8}}><div style={{flexShrink:0,marginTop:2}}><I.Ck/></div><span style={{fontSize:14,color:B.g7}}>{it}</span></div>)}
-</div></div>))}
-</div><CTA st={st} I={I}/></div></div>);}
-
 /* â•â•â• INDUSTRIES â•â•â• */
-function IndustriesPage(){const go=useNavigate();
-const d=[{t:"Textiles & Garments",d:"Time-sensitive shipments, GSP/COO documentation."},{t:"Pharmaceuticals",d:"Temperature-controlled logistics, GDP compliance."},{t:"Chemicals & Hazardous",d:"IMO-classified, MSDS documentation."},{t:"Engineering Goods",d:"Heavy cargo, ODC handling, project cargo."},{t:"Food & Agriculture",d:"FSSAI compliance, fumigation, phytosanitary."},{t:"Auto Components",d:"JIT delivery, precision stuffing."},{t:"Electronics",d:"High-value insurance, secure handling."},{t:"Machinery",d:"Project cargo, flat rack, heavy lift."}];
-return(
-<div style={{paddingTop:68}}><Helmet><title>Industries We Serve | Freight Forwarding for Indian Exporters | Sattva Global Logistics</title><meta name="description" content="Specialist freight forwarding for textiles, pharma, chemicals, engineering goods, food, auto components, electronics and machinery exporters from India." /><link rel="canonical" href="https://www.sattvaglobal.in/industries" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Industries</div>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Industries We Serve with <span style={{color:B.primary}}>Expertise</span></h1>
-</div></section>
-<div style={st.sec}>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:20}}>
-{d.map((x,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`}}><h3 style={{...st.h3,fontSize:17,marginBottom:6}}>{x.t}</h3><p style={{...st.bd,fontSize:13}}>{x.d}</p></div>)}
-</div><CTA headline="Discuss Your Industry Needs" st={st} I={I}/></div></div>);}
-
 /* â•â•â• KNOWLEDGE â•â•â• */
 function KnowledgePage(){const go=useNavigate();
 const[tab,setTab]=useState("incoterms");
@@ -418,74 +372,6 @@ return(
 <CTA headline="Have Questions? Our Experts Are Ready" st={st} I={I}/></div></div>);}
 
 /* â•â•â• TESTIMONIALS â•â•â• */
-function TestimonialsPage(){const go=useNavigate();
-const d=[
-{text:"Our buyers stopped raising discrepancy claims after we switched to Sattva. The documentation is always clean and the vessel bookings are never missed.",from:"Ravi M., Export Manager",co:"Garments Manufacturer, Mumbai",route:"JNPT â†’ Jebel Ali"},
-{text:"Sattva handled every FSSAI certificate and fumigation requirement without us having to follow up even once. Our first Africa shipments went without a single customs hold.",from:"Haresh P., Proprietor",co:"Food Products Exporter, Surat",route:"Mundra â†’ Mombasa"},
-{text:"Pharma exports need a forwarder who understands regulatory compliance, not just freight rates. Sattva has never missed a documentation deadline.",from:"Priya S., GM Logistics",co:"Pharma API Manufacturer, Thane",route:"JNPT â†’ Jeddah"},
-{text:"Proactive updates at every milestone â€” we always know where our cargo is without having to call. That kind of transparency is rare in this industry.",from:"Anand K., Director",co:"Engineering Goods Exporter, Pune",route:"JNPT â†’ Dammam"},
-{text:"Switched to Sattva after a bad experience with documentation errors on our previous forwarder. Not a single BL amendment in 14 months.",from:"Farida T., CFO",co:"Chemical Exporter, Ankleshwar",route:"Mundra â†’ Port Said"},
-{text:"Their understanding of Indian customs procedures and DGFT compliance gave us confidence when we started exporting for the first time.",from:"Suresh N., MD",co:"Auto Components Manufacturer, Chennai",route:"Chennai â†’ Durban"},
-];
-
-const cases=[
-{tag:"Readymade Garments Â· Mumbai",headline:"Zero BL amendments across 18 months for a Mumbai garment exporter shipping to the Gulf",challenge:"A mid-sized garments manufacturer from Andheri was regularly facing BL amendments and customs examination delays â€” costing them buyer penalties and L/C discrepancy charges on every second shipment.",solution:"Sattva implemented a pre-shipment documentation checklist aligned with their buyer's L/C terms, coordinated directly with their CHA for Shipping Bill filing, and set up structured pickup-to-vessel cut-off timelines.",stats:[["18 months","zero BL amendments"],["40HC / 20GP","JNPT â†’ Jebel Ali, weekly"],["100%","on-vessel before cut-off"]],quote:"Our buyers stopped raising discrepancy claims after we switched to Sattva. The documentation is always clean and the vessel bookings are never missed.",attr:"Export Manager, Garments Manufacturer, Mumbai"},
-{tag:"Food Products / FMCG Â· Gujarat",headline:"Seamless FSSAI-compliant exports to East Africa for a Gujarat food products manufacturer",challenge:"A packaged food exporter from Surat was expanding into East Africa for the first time. The key challenge: FSSAI labelling compliance, fumigation certificates, and phytosanitary requirements that their previous forwarder had no experience handling.",solution:"Sattva managed end-to-end â€” coordinating fumigation at the warehouse, obtaining FSSAI export certificates, filing the Shipping Bill with correct HS codes to avoid customs holds at Mombasa, and arranging inland haulage from Surat to Mundra.",stats:[["Mundra â†’ Mombasa","primary trade lane"],["0 customs holds","across first 12 shipments"],["Full compliance","FSSAI + fumigation + COO"]],quote:"We were nervous about our first Africa shipments given the documentation complexity. Sattva handled every certificate and requirement without us having to follow up once.",attr:"Proprietor, Food Products Exporter, Surat"},
-{tag:"Pharma API Â· Mumbai",headline:"Time-critical pharma API exports to the Red Sea corridor â€” with zero compliance failures",challenge:"A pharmaceutical API manufacturer from Thane needed a freight partner who could handle CDSCO export NOC, MSDS, dangerous goods declarations, and strict temperature-monitoring requirements during port dwell time.",solution:"Sattva coordinated all regulatory documentation, sourced reefer containers for temperature-sensitive consignments, and established a dedicated communication protocol ensuring the client received updates at every milestone.",stats:[["JNPT â†’ Jeddah","fortnightly, regular"],["100% GDP","cold chain compliance"],["Zero delays","CDSCO NOC + customs"]],quote:"Pharma exports require a forwarder who understands regulatory compliance, not just freight rates. Sattva has never missed a documentation deadline.",attr:"GM Logistics, Pharma API Manufacturer, Thane"},
-];
-
-return(
-<div style={{paddingTop:68}}><Helmet><title>Client Testimonials | Indian Exporter Success Stories | Sattva Global Logistics</title><meta name="description" content="Real results from Indian exporters shipping garments, pharma, food, engineering goods and chemicals to the Middle East, Africa and beyond with Sattva Global Logistics." /><link rel="canonical" href="https://www.sattvaglobal.in/testimonials" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px",textAlign:"center"}}>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)",maxWidth:700,margin:"0 auto"}}>Trusted by Exporters Who <span style={{color:B.primary}}>Move the World</span></h1>
-<p style={{...st.bd,fontSize:17,maxWidth:600,margin:"18px auto 0"}}>Real results from Indian exporters shipping to the Middle East, Africa and beyond.</p>
-</section>
-
-<div style={st.sec}>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:20}}>
-{d.map((t,i)=>(
-<div key={i} style={{...st.cd,display:"flex",flexDirection:"column",gap:12}}>
-<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}>
-<div style={{display:"flex",gap:2}}>{[1,2,3,4,5].map(x=><I.St key={x}/>)}</div>
-<span style={{fontSize:11,background:`${B.primary}10`,color:B.primary,padding:"3px 8px",borderRadius:6,fontWeight:600}}>{t.route}</span>
-</div>
-<p style={{...st.bd,fontSize:14,fontStyle:"italic",flex:1}}>"{t.text}"</p>
-<div>
-<div style={{fontSize:13,fontWeight:600,color:B.dark}}>{t.from}</div>
-<div style={{fontSize:12,color:B.g5}}>{t.co}</div>
-</div>
-</div>))}
-</div>
-
-<div style={{marginTop:64}}>
-<h2 style={st.h2}>Client Success Stories</h2>
-<p style={{...st.sub,marginBottom:48}}>How Indian exporters achieved documentation accuracy and shipment reliability with Sattva.</p>
-<div style={{display:"grid",gap:32}}>
-{cases.map((c,i)=>(
-<div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`}}>
-<div style={{fontSize:11,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:2,marginBottom:10}}>{c.tag}</div>
-<h3 style={{...st.h3,fontSize:20,marginBottom:14}}>{c.headline}</h3>
-<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:16}}>
-<div><div style={{fontSize:12,fontWeight:600,color:B.g5,marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>The Challenge</div><p style={{...st.bd,fontSize:13}}>{c.challenge}</p></div>
-<div><div style={{fontSize:12,fontWeight:600,color:B.g5,marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>What We Did</div><p style={{...st.bd,fontSize:13}}>{c.solution}</p></div>
-</div>
-<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:16}}>
-{c.stats.map(([n,l],j)=>(
-<div key={j} style={{background:B.g1,borderRadius:10,padding:"12px 16px",textAlign:"center"}}>
-<div style={{fontSize:n.length>8?13:18,fontWeight:700,color:B.primary,fontFamily:FF}}>{n}</div>
-<div style={{fontSize:11,color:B.g5,marginTop:4}}>{l}</div>
-</div>))}
-</div>
-<div style={{background:`${B.primary}06`,borderRadius:10,padding:16}}>
-<p style={{fontSize:14,fontStyle:"italic",color:B.g7,margin:"0 0 6px"}}>"{c.quote}"</p>
-<div style={{fontSize:12,fontWeight:600,color:B.primary}}>â€” {c.attr}</div>
-</div>
-</div>))}
-</div>
-</div>
-<CTA st={st} I={I}/>
-</div></div>);}
-
 /* â•â•â• COUNTRY PHONE DATA â•â•â• */
 /* â•â•â• RATE GATE â€” email OTP verification â•â•â• */
 function RateGate({onUnlock,isMobile}){
@@ -969,11 +855,11 @@ return(
 <Routes>
 <Route path="/*" element={<><Nav st={st}/><Routes>
 <Route path="/" element={<HomePage/>}/>
-<Route path="/about" element={<AboutPage/>}/>
-<Route path="/services" element={<ServicesPage/>}/>
-<Route path="/industries" element={<IndustriesPage/>}/>
+<Route path="/about" element={<AboutPage st={st} I={I}/>}/>
+<Route path="/services" element={<ServicesPage st={st} I={I}/>}/>
+<Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
 <Route path="/knowledge" element={<KnowledgePage/>}/>
-<Route path="/testimonials" element={<TestimonialsPage/>}/>
+<Route path="/testimonials" element={<TestimonialsPage st={st} I={I}/>}/>
 <Route path="/quote" element={<QuotePage rates={rates}/>}/>
 </Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
@@ -989,6 +875,8 @@ return(
 </div>
 </BrowserRouter>
 </HelmetProvider>);}
+
+
 
 
 
