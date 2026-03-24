@@ -1,14 +1,16 @@
-﻿import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import emailjs from "@emailjs/browser";
 import { ErrMsg } from "./components/forms/ErrMsg";
+import { RateGate } from "./components/forms/RateGate";
 import { PhoneField } from "./components/forms/PhoneField";
 import { CTA } from "./components/layout/CTA";
 import { Footer } from "./components/layout/Footer";
 import { Nav } from "./components/layout/Nav";
 import { ScrollToTop } from "./components/routing/ScrollToTop";
 import { CarrierBadge } from "./components/shared/CarrierBadge";
+import { I } from "./components/shared/icons";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
 import { AboutPage } from "./pages/AboutPage";
@@ -22,10 +24,10 @@ import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
 import { POL, POD_R, ALL_POD } from "./data/ports";
 import { B, F, FF } from "./theme/tokens";
+import { st } from "./styles/sharedStyles";
 import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
-import { isFreeEmail } from "./utils/validation";
 /* â•â•â• EMAILJS CONFIG â•â•â• */
 /* â•â•â• RESPONSIVE HOOK â•â•â• */
 /* â•â•â• PACKING TYPES â•â•â• */
@@ -33,44 +35,7 @@ import { isFreeEmail } from "./utils/validation";
 /* â•â•â• PORT DATA â•â•â• */
 /* â•â•â• GOOGLE SHEETS BACKEND â•â•â• */
 /* â•â•â• ICONS â•â•â• */
-const I={
-Ck:()=><svg width="18" height="18" viewBox="0 0 20 20" fill={B.primary}><path d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm4.707 8.707l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 111.414-1.414L9 11.586l4.293-4.293a1 1 0 111.414 1.414z"/></svg>,
-Wr:()=><svg width="18" height="18" viewBox="0 0 20 20" fill="#94a3b8"><path d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm1 14H9v-2h2v2zm0-4H9V6h2v4z"/></svg>,
-St:()=><svg width="14" height="14" viewBox="0 0 16 16" fill={B.primary}><path d="M8 0l2.472 4.932L16 5.78l-4 3.854L12.944 16 8 13.416 3.056 16 4 9.634 0 5.78l5.528-.848z"/></svg>,
-Qt:()=><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>,
-Sh:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.4 11.4 0 0020 17l-9-4-9 4c0 1.03.16 2.04.46 3"/><path d="M11 2v5L6 10l4-1V2"/><path d="M11 7h2"/></svg>,
-Dc:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>,
-Tr:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
-Sd:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>,
-Gl:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>,
-Cb:()=><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>,
-Ph:()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
-Ma:()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>,
-Pi:()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>,
-Ar:()=><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>,
-An:()=><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="1.5"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M5 12H2a10 10 0 0020 0h-3"/></svg>,
-Lk:()=><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>,
-Ed:()=><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-Dl:()=><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>,
-Pl:()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-Dw:()=><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>,
-};
-
 /* â•â•â• STYLES â•â•â• */
-const st={
-sec:{padding:"72px 20px",maxWidth:1200,margin:"0 auto",boxSizing:"border-box",width:"100%"},
-h1:{fontSize:"clamp(28px,6vw,52px)",fontWeight:700,color:B.dark,lineHeight:1.12,fontFamily:FF,margin:0},
-h2:{fontSize:"clamp(24px,3.5vw,38px)",fontWeight:700,color:B.dark,lineHeight:1.2,fontFamily:FF,margin:0,textAlign:"center"},
-h3:{fontSize:20,fontWeight:600,color:B.dark,fontFamily:F,margin:0},
-bd:{fontSize:15,lineHeight:1.7,color:B.g5,fontFamily:F},
-sub:{fontSize:16,lineHeight:1.7,color:B.g5,maxWidth:620,margin:"14px auto 0",textAlign:"center",fontFamily:F},
-bp:{display:"inline-flex",alignItems:"center",gap:8,padding:"13px 24px",background:B.primary,color:"#fff",borderRadius:8,fontWeight:600,fontSize:14,border:"none",cursor:"pointer",fontFamily:F,boxShadow:`0 4px 14px ${B.primary}40`,transition:"all .2s"},
-bs:{display:"inline-flex",alignItems:"center",gap:8,padding:"13px 24px",background:"transparent",color:B.primary,borderRadius:8,fontWeight:600,fontSize:14,border:`2px solid ${B.primary}`,cursor:"pointer",fontFamily:F,transition:"all .2s"},
-cd:{background:"#fff",borderRadius:14,padding:28,boxShadow:"0 1px 3px rgba(0,0,0,.05), 0 6px 20px rgba(0,0,0,.03)"},
-inp:{width:"100%",padding:"11px 14px",border:`1.5px solid ${B.g3}`,borderRadius:8,fontSize:14,fontFamily:F,outline:"none",boxSizing:"border-box",background:"#fff"},
-lb:{fontSize:12,fontWeight:600,color:B.g7,marginBottom:5,display:"block",fontFamily:F},
-};
-
 /* â•â•â• NAV â•â•â• */
 /* â•â•â• FOOTER â•â•â• */
 /* â•â•â• CTA â•â•â• */
@@ -82,124 +47,6 @@ lb:{fontSize:12,fontWeight:600,color:B.g7,marginBottom:5,display:"block",fontFam
 /* â•â•â• TESTIMONIALS â•â•â• */
 /* â•â•â• COUNTRY PHONE DATA â•â•â• */
 /* â•â•â• RATE GATE â€” email OTP verification â•â•â• */
-function RateGate({onUnlock,isMobile}){
-const[step,setStep]=useState("form");
-const[g,setG]=useState({name:"",email:"",company:"",phone:""});
-const[errs,setErrs]=useState({});
-const[phoneErr,setPhoneErr]=useState("");
-const[otp,setOtp]=useState("");
-const[sentOtp,setSentOtp]=useState("");
-const[otpErr,setOtpErr]=useState("");
-const[expiry,setExpiry]=useState(null);
-const[sending,setSending]=useState(false);
-const[resendCooldown,setResendCooldown]=useState(0);
-const upg=(k,v)=>setG(p=>({...p,[k]:v}));
-
-useEffect(()=>{
-  if(!expiry) return;
-  const t=setInterval(()=>{
-    const left=Math.max(0,Math.ceil((expiry-Date.now())/1000));
-    if(left===0){setStep("form");setSentOtp("");setOtp("");}
-  },1000);
-  return()=>clearInterval(t);
-},[expiry]);
-
-useEffect(()=>{
-  if(resendCooldown<=0) return;
-  const t=setInterval(()=>setResendCooldown(c=>Math.max(0,c-1)),1000);
-  return()=>clearInterval(t);
-},[resendCooldown]);
-
-const validateForm=()=>{
-  const e={};
-  if(!g.name.trim()) e.name="Required";
-  if(!g.email.trim()) e.email="Required";
-  else if(!/^[^@]+@[^@]+\.[^@]+$/.test(g.email)) e.email="Invalid email";
-  else if(isFreeEmail(g.email)) e.email="Please use your company email (not Gmail/Yahoo/Hotmail)";
-  if(!g.phone.trim()) e.phone="Required";
-  else if(phoneErr) e.phone=phoneErr;
-  setErrs(e); return Object.keys(e).length===0;
-};
-
-const sendOtp=async()=>{
-  if(!validateForm()) return;
-  setSending(true);
-  const code=String(Math.floor(100000+Math.random()*900000));
-  try{
-    await emailjs.send(EJS.serviceId, EJS.otpTemplateId, {
-      user_name: g.name,
-      user_email: g.email,
-      otp: code
-    }, EJS.publicKey);
-    setSentOtp(code);
-    setExpiry(Date.now()+10*60*1000);
-    setResendCooldown(60);
-    setStep("verify");
-  }catch(err){
-    console.error(err);
-    setErrs(p=>({...p,email:"Failed to send OTP. Check your email and try again."}));
-  }finally{setSending(false);}
-};
-
-const verifyOtp=()=>{
-  if(!otp.trim()){setOtpErr("Enter the OTP");return;}
-  if(otp.trim()!==sentOtp){setOtpErr("Incorrect OTP. Please try again.");return;}
-  if(Date.now()>expiry){setOtpErr("OTP expired. Please request a new one.");setStep("form");return;}
-  logSearchAPI({name:g.name,email:g.email,company:g.company||"(not provided)",phone:g.phone,pol:"â€”",pod:"â€”",eq:"â€”",found:"0",total:"â€”",note:"Gate unlock via OTP"});
-  onUnlock(g);
-};
-
-if(step==="form") return(
-<div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
-<div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-<h4 style={{fontSize:15,fontWeight:700,color:B.dark,margin:0}}>Verify Your Identity to View Rates</h4>
-</div>
-<p style={{fontSize:12,color:B.g5,marginBottom:18,lineHeight:1.6}}>Enter your <strong>company email</strong> to receive a one-time access code. Personal email addresses (Gmail, Yahoo, etc.) are not accepted.</p>
-<div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:14}}>
-<div><label style={st.lb}>Your Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} value={g.name} onChange={e=>{upg("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/>{errs.name&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.name}</div>}</div>
-<div><label style={st.lb}>Company</label><input style={st.inp} value={g.company} onChange={e=>upg("company",e.target.value)} placeholder="Company name"/></div>
-<div><label style={st.lb}>Company Email *</label><input type="email" style={{...st.inp,borderColor:errs.email?B.red:undefined}} value={g.email} onChange={e=>{upg("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@yourcompany.com"/>{errs.email&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{errs.email}</div>}</div>
-<div><label style={st.lb}>Phone *</label>
-<PhoneField value={g.phone} onChange={v=>{upg("phone",v);setErrs(p=>({...p,phone:""}));}} error={errs.phone} onError={e=>setPhoneErr(e)} st={st}/>
-</div>
-</div>
-<button onClick={sendOtp} disabled={sending} style={{...st.bp,marginTop:18,opacity:sending?.7:1}}>
-{sending?"Sending OTPâ€¦":"Send Verification Code â†’"}
-</button>
-<p style={{fontSize:11,color:B.g5,marginTop:10}}>ðŸ”’ Your details are kept confidential and used only for rate access purposes.</p>
-</div>);
-
-return(
-<div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
-<div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
-<h4 style={{fontSize:15,fontWeight:700,color:B.dark,margin:0}}>Check Your Email</h4>
-</div>
-<p style={{fontSize:13,color:B.g7,marginBottom:18,lineHeight:1.6}}>
-A 6-digit code was sent to <strong>{g.email}</strong>. Enter it below to unlock rates.
-</p>
-<div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
-<div style={{flex:1,minWidth:160}}>
-<label style={st.lb}>Enter 6-digit OTP *</label>
-<input type="number" maxLength={6} style={{...st.inp,fontSize:24,fontWeight:700,letterSpacing:8,textAlign:"center",borderColor:otpErr?B.red:undefined}}
-  value={otp} onChange={e=>{setOtp(e.target.value.slice(0,6));setOtpErr("");}}
-  placeholder="â€”â€”â€”â€”â€”â€”"/>
-{otpErr&&<div style={{fontSize:11,color:B.red,marginTop:3}}>{otpErr}</div>}
-</div>
-<button onClick={verifyOtp} style={{...st.bp,marginTop:22,whiteSpace:"nowrap"}}>Verify & Unlock â†’</button>
-</div>
-<div style={{marginTop:14,display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
-<span style={{fontSize:12,color:B.g5}}>Didn't receive it? Check spam folder.</span>
-{resendCooldown>0
-  ?<span style={{fontSize:12,color:B.g5}}>Resend in {resendCooldown}s</span>
-  :<button onClick={sendOtp} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:B.primary,fontWeight:600,padding:0}}>Resend OTP</button>
-}
-<button onClick={()=>{setStep("form");setOtp("");setOtpErr("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:B.g5,padding:0}}>â† Change email</button>
-</div>
-</div>);
-}
-
 /* â•â•â• QUOTE PAGE â€” with instant rate lookup â•â•â• */
 function QuotePage({rates}){const go=useNavigate();
 const m=useIsMobile();
@@ -314,7 +161,7 @@ return(
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
 <div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional â€” max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.green,marginTop:6}}>âœ“ {files.length} file(s) selected: {files.map(x=>x.name).join(", ")}</div>}</div>
 </div>)}
-{rk&&!gateUser&&<RateGate onUnlock={setVerifiedUser} isMobile={m}/>}
+{rk&&!gateUser&&<RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>}
 {gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`Â· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
 {rk&&gateUser&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:rate?B.gBg:B.aBg,border:`1px solid ${rate?B.green:B.amber}22`}}>
 {rate?(<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><h4 style={{fontSize:15,fontWeight:700,color:B.green,margin:0}}>âœ“ Instant Rate Available</h4>{rate.carrier&&<CarrierBadge name={rate.carrier}/>}</div><span style={{fontSize:12,color:B.g5}}>Valid: {rate.validFrom||"â€”"} to {rate.validTo||"â€”"}</span></div>
@@ -583,6 +430,9 @@ return(
 </div>
 </BrowserRouter>
 </HelmetProvider>);}
+
+
+
 
 
 
