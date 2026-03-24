@@ -1,5 +1,5 @@
 ﻿export const COUNTRIES=[
-  {c:"IN",flag:"ðŸ‡®ðŸ‡³",name:"India",dial:"+91",digits:10,pattern:/^[6-9]\d{9}$/,hint:"10 digits starting with 6-9"},
+  {c:"IN",flag:"🇮🇳",name:"India",dial:"+91",digits:10,pattern:/^[6-9]\d{9}$/,hint:"10 digits starting with 6-9"},
   {c:"AE",flag:"ðŸ‡¦ðŸ‡ª",name:"UAE",dial:"+971",digits:9,pattern:/^5\d{8}$|^[2-9]\d{7}$/,hint:"9 digits (mobile: starts with 5)"},
   {c:"SA",flag:"ðŸ‡¸ðŸ‡¦",name:"Saudi Arabia",dial:"+966",digits:9,pattern:/^5\d{8}$|^[1-9]\d{7}$/,hint:"9 digits (mobile: starts with 5)"},
   {c:"OM",flag:"ðŸ‡´ðŸ‡²",name:"Oman",dial:"+968",digits:8,pattern:/^\d{8}$/,hint:"8 digits"},

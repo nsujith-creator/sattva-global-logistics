@@ -169,7 +169,7 @@ return(
 {qty>1&&<div style={{background:"#fff",padding:10,borderRadius:8,textAlign:"center",marginBottom:8}}><span style={{fontSize:13,color:B.g5}}>Total {qty} ctrs: </span><span style={{fontSize:18,fontWeight:800,color:B.primary}}>${(rate.total*qty).toLocaleString()} USD</span></div>}
 <p style={{fontSize:11,color:B.g5,marginTop:4,fontStyle:"italic"}}>* Indicative. Final quote subject to space & surcharges at booking.</p></>
 ):(<div><h4 style={{fontSize:14,fontWeight:600,color:B.amber,margin:0,marginBottom:6}}>Rate not pre-loaded for this route</h4><p style={{fontSize:13,color:B.g5,margin:0}}>Submit your request â€” custom quote within 24 hours.</p></div>)}</div>)}
-<div style={{marginTop:20}}><label style={st.lb}>Additional Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Special requirementsâ€¦"/></div>
+<div style={{marginTop:20}}><label style={st.lb}>Additional Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Special requirements…"/></div>
 <div style={{marginTop:20,padding:16,borderRadius:10,background:B.g1,display:"flex",alignItems:"center",gap:14,flexWrap:"wrap"}}>
 <label style={{...st.lb,margin:0}}>Verification *</label>
 <span style={{fontSize:15,fontWeight:700,color:B.dark}}>{captcha.a} + {captcha.b} = ?</span>
@@ -179,7 +179,7 @@ return(
 </div>
 {sendErr&&<div style={{marginTop:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
 <div style={{display:"flex",gap:12,marginTop:24,flexWrap:"wrap"}}>
-<button onClick={handleSubmit} disabled={sending} style={{...st.bp,flex:1,justifyContent:"center",opacity:sending?.7:1}}>{sending?"Sendingâ€¦":"Submit Quote Request"} {!sending&&<I.Ar/>}</button>
+<button onClick={handleSubmit} disabled={sending} style={{...st.bp,flex:1,justifyContent:"center",opacity:sending?.7:1}}>{sending?"Sending…":"Submit Quote Request"} {!sending&&<I.Ar/>}</button>
 <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:8,padding:"13px 20px",background:"#25D366",color:"#fff",borderRadius:8,fontWeight:600,fontSize:14,textDecoration:"none",whiteSpace:"nowrap"}}>
 <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.564l4.682-1.463A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.156 0-4.154-.695-5.785-1.873l-.413-.281-2.776.868.854-2.703-.302-.436A9.713 9.713 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>WhatsApp</a>
 </div>
@@ -221,7 +221,7 @@ const saveRate=async()=>{
 if(!fm.pol||!fm.pod||!fm.eq){setMsg("Fill POL, POD, Equipment.");return;}
 const key=`${fm.pol}:${fm.pod}:${fm.eq}`;
 const entry={oceanFreight:parseFloat(fm.of)||0,thcOrigin:parseFloat(fm.to)||0,thcDest:parseFloat(fm.td)||0,blFee:parseFloat(fm.bl)||0,surcharges:parseFloat(fm.su)||0,extraItems:extraItems.filter(x=>x.label&&parseFloat(x.value)),total:tot(),validFrom:fm.vf,validTo:fm.vt,carrier:fm.cr||null,updatedAt:new Date().toISOString()};
-setMsg("Savingâ€¦");
+setMsg("Saving…");
 const ok=await saveRateAPI(key,entry);
 if(ok){
   const updated={...rates,[key]:entry};
@@ -233,7 +233,7 @@ if(ok){
 }else setMsg("âš  Save failed. Check your SCRIPT_URL in App.jsx.");};
 
 const del=async(key)=>{
-  setMsg("Deletingâ€¦");
+  setMsg("Deleting…");
   await deleteRateAPI(key);
   const u={...rates};delete u[key];
   setRates(u);
@@ -250,7 +250,7 @@ setEditKey(key);setTab("add");};
 const importBulk=async()=>{
   try{
     const p=JSON.parse(bulk);
-    setMsg(`Saving ${Object.keys(p).length} rates to Google Sheetsâ€¦`);
+    setMsg(`Saving ${Object.keys(p).length} rates to Google Sheets…`);
     let count=0;
     for(const[key,entry]of Object.entries(p)){
       const ok=await saveRateAPI(key,entry);

@@ -88,7 +88,7 @@ if(step==="form") return(
 </div>
 </div>
 <button onClick={sendOtp} disabled={sending} style={{...st.bp,marginTop:18,opacity:sending?.7:1}}>
-{sending?"Sending OTPâ€¦":"Send Verification Code â†’"}
+{sending?"Sending OTP…":"Send Verification Code â†’"}
 </button>
 <p style={{fontSize:11,color:B.g5,marginTop:10}}>ðŸ”’ Your details are kept confidential and used only for rate access purposes.</p>
 </div>);

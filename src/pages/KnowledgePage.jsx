@@ -63,7 +63,7 @@ return(
 </div>
 
 {tab==="incoterms"&&(<div>
-<h2 style={{...st.h2,textAlign:"left"}}>IncotermsÂ® 2020 â€” Complete Guide</h2>
+<h2 style={{...st.h2,textAlign:"left"}}>Incoterms® 2020 â€” Complete Guide</h2>
 <p style={{...st.bd,marginTop:10,marginBottom:28}}>Incoterms define who pays for what, where risk transfers, and who handles documentation between seller and buyer. Published by the International Chamber of Commerce (ICC), the 2020 edition has 11 rules: 7 for any transport mode and 4 for sea/inland waterway only.</p>
 <div style={{display:"grid",gap:16}}>
 {incoterms.map((ic,i)=><div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`,padding:"20px 24px"}}>
