@@ -1,5 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { getCorsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders, escapeHtml } from "../_shared/cors.ts";
+
+// FAIL-11 FIX: All user-supplied values escaped before HTML injection.
+// FAIL-10 FIX: Per-session quote submission throttle applied before any DB write.
+// FAIL-12 FIX: Email send failures surface as partial-success with actionable message; DB record is preserved.
 
 const quoteNotificationHtml = (user: Record<string, string>, q: Record<string, unknown>) => `
 <!DOCTYPE html>
@@ -18,55 +22,55 @@ const quoteNotificationHtml = (user: Record<string, string>, q: Record<string, u
         <tr>
           <td style="padding:28px 32px;">
             <h2 style="margin:0 0 20px;color:#1B2E5E;font-size:16px;">
-              ${q.pol} to ${q.pod} | ${user.company || user.name}
+              ${escapeHtml(q.pol)} to ${escapeHtml(q.pod)} | ${escapeHtml(user.company || user.name)}
             </h2>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
               <tr style="background:#f8f9fc;">
                 <td style="padding:10px 14px;color:#666;width:140px;border-bottom:1px solid #e8ecf0;">Customer</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${user.name}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(user.name)}</td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Email</td>
                 <td style="padding:10px 14px;color:#1B2E5E;border-bottom:1px solid #e8ecf0;">
-                  <a href="mailto:${user.email}" style="color:#1B2E5E;">${user.email}</a>
+                  <a href="mailto:${escapeHtml(user.email)}" style="color:#1B2E5E;">${escapeHtml(user.email)}</a>
                 </td>
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Company</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${user.company || "-"}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(user.company || "-")}</td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Phone</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${user.phone || "-"}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(user.phone || "-")}</td>
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">POL</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.pol}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.pol)}</td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">POD</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.pod}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.pod)}</td>
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Equipment</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.equipment}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.equipment)}</td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Containers</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.containers}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.containers)}</td>
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Cargo</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.cargo || "-"}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.cargo || "-")}</td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Notes</td>
-                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.notes || "-"}</td>
+                <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.notes || "-")}</td>
               </tr>
               <tr style="background:${q.rateFound ? "#e8f5e9" : "#fff8e1"};">
                 <td style="padding:10px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Rate Status</td>
                 <td style="padding:10px 14px;font-weight:700;color:${q.rateFound ? "#2e7d32" : "#f57f17"};border-bottom:1px solid #e8ecf0;">
-                  ${q.rateFound ? `Rate found - USD ${q.rateTotal}` : "No rate on file - manual quotation required"}
+                  ${q.rateFound ? `Rate found - USD ${escapeHtml(q.rateTotal)}` : "No rate on file - manual quotation required"}
                 </td>
               </tr>
             </table>
@@ -75,7 +79,7 @@ const quoteNotificationHtml = (user: Record<string, string>, q: Record<string, u
         <tr>
           <td style="background:#f8f9fc;border-top:1px solid #e8ecf0;padding:16px 32px;">
             <p style="margin:0;color:#888;font-size:12px;">
-              Submitted at ${new Date().toUTCString()} | Reply-To: ${user.email}
+              Submitted at ${new Date().toUTCString()} | Reply-To: ${escapeHtml(user.email)}
             </p>
           </td>
         </tr>
@@ -101,7 +105,7 @@ const quoteConfirmationHtml = (user: Record<string, string>, q: Record<string, u
         </tr>
         <tr>
           <td style="padding:32px;">
-            <p style="margin:0 0 16px;color:#333;font-size:15px;">Hello ${user.name},</p>
+            <p style="margin:0 0 16px;color:#333;font-size:15px;">Hello ${escapeHtml(user.name)},</p>
             <p style="margin:0 0 24px;color:#555;font-size:14px;line-height:1.7;">
               Thank you for your freight enquiry. We have received your quote request and our team will respond
               within <strong>24 hours</strong> with a competitive quotation.
@@ -114,19 +118,19 @@ const quoteConfirmationHtml = (user: Record<string, string>, q: Record<string, u
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:9px 14px;color:#666;width:130px;border-bottom:1px solid #e8ecf0;">Route</td>
-                <td style="padding:9px 14px;color:#333;font-weight:700;border-bottom:1px solid #e8ecf0;">${q.pol} to ${q.pod}</td>
+                <td style="padding:9px 14px;color:#333;font-weight:700;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.pol)} to ${escapeHtml(q.pod)}</td>
               </tr>
               <tr>
                 <td style="padding:9px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Equipment</td>
-                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.equipment}</td>
+                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.equipment)}</td>
               </tr>
               <tr style="background:#f8f9fc;">
                 <td style="padding:9px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Containers</td>
-                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.containers}</td>
+                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.containers)}</td>
               </tr>
               <tr>
                 <td style="padding:9px 14px;color:#666;border-bottom:1px solid #e8ecf0;">Cargo</td>
-                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${q.cargo || "-"}</td>
+                <td style="padding:9px 14px;color:#333;border-bottom:1px solid #e8ecf0;">${escapeHtml(q.cargo || "-")}</td>
               </tr>
             </table>
             <p style="margin:0;color:#888;font-size:13px;line-height:1.6;">
@@ -149,6 +153,9 @@ const quoteConfirmationHtml = (user: Record<string, string>, q: Record<string, u
   </table>
 </body>
 </html>`;
+
+// FAIL-10: Max quotes per verified session. Keeps token-obtained quota burns under control.
+const MAX_QUOTES_PER_SESSION = 5;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -188,16 +195,39 @@ Deno.serve(async (req) => {
     }
 
     const session = sessions[0];
-    const user = { email: session.email, name: session.name, company: session.company || "", phone: session.phone || "" };
+
+    // FAIL-10: Count existing quote submissions for this session.
+    const { count: sessionQuoteCount, error: countErr } = await supabase
+      .from("quote_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("session_id", session.id);
+
+    if (countErr) throw countErr;
+
+    if ((sessionQuoteCount ?? 0) >= MAX_QUOTES_PER_SESSION) {
+      return new Response(
+        JSON.stringify({
+          error: `You have reached the maximum of ${MAX_QUOTES_PER_SESSION} quote requests per session. Please contact quotes@sattvaglobal.in for further assistance.`,
+        }),
+        { status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+      );
+    }
+
+    const user = {
+      email:   session.email,
+      name:    session.name,
+      company: session.company || "",
+      phone:   session.phone   || "",
+    };
 
     const body = await req.json();
     const q = {
-      pol:        (body.pol || "").trim().toUpperCase(),
-      pod:        (body.pod || "").trim().toUpperCase(),
+      pol:        (body.pol       || "").trim().toUpperCase(),
+      pod:        (body.pod       || "").trim().toUpperCase(),
       equipment:  (body.equipment || "").trim(),
-      containers: parseInt(body.containers) || 1,
-      cargo:      (body.cargo || "").trim(),
-      notes:      (body.notes || "").trim(),
+      containers: Math.min(Math.max(parseInt(body.containers) || 1, 1), 99),
+      cargo:      (body.cargo     || "").trim(),
+      notes:      (body.notes     || "").trim(),
       rateFound:  Boolean(body.rateFound),
       rateTotal:  body.rateTotal ? parseFloat(body.rateTotal) : null,
     };
@@ -214,13 +244,13 @@ Deno.serve(async (req) => {
         name:        user.name,
         email:       user.email,
         company:     user.company || null,
-        phone:       user.phone || null,
+        phone:       user.phone   || null,
         pol:         q.pol,
         pod:         q.pod,
         equipment:   q.equipment,
         containers:  q.containers,
-        cargo:       q.cargo || null,
-        notes:       q.notes || null,
+        cargo:       q.cargo  || null,
+        notes:       q.notes  || null,
         rate_found:  q.rateFound,
         rate_total:  q.rateTotal,
         ip_address,
@@ -238,6 +268,7 @@ Deno.serve(async (req) => {
       rate_found: q.rateFound,
     });
 
+    // FAIL-12: Send both emails; track success independently.
     const [opsRes, userRes] = await Promise.all([
       fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -268,8 +299,26 @@ Deno.serve(async (req) => {
       }),
     ]);
 
-    if (!opsRes.ok) console.error("Ops email failed:", await opsRes.text());
-    if (!userRes.ok) console.error("User confirmation email failed:", await userRes.text());
+    const opsEmailOk  = opsRes.ok;
+    const userEmailOk = userRes.ok;
+
+    if (!opsEmailOk)  console.error("Ops email failed:", await opsRes.text());
+    if (!userEmailOk) console.error("User confirmation email failed:", await userRes.text());
+
+    // FAIL-12: Quote is saved regardless of email status. But tell the user the truth.
+    // Both failed → ops team must be alerted — return partial success with warning.
+    // Only one failed → logged; quote is saved; don't alarm the user unnecessarily.
+    if (!opsEmailOk && !userEmailOk) {
+      return new Response(
+        JSON.stringify({
+          success:   true,
+          quoteId:   quoteData.id,
+          warning:   "Your quote request was recorded, but our notification system is currently experiencing issues. Please contact quotes@sattvaglobal.in to confirm we received your request.",
+          emailFail: true,
+        }),
+        { status: 200, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+      );
+    }
 
     return new Response(
       JSON.stringify({ success: true, quoteId: quoteData.id }),

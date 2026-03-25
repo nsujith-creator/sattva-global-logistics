@@ -1,7 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { getCorsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders, escapeHtml } from "../_shared/cors.ts";
 
-// Free/consumer email domains - reject these (same list as frontend validation.js)
+// FAIL-11 FIX: All user-supplied values escaped before HTML injection.
+
 const FREE_DOMAINS = [
   "gmail.com","yahoo.com","yahoo.in","yahoo.co.in","hotmail.com","outlook.com",
   "live.com","msn.com","icloud.com","me.com","mac.com","aol.com","protonmail.com",
@@ -28,6 +29,7 @@ function generateOtp(): string {
   return (100000 + (arr[0] % 900000)).toString();
 }
 
+// FAIL-11: name and otp are escaped. otp is numeric-only so escaping is a no-op, but kept for defence-in-depth.
 const otpEmailHtml = (name: string, otp: string) => `
 <!DOCTYPE html>
 <html>
@@ -44,13 +46,13 @@ const otpEmailHtml = (name: string, otp: string) => `
         </tr>
         <tr>
           <td style="padding:36px 32px;">
-            <p style="margin:0 0 16px;color:#333;font-size:15px;">Hello ${name},</p>
+            <p style="margin:0 0 16px;color:#333;font-size:15px;">Hello ${escapeHtml(name)},</p>
             <p style="margin:0 0 28px;color:#555;font-size:14px;line-height:1.6;">
               Your one-time access code to view freight rates is:
             </p>
             <div style="text-align:center;margin:0 0 32px;">
               <div style="display:inline-block;background:#f0f4ff;border:2px solid #1B2E5E;border-radius:8px;padding:20px 40px;">
-                <span style="font-size:36px;font-weight:700;color:#1B2E5E;letter-spacing:8px;">${otp}</span>
+                <span style="font-size:36px;font-weight:700;color:#1B2E5E;letter-spacing:8px;">${escapeHtml(otp)}</span>
               </div>
             </div>
             <p style="margin:0 0 12px;color:#888;font-size:13px;text-align:center;">
@@ -82,10 +84,10 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const email: string = (body.email || "").trim().toLowerCase();
-    const name: string  = (body.name  || "").trim();
-    const company: string | undefined = body.company?.trim();
-    const phone: string | undefined   = body.phone?.trim();
+    const email: string   = (body.email   || "").trim().toLowerCase();
+    const name: string    = (body.name    || "").trim();
+    const company: string = (body.company || "").trim();
+    const phone: string   = (body.phone   || "").trim();
 
     if (!email || !isValidEmail(email)) {
       return new Response(JSON.stringify({ error: "Invalid email address." }), {
@@ -107,27 +109,49 @@ Deno.serve(async (req) => {
       Deno.env.get("SERVICE_ROLE_KEY")!
     );
 
-    const fifteenMinsAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
-    const { count } = await supabase
-      .from("otp_challenges")
-      .select("id", { count: "exact", head: true })
-      .eq("email", email)
-      .gte("created_at", fifteenMinsAgo);
+    const ip_address =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      null;
 
-    if ((count ?? 0) >= 3) {
+    const fifteenMinsAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+
+    // FAIL-09 FIX: Dual throttle — per email AND per IP.
+    // Per-email: max 3 OTPs per 15 min (protects against using us to spam one inbox).
+    // Per-IP:    max 5 OTPs per 15 min (protects against rotating emails from one attacker IP).
+
+    const [emailCountRes, ipCountRes] = await Promise.all([
+      supabase
+        .from("otp_challenges")
+        .select("id", { count: "exact", head: true })
+        .eq("email", email)
+        .gte("created_at", fifteenMinsAgo),
+
+      ip_address
+        ? supabase
+            .from("otp_challenges")
+            .select("id", { count: "exact", head: true })
+            .eq("ip_address", ip_address)
+            .gte("created_at", fifteenMinsAgo)
+        : Promise.resolve({ count: 0, error: null }),
+    ]);
+
+    if ((emailCountRes.count ?? 0) >= 3) {
       return new Response(
-        JSON.stringify({ error: "Too many OTP requests. Please email quotes@sattvaglobal.in directly." }),
+        JSON.stringify({ error: "Too many OTP requests for this address. Please email quotes@sattvaglobal.in directly." }),
+        { status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+      );
+    }
+
+    if ((ipCountRes.count ?? 0) >= 5) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests from this network. Please try again later." }),
         { status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
       );
     }
 
     const otp = generateOtp();
     const otp_hash = await hashOtp(otp);
-
-    const ip_address =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      req.headers.get("x-real-ip") ||
-      null;
 
     const { error: insertError } = await supabase
       .from("otp_challenges")

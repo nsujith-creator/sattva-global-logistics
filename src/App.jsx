@@ -279,8 +279,8 @@ const handleSubmit=async()=>{
   const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
   saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));
   try{
-    await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:allEqs.map(e=>`${EQ_L[e]||e} (${e})`).join(", "),containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!quote},freshSession.token);
-    clearFormState();setDone(true);
+    const result=await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:allEqs.map(e=>`${EQ_L[e]||e} (${e})`).join(", "),containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!quote},freshSession.token);
+    clearFormState();setDone(true);if(result?.emailFail){setSendErr("Your request was saved, but our email system is currently experiencing issues. Please contact quotes@sattvaglobal.in to confirm receipt.");}
   }catch(err){
     if(err.status===401){clearSession();setGateUser(null);setSessionToken(null);setSendErr("Session expired. Please verify your identity again.");}
     else if(err.message?.includes("timed out")){setSendErr("Request timed out — check your connection and try again.");}
