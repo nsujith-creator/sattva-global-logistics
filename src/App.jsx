@@ -1,5 +1,20 @@
 // FAIL-24: Route-level code splitting
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+
+class ChunkErrorBoundary extends React.Component{
+  constructor(p){super(p);this.state={err:false};}
+  static getDerivedStateFromError(){return{err:true};}
+  render(){
+    if(this.state.err)return(
+      <div style={{paddingTop:120,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16,textAlign:"center",padding:"120px 24px 40px"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#1e293b"}}>Page failed to load</h2>
+        <p style={{fontSize:14,color:"#64748b"}}>This can happen due to a network issue or a recent update. Please try refreshing.</p>
+        <button onClick={()=>window.location.reload()} style={{padding:"10px 24px",background:"#024aab",color:"#fff",border:"none",borderRadius:8,fontWeight:600,fontSize:14,cursor:"pointer"}}>Refresh Page</button>
+      </div>
+    );
+    return this.props.children;
+  }
+}
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { ErrMsg } from "./components/forms/ErrMsg";
@@ -216,7 +231,8 @@ function QuoteDisplay({quote,selectedEq,gateUser,pol,pod,cargo,vol}){
 
 /* ─── Quote page ─── */
 function QuotePage({quotes,quotesErr,setQuotes,setQuotesErr}){const go=useNavigate();
-React.useEffect(()=>{getQuotes().then(r=>{setQuotes(r);setQuotesErr(false);}).catch(()=>setQuotesErr(true));},[]);
+const[quotesLoading,setQuotesLoading]=useState(true);
+React.useEffect(()=>{setQuotesLoading(true);getQuotes().then(r=>{setQuotes(r);setQuotesErr(false);}).catch(()=>setQuotesErr(true)).finally(()=>setQuotesLoading(false));},[]);
 const m=useIsMobile();
 const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
 const[f,setF]=useState(()=>loadFormState()||BLANK_F);
@@ -234,7 +250,7 @@ const[sessionToken,setSessionToken]=useState(()=>sessionData?.token||null);
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
 const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
 const setVerifiedUser=(user,token)=>{saveSession(user,token);setGateUser(user);setSessionToken(token);setHist(getQuoteHistory(user.email));};
-React.useEffect(()=>{const handler=(e)=>{if(e.key==="sattva-verified-user"){const u=loadSession();setGateUser(u);if(u)setHist(getQuoteHistory(u.email));}};window.addEventListener("storage",handler);return()=>window.removeEventListener("storage",handler);},[]);
+React.useEffect(()=>{const handler=(e)=>{if(e.key==="sattva_session_v2"){const s=loadSession();setGateUser(s?.user||null);setSessionToken(s?.token||null);if(s?.user)setHist(getQuoteHistory(s.user.email));}};window.addEventListener("storage",handler);return()=>window.removeEventListener("storage",handler);},[]);
 const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
 const changeEq=(v)=>{up("eq",v);setExtraEqs([]);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");};
 React.useEffect(()=>{if(gateUser?.email&&f.pol&&f.pod&&f.cargo){saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));}},[f.pol,f.pod,f.cargo,gateUser?.email]);
@@ -252,16 +268,24 @@ useEffect(()=>{
 const validate=()=>{const e={};if(!f.pol)e.pol="Required";if(!f.pod)e.pod="Required";if(!f.cargo)e.cargo="Required";if(!f.eq)e.eq="Required";if(isOTFR){if(!f.dimL.trim()||!f.dimW.trim()||!f.dimH.trim())e.dims="All dimensions required";if(!f.packType)e.packType="Required";}if(parseInt(f.captchaAns)!==captcha.ans)e.captcha="Incorrect answer";setErrs(e);return Object.keys(e).length===0;};
 const handleSubmit=async()=>{
   if(sending)return;
-  // Always validate required fields first — before identity gate
   if(!validate())return;
-  if(!gateUser){setSendErr("Please verify your identity first.");return;}
+  // Re-check session freshness before acting — catches expired tokens
+  const freshSession=loadSession();
+  if(!freshSession||!freshSession.user){
+    clearSession();setGateUser(null);setSessionToken(null);
+    setSendErr("Your session has expired. Please verify your identity again.");return;
+  }
   setSending(true);setSendErr("");
   const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
   saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));
   try{
-    await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:allEqs.map(e=>`${EQ_L[e]||e} (${e})`).join(", "),containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!quote,rateTotal:null},sessionToken);
+    await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:allEqs.map(e=>`${EQ_L[e]||e} (${e})`).join(", "),containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!quote},freshSession.token);
     clearFormState();setDone(true);
-  }catch(err){setSendErr("Submission failed. Please use WhatsApp or email quotes@sattvaglobal.in directly.");}
+  }catch(err){
+    if(err.status===401){clearSession();setGateUser(null);setSessionToken(null);setSendErr("Session expired. Please verify your identity again.");}
+    else if(err.message?.includes("timed out")){setSendErr("Request timed out — check your connection and try again.");}
+    else{setSendErr("Submission failed. Please use WhatsApp or email quotes@sattvaglobal.in directly.");}
+  }
   finally{setSending(false);}
 };
 const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} → POD: ${f.pod}\nCargo: ${f.cargo} | ${allEqs.join("+")} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
@@ -276,7 +300,8 @@ return(
 </div></section>
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
 <div style={{...st.cd,padding:m?20:36}}>
-{quotesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded. You can still submit a quote request and we'll respond within 24 hours.</div>}
+{quotesLoading&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#eff6ff",border:"1px solid #bfdbfe",fontSize:12,color:"#1e40af",display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:12,height:12,border:"2px solid #bfdbfe",borderTopColor:"#3b82f6",borderRadius:"50%",animation:"spin .6s linear infinite",flexShrink:0}}/>Loading live rates…</div>}
+{!quotesLoading&&quotesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded. You can still submit a quote request and we'll respond within 24 hours.</div>}
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
@@ -295,7 +320,7 @@ return(
 </div>
 </div>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18}}>
-<div><label style={st.lb}>Containers</label><input type="number" style={st.inp} value={f.vol} onChange={e=>up("vol",e.target.value)} min="1"/></div>
+<div><label style={st.lb}>Containers</label><input type="number" style={st.inp} value={f.vol} onChange={e=>{const v=Math.max(1,Math.min(99,parseInt(e.target.value)||1));up("vol",String(v));}} min="1" max="99"/></div>
 </div>
 {isOTFR&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:`${B.primary}05`,border:`1.5px solid ${B.primary}22`}}>
 <h4 style={{fontSize:14,fontWeight:700,color:B.primary,marginBottom:16}}>📐 Special Cargo Details — Required for {f.eq}</h4>
@@ -306,7 +331,7 @@ return(
 </div>
 {errs.dims&&<div style={{fontSize:11,color:B.red,marginBottom:10}}>{errs.dims}</div>}
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
-<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.amber,marginTop:6}}>⚠ Send files separately to <a href="mailto:quotes@sattvaglobal.in">quotes@sattvaglobal.in</a></div>}</div>
+<div><div style={{fontSize:12,color:B.g5,marginTop:8,padding:"10px 14px",borderRadius:8,background:B.g1,border:`1px solid ${B.g3}44`}}>📎 Need to attach cargo images, brochures, or datasheets? Email them directly to <a href="mailto:quotes@sattvaglobal.in" style={{color:B.primary,fontWeight:600}}>quotes@sattvaglobal.in</a> with your shipment route in the subject.</div></div>
 </div>)}
 {f.pol&&f.pod&&f.eq&&!gateUser&&(
 <div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
@@ -335,7 +360,8 @@ return(
 <button
   onClick={()=>{
     if(!validate())return;
-    if(!gateUser){setSendErr("Please verify your identity first.");return;}
+    const freshSession=loadSession();
+    if(!freshSession||!freshSession.user){clearSession();setGateUser(null);setSessionToken(null);setSendErr("Your session has expired. Please verify your identity again.");return;}
     window.open(waLink(waMsg),"_blank","noopener,noreferrer");
   }}
   style={{display:"inline-flex",alignItems:"center",gap:8,padding:"13px 20px",background:"#25D366",color:"#fff",borderRadius:8,fontWeight:600,fontSize:14,border:"none",fontFamily:F,cursor:"pointer",whiteSpace:"nowrap"}}>
@@ -370,7 +396,31 @@ const[bulkFile,setBulkFile]=useState(null);
 const[bulkPreview,setBulkPreview]=useState(null);
 const[bulkUploading,setBulkUploading]=useState(false);
 const pods=fPodR?POD_R[fPodR]||[]:[];
-const doLogin=async()=>{setLoginErr("");const{data,error}=await supabase.auth.signInWithPassword({email,password:pass});if(error||!data?.session){setLoginErr("Invalid email or password.");return;}setAdminToken(data.session.access_token);setAuthed(true);};
+const doLogin=async()=>{
+  setLoginErr("");
+  const{data,error}=await supabase.auth.signInWithPassword({email,password:pass});
+  if(error){
+    if(error.message?.toLowerCase().includes("invalid")||error.status===400)setLoginErr("Invalid email or password.");
+    else if(error.message?.toLowerCase().includes("network")||error.status===0)setLoginErr("Network error — check your connection.");
+    else setLoginErr(`Sign-in failed (${error.status||"unknown"}). Try again.`);
+    return;
+  }
+  if(!data?.session){setLoginErr("Sign-in failed — no session returned. Try again.");return;}
+  setAdminToken(data.session.access_token);
+  setAuthed(true);
+  // Fetch quotes for admin after auth — FAIL-03 fix
+  getQuotes().then(r=>setQuotes(r)).catch(()=>{});
+};
+// Restore Supabase auth session on mount — FAIL-04 fix
+React.useEffect(()=>{
+  supabase.auth.getSession().then(({data})=>{
+    if(data?.session){setAdminToken(data.session.access_token);setAuthed(true);getQuotes().then(r=>setQuotes(r)).catch(()=>{});}
+  });
+  const{data:{subscription}}=supabase.auth.onAuthStateChange((_,session)=>{
+    if(!session){setAuthed(false);setAdminToken(null);}
+  });
+  return()=>subscription.unsubscribe();
+},[]);
 const doLogout=async()=>{await supabase.auth.signOut();setAuthed(false);setAdminToken(null);};
 const resetForm=()=>{setFPol("");setFPod("");setFPodR("");setFValidUntil("");setFOptions([newOption()]);setActiveOptIdx(0);setEditKey(null);};
 const editQuote=(key)=>{const q=quotes[key];const[pol,pod]=key.split(":");let podR="";for(const[rg,ps]of Object.entries(POD_R)){if(ps.find(p=>p.c===pod)){podR=rg;break;}}setFPol(pol);setFPod(pod);setFPodR(podR);setFValidUntil(q.validUntil||"");setFOptions(q.options&&q.options.length>0?q.options:[newOption()]);setActiveOptIdx(0);setEditKey(key);setTab("edit");};
@@ -622,8 +672,8 @@ return(
 <Route path="/about" element={<AboutPage st={st} I={I}/>}/>
 <Route path="/services" element={<ServicesPage st={st} I={I}/>}/>
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
-<Route path="/knowledge" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense>}/>
-<Route path="/testimonials" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense>}/>
+<Route path="/knowledge" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
+<Route path="/testimonials" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
 <Route path="/quote" element={<QuotePage quotes={quotes} quotesErr={quotesErr} setQuotes={setQuotes} setQuotesErr={setQuotesErr}/>}/>
 <Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p></div>}/>
 </Routes><Footer I={I}/></>}/>
