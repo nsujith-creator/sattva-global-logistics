@@ -17,10 +17,8 @@ import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { IndustriesPage } from "./pages/IndustriesPage";
 import { ServicesPage } from "./pages/ServicesPage";
-// Heavy pages lazy-loaded — only fetched when route is visited
 const KnowledgePage   = lazy(()=>import("./pages/KnowledgePage").then(m=>({default:m.KnowledgePage})));
 const TestimonialsPage = lazy(()=>import("./pages/TestimonialsPage").then(m=>({default:m.TestimonialsPage})));
-import { supabase } from "./config/supabase";
 import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
 import { POL, POD_R, ALL_POD } from "./data/ports";
@@ -33,6 +31,9 @@ import { searchCargo } from "./utils/cargoSearch";
 import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
 import { saveFormState, loadFormState, clearFormState } from "./utils/formState";
 
+const ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNha21pcGlxY2hsb3R1aGFodWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzM1NzEsImV4cCI6MjA4OTk0OTU3MX0.VfucK_bIfQGdA30KWehZhjGN71QmsK1YgdZ71I06FW0";
+const FN_URL=typeof import.meta!=="undefined"&&import.meta.env?.VITE_SUPABASE_FUNCTIONS_URL||"https://cakmipiqchlotuhahuds.supabase.co/functions/v1";
+
 /* ─── Search-as-you-type port combobox with user history ─── */
 function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) {
   const[q,setQ]=useState("");
@@ -41,7 +42,6 @@ function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) 
   const ref=React.useRef(null);
   const selected=options.find(o=>o.c===value);
   const display=focused?q:(selected?`${selected.n} (${selected.c})`:"");
-
   let items=[];
   if(q.length===0&&history.length>0){
     const histItems=history.map(code=>options.find(o=>o.c===code)).filter(Boolean).map(o=>({...o,isHistory:true}));
@@ -49,7 +49,6 @@ function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) 
   } else if(q.length>0){
     items=options.filter(o=>o.n.toLowerCase().includes(q.toLowerCase())||o.c.toLowerCase().includes(q.toLowerCase())).slice(0,12);
   }
-
   React.useEffect(()=>{
     const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
     document.addEventListener("mousedown",handler);
@@ -83,7 +82,7 @@ function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) 
   );
 }
 
-/* ─── Search-as-you-type cargo combobox with HS code database + history ─── */
+/* ─── Search-as-you-type cargo combobox ─── */
 function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[q,setQ]=useState("");
   const[open,setOpen]=useState(false);
@@ -93,19 +92,12 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[chunkErr,setChunkErr]=useState(false);
   const ref=React.useRef(null);
   const display=focused?q:(value||"");
-
   React.useEffect(()=>{
     if(q.length<2){setResults([]);setLoading(false);return;}
     setLoading(true);
-    import("./utils/cargoSearch").then(m=>{
-      setResults(m.searchCargo(q,12));
-      setLoading(false);
-      setChunkErr(false);
-    }).catch(()=>{setLoading(false);setChunkErr(true);});
+    import("./utils/cargoSearch").then(m=>{setResults(m.searchCargo(q,12));setLoading(false);setChunkErr(false);}).catch(()=>{setLoading(false);setChunkErr(true);});
   },[q]);
-
   const showHistory=focused&&q.length===0&&history.length>0;
-
   React.useEffect(()=>{
     const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target)){setOpen(false);setFocused(false);setQ("");}};
     document.addEventListener("mousedown",handler);
@@ -143,9 +135,7 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
 }
 
 function QuotePage({rates,ratesErr,setRates,setRatesErr}){const go=useNavigate();
-React.useEffect(()=>{
-  lr().then(r=>{setRates(r);setRatesErr(false);}).catch(()=>setRatesErr(true));
-},[]);
+React.useEffect(()=>{lr().then(r=>{setRates(r);setRatesErr(false);}).catch(()=>setRatesErr(true));},[]);
 const m=useIsMobile();
 const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
 const[f,setF]=useState(()=>loadFormState()||BLANK_F);
@@ -164,14 +154,12 @@ const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHi
 const setVerifiedUser=(user,token)=>{saveSession(user,token);setGateUser(user);setSessionToken(token);setHist(getQuoteHistory(user.email));};
 React.useEffect(()=>{
   const handler=(e)=>{if(e.key==="sattva-verified-user"){const u=loadSession();setGateUser(u);if(u)setHist(getQuoteHistory(u.email));}};
-  window.addEventListener("storage",handler);
-  return()=>window.removeEventListener("storage",handler);
+  window.addEventListener("storage",handler);return()=>window.removeEventListener("storage",handler);
 },[]);
 const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
 React.useEffect(()=>{
   if(gateUser?.email&&f.pol&&f.pod&&f.cargo){saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));}
 },[f.pol,f.pod,f.cargo,gateUser?.email]);
-const pods=f.podR?POD_R[f.podR]||[]:[];
 const rk=f.pol&&f.pod&&f.eq?`${f.pol}:${f.pod}:${f.eq}`:null;
 const rate=rk&&rates[rk]?rates[rk]:null;
 const qty=Math.max(1,parseInt(f.vol)||1);
@@ -195,18 +183,17 @@ const validate=()=>{
   setErrs(e);return Object.keys(e).length===0;
 };
 const handleSubmit=async()=>{
-  if(sending){return;}
+  if(sending)return;
   if(!gateUser){setSendErr("Please select your route and verify your identity first.");return;}
   if(!validate())return;
   setSending(true);setSendErr("");
   const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;
   const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
-  const params={from_name:gateUser.name,company:gateUser.company||"(not provided)",from_email:gateUser.email,phone:gateUser.phone,pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,cargo:f.cargo,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:f.vol,dimensions:isOTFR?`L:${f.dimL}m x W:${f.dimW}m x H:${f.dimH}m`:"N/A",packing:isOTFR?f.packType:"N/A",attachments:"(not supported — email us directly with supporting documents)",notes:f.msg||"(none)",reply_to:gateUser.email};
-  logSearchAPI({name:gateUser.name,email:gateUser.email,company:gateUser.company||"(not provided)",phone:gateUser.phone,pol:params.pol,pod:params.pod,eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"});
+  logSearchAPI({name:gateUser.name,email:gateUser.email,company:gateUser.company||"(not provided)",phone:gateUser.phone,pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"});
   saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);
   setHist(getQuoteHistory(gateUser.email));
   try{
-    await submitQuoteAPI({pol:params.pol,pod:params.pod,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!rate,rateTotal:rate?.total||null},sessionToken);
+    await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!rate,rateTotal:rate?.total||null},sessionToken);
     clearFormState();setDone(true);
   }catch(err){
     console.error("submitQuote error:",err);
@@ -225,7 +212,7 @@ return(
 </div></section>
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
 <div style={{...st.cd,padding:m?20:36}}>
-{ratesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded — your network or a corporate proxy may be blocking the connection. You can still submit a quote request and we'll respond within 24 hours.</div>}
+{ratesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded. You can still submit a quote request and we'll respond within 24 hours.</div>}
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
@@ -247,7 +234,7 @@ return(
 </div>
 {errs.dims&&<div style={{fontSize:11,color:B.red,marginBottom:10}}>{errs.dims}</div>}
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
-<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.amber,marginTop:6}}>⚠ {files.length} file(s) selected. Note: files cannot be attached to quote emails — please send them separately to <a href="mailto:quotes@sattvaglobal.in">quotes@sattvaglobal.in</a> quoting your submission.</div>}</div>
+<div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.amber,marginTop:6}}>⚠ {files.length} file(s) selected. Please send them separately to <a href="mailto:quotes@sattvaglobal.in">quotes@sattvaglobal.in</a> quoting your submission.</div>}</div>
 </div>)}
 {rk&&!gateUser&&(
 <div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
@@ -302,8 +289,20 @@ const[extraItems,setExtraItems]=useState([]);
 const[bulk,setBulk]=useState("");
 const[msg,setMsg]=useState("");
 const[search,setSearch]=useState("");
-const doLogin=async()=>{setLoginErr("");const{data,error}=await supabase.auth.signInWithPassword({email,password:pass});if(error||!data?.session){setLoginErr("Invalid email or password.");return;}setAdminToken(data.session.access_token);setAuthed(true);};
-const doLogout=async()=>{await supabase.auth.signOut();setAuthed(false);setAdminToken(null);};
+const doLogin=async()=>{
+  setLoginErr("");
+  try{
+    const res=await fetch(`${FN_URL}/admin-login`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON_KEY}`},
+      body:JSON.stringify({email,password:pass})
+    });
+    const d=await res.json();
+    if(!res.ok||!d.token){setLoginErr(d.error||"Invalid email or password.");return;}
+    setAdminToken(d.token);setAuthed(true);
+  }catch(e){setLoginErr("Login failed. Please try again.");}
+};
+const doLogout=async()=>{setAuthed(false);setAdminToken(null);};
 const up=(k,v)=>setFm(p=>({...p,[k]:v}));
 const pods=fm.podR?POD_R[fm.podR]||[]:[];
 const extraTotal=()=>extraItems.reduce((a,x)=>a+(parseFloat(x.value)||0),0);
@@ -312,19 +311,20 @@ const addExtraItem=()=>setExtraItems(p=>[...p,{label:"",value:""}]);
 const removeExtraItem=(i)=>setExtraItems(p=>p.filter((_,idx)=>idx!==i));
 const upExtra=(i,k,v)=>setExtraItems(p=>p.map((x,idx)=>idx===i?{...x,[k]:v}:x));
 const saveRate=async()=>{
-if(!fm.pol||!fm.pod||!fm.eq){setMsg("Fill POL, POD, Equipment.");return;}
-const key=`${fm.pol}:${fm.pod}:${fm.eq}`;
-const entry={oceanFreight:parseFloat(fm.of)||0,thcOrigin:parseFloat(fm.to)||0,thcDest:parseFloat(fm.td)||0,blFee:parseFloat(fm.bl)||0,surcharges:parseFloat(fm.su)||0,extraItems:extraItems.filter(x=>x.label&&parseFloat(x.value)),total:tot(),validFrom:fm.vf,validTo:fm.vt,carrier:fm.cr||null,updatedAt:new Date().toISOString()};
-setMsg("Saving…");
-const ok=await saveRateAPI(key,entry,adminToken);
-if(ok){const updated={...rates,[key]:entry};setRates(updated);setMsg(`✓ Saved: ${key} — $${entry.total}/ctr`);setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});setExtraItems([]);setEditKey(null);setTab("rates");}
-else setMsg("⚠ Save failed.");};
+  if(!fm.pol||!fm.pod||!fm.eq){setMsg("Fill POL, POD, Equipment.");return;}
+  const key=`${fm.pol}:${fm.pod}:${fm.eq}`;
+  const entry={oceanFreight:parseFloat(fm.of)||0,thcOrigin:parseFloat(fm.to)||0,thcDest:parseFloat(fm.td)||0,blFee:parseFloat(fm.bl)||0,surcharges:parseFloat(fm.su)||0,extraItems:extraItems.filter(x=>x.label&&parseFloat(x.value)),total:tot(),validFrom:fm.vf,validTo:fm.vt,carrier:fm.cr||null,updatedAt:new Date().toISOString()};
+  setMsg("Saving…");
+  const ok=await saveRateAPI(key,entry,adminToken);
+  if(ok){const updated={...rates,[key]:entry};setRates(updated);setMsg(`✓ Saved: ${key} — $${entry.total}/ctr`);setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});setExtraItems([]);setEditKey(null);setTab("rates");}
+  else setMsg("⚠ Save failed.");
+};
 const del=async(key)=>{setMsg("Deleting…");await deleteRateAPI(key,adminToken);const u={...rates};delete u[key];setRates(u);setMsg(`✓ Deleted: ${key}`);};
 const edit=(key)=>{const r=rates[key];const[pol,pod,eq]=key.split(":");let podR="";for(const[rg,ps]of Object.entries(POD_R)){if(ps.find(p=>p.c===pod)){podR=rg;break;}}setFm({pol,pod,podR,eq,of:String(r.oceanFreight),to:String(r.thcOrigin),td:String(r.thcDest),bl:String(r.blFee),su:String(r.surcharges||0),vf:r.validFrom||"",vt:r.validTo||"",cr:r.carrier||""});setExtraItems(r.extraItems||[]);setEditKey(key);setTab("add");};
-const importBulk=async()=>{try{const p=JSON.parse(bulk);setMsg(`Saving ${Object.keys(p).length} rates…`);let count=0;for(const[key,entry]of Object.entries(p)){const ok=await saveRateAPI(key,entry);if(ok)count++;}const m={...rates,...p};setRates(m);setMsg(`✓ Imported ${count}/${Object.keys(p).length} rates.`);setBulk("");}catch{setMsg("Invalid JSON.");}};
+const importBulk=async()=>{try{const p=JSON.parse(bulk);setMsg(`Saving ${Object.keys(p).length} rates…`);let count=0;for(const[key,entry]of Object.entries(p)){const ok=await saveRateAPI(key,entry,adminToken);if(ok)count++;}const m={...rates,...p};setRates(m);setMsg(`✓ Imported ${count}/${Object.keys(p).length} rates.`);setBulk("");}catch{setMsg("Invalid JSON.");}};
 const exportRates=()=>{const b=new Blob([JSON.stringify(rates,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="sattva-rates.json";a.click();URL.revokeObjectURL(u);};
 const entries=Object.entries(rates).filter(([k])=>!search||k.toLowerCase().includes(search.toLowerCase()));
-if(!authed) return(
+if(!authed)return(
 <div style={{paddingTop:68,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:B.g1}}>
 <div style={{...st.cd,maxWidth:400,width:"100%",textAlign:"center",padding:40}}>
 <I.Lk/><h2 style={{fontSize:22,fontWeight:700,color:B.dark,marginTop:16,marginBottom:8,fontFamily:FF}}>Admin Panel</h2>

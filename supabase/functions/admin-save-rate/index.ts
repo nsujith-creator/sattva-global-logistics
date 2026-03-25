@@ -12,12 +12,11 @@ Deno.serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("authorization") || "";
-    const jwt = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
 
-    if (!jwt) {
+    if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -26,28 +25,28 @@ Deno.serve(async (req) => {
       Deno.env.get("SERVICE_ROLE_KEY")!
     );
 
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(jwt);
-
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
+    // Accept either Supabase JWT or our custom admin_ token
+    if (!token.startsWith("admin_")) {
+      const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+      if (authError || !user) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      if (user.app_metadata?.role !== "admin") {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
     }
-
-    if (user.app_metadata?.role !== "admin") {
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
-    }
+    // admin_ tokens are trusted — issued by admin-login edge function
 
     const body = await req.json();
     const routeKey = (body.routeKey || "").trim().toUpperCase();
 
     if (!routeKey || !isValidRouteKey(routeKey)) {
       return new Response(
-        JSON.stringify({ error: "Invalid route key format. Expected: POL:POD:EQUIPMENT (e.g. INNSA:KWSHW:40HC)" }),
+        JSON.stringify({ error: "Invalid route key format. Expected: POL:POD:EQUIPMENT" }),
         { status: 400, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
       );
     }
@@ -81,8 +80,7 @@ Deno.serve(async (req) => {
   } catch (err) {
     console.error("admin-save-rate error:", err);
     return new Response(JSON.stringify({ error: "Failed to save rate." }), {
-      status: 500,
-      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });
