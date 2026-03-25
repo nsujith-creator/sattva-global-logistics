@@ -1,10 +1,11 @@
 /**
  * RateGate.jsx — OTP gate for rate access
- * Styled card with 2-column grid layout matching original design.
+ * Styled card with 2-column grid layout, PhoneField with country codes + flags.
  */
 import { useState, useEffect, useRef } from "react";
 import { apiPost } from "../../api/supabase.js";
 import { saveSession } from "../../utils/session.js";
+import { PhoneField } from "./PhoneField.jsx";
 
 const FREE_DOMAINS = [
   "gmail.com","yahoo.com","yahoo.in","yahoo.co.in","hotmail.com","outlook.com",
@@ -23,6 +24,7 @@ export default function RateGate({ onUnlock, isMobile, st }) {
   const [step, setStep]           = useState("details");
   const [sending, setSending]     = useState(false);
   const [errs, setErrs]           = useState({});
+  const [phoneErr, setPhoneErr]   = useState("");
   const [countdown, setCountdown] = useState(0);
   const [otpExpiry, setOtpExpiry] = useState(null);
   const [timeLeft, setTimeLeft]   = useState(600);
@@ -66,6 +68,19 @@ export default function RateGate({ onUnlock, isMobile, st }) {
   };
   const errStyle = { fontSize: 11, color: "#dc2626", marginTop: 3 };
 
+  const btnPrimary = {
+    display: "inline-flex", alignItems: "center", gap: 8,
+    padding: "12px 24px", background: "#024aab", color: "#fff",
+    borderRadius: 8, fontWeight: 600, fontSize: 14, border: "none",
+    cursor: "pointer", fontFamily: "inherit",
+    boxShadow: "0 4px 14px rgba(2,74,171,0.25)",
+    opacity: sending ? 0.7 : 1,
+  };
+  const btnLink = {
+    background: "none", border: "none", color: "#64748b",
+    fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "inherit",
+  };
+
   // ── Step 1: Send OTP ─────────────────────────────────────────────
   async function sendOtp(e) {
     e.preventDefault();
@@ -74,6 +89,7 @@ export default function RateGate({ onUnlock, isMobile, st }) {
     if (!g.email.trim()) newErrs.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(g.email)) newErrs.email = "Invalid email address.";
     else if (!isCompanyEmail(g.email)) newErrs.email = "Please use your company email address.";
+    if (phoneErr) newErrs.phone = phoneErr;
     if (Object.keys(newErrs).length) { setErrs(newErrs); return; }
 
     setErrs({});
@@ -146,24 +162,6 @@ export default function RateGate({ onUnlock, isMobile, st }) {
 
   const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
-  const btnPrimary = {
-    display: "inline-flex", alignItems: "center", gap: 8,
-    padding: "12px 24px", background: "#024aab", color: "#fff",
-    borderRadius: 8, fontWeight: 600, fontSize: 14, border: "none",
-    cursor: "pointer", fontFamily: "inherit",
-    boxShadow: "0 4px 14px rgba(2,74,171,0.25)",
-    opacity: sending ? 0.7 : 1,
-  };
-  const btnSecondary = {
-    background: "none", border: "1.5px solid #024aab", color: "#024aab",
-    borderRadius: 8, padding: "10px 18px", fontWeight: 600, fontSize: 13,
-    cursor: "pointer", fontFamily: "inherit",
-  };
-  const btnLink = {
-    background: "none", border: "none", color: "#64748b",
-    fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "inherit",
-  };
-
   // ── Render: Details step ─────────────────────────────────────────
   if (step === "details") {
     return (
@@ -188,8 +186,13 @@ export default function RateGate({ onUnlock, isMobile, st }) {
           </div>
           <div>
             <label style={lb}>Phone</label>
-            <input style={inp(false)} type="tel" value={g.phone}
-              onChange={set("phone")} placeholder="+91 98..." autoComplete="tel"/>
+            <PhoneField
+              value={g.phone}
+              onChange={v => setG(p => ({ ...p, phone: v }))}
+              error={errs.phone || phoneErr}
+              onError={setPhoneErr}
+              st={st}
+            />
           </div>
         </div>
 
