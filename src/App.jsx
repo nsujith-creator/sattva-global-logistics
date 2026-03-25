@@ -23,6 +23,7 @@ import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
 import { POL, POD_R, ALL_POD } from "./data/ports";
 import { B, F, FF } from "./theme/tokens";
+import { supabase } from "./config/supabase";
 import { st } from "./styles/sharedStyles";
 import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
@@ -31,8 +32,6 @@ import { searchCargo } from "./utils/cargoSearch";
 import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
 import { saveFormState, loadFormState, clearFormState } from "./utils/formState";
 
-const ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNha21pcGlxY2hsb3R1aGFodWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzM1NzEsImV4cCI6MjA4OTk0OTU3MX0.VfucK_bIfQGdA30KWehZhjGN71QmsK1YgdZ71I06FW0";
-const FN_URL=typeof import.meta!=="undefined"&&import.meta.env?.VITE_SUPABASE_FUNCTIONS_URL||"https://cakmipiqchlotuhahuds.supabase.co/functions/v1";
 
 /* ─── Search-as-you-type port combobox with user history ─── */
 function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) {
@@ -289,20 +288,52 @@ const[extraItems,setExtraItems]=useState([]);
 const[bulk,setBulk]=useState("");
 const[msg,setMsg]=useState("");
 const[search,setSearch]=useState("");
+useEffect(()=>{
+  let alive=true;
+  supabase.auth.getSession().then(({data})=>{
+    const session=data?.session||null;
+    const role=session?.user?.app_metadata?.role;
+    if(!alive)return;
+    if(session?.access_token&&role==="admin"){
+      setAdminToken(session.access_token);
+      setAuthed(true);
+      setEmail(session.user.email||"");
+    }
+  });
+  const { data: listener } = supabase.auth.onAuthStateChange((_event, session)=>{
+    if(!alive)return;
+    const role=session?.user?.app_metadata?.role;
+    if(session?.access_token&&role==="admin"){
+      setAdminToken(session.access_token);
+      setAuthed(true);
+      setEmail(session.user.email||"");
+      setLoginErr("");
+      return;
+    }
+    setAdminToken(null);
+    setAuthed(false);
+  });
+  return()=>{alive=false;listener.subscription.unsubscribe();};
+},[]);
 const doLogin=async()=>{
   setLoginErr("");
   try{
-    const res=await fetch(`${FN_URL}/admin-login`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON_KEY}`},
-      body:JSON.stringify({email,password:pass})
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: pass,
     });
-    const d=await res.json();
-    if(!res.ok||!d.token){setLoginErr(d.error||"Invalid email or password.");return;}
-    setAdminToken(d.token);setAuthed(true);
+    if(error){setLoginErr(error.message||"Invalid email or password.");return;}
+    const session=data?.session||null;
+    const role=session?.user?.app_metadata?.role;
+    if(!session?.access_token||role!=="admin"){
+      await supabase.auth.signOut();
+      setLoginErr("This account is not authorized for admin access.");
+      return;
+    }
+    setAdminToken(session.access_token);setAuthed(true);setEmail(session.user.email||email.trim());
   }catch(e){setLoginErr("Login failed. Please try again.");}
 };
-const doLogout=async()=>{setAuthed(false);setAdminToken(null);};
+const doLogout=async()=>{await supabase.auth.signOut();setAuthed(false);setAdminToken(null);};
 const up=(k,v)=>setFm(p=>({...p,[k]:v}));
 const pods=fm.podR?POD_R[fm.podR]||[]:[];
 const extraTotal=()=>extraItems.reduce((a,x)=>a+(parseFloat(x.value)||0),0);

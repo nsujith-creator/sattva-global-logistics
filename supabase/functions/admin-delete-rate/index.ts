@@ -21,21 +21,17 @@ Deno.serve(async (req) => {
       Deno.env.get("SERVICE_ROLE_KEY")!
     );
 
-    // Accept either Supabase JWT or our custom admin_ token
-    if (!token.startsWith("admin_")) {
-      const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-      if (authError || !user) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-      if (user.app_metadata?.role !== "admin") {
-        return new Response(JSON.stringify({ error: "Forbidden" }), {
-          status: 403, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      });
     }
-    // admin_ tokens are trusted — issued by admin-login edge function
+    if (user.app_metadata?.role !== "admin") {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      });
+    }
 
     const body = await req.json();
     const routeKey = (body.routeKey || "").trim().toUpperCase();
