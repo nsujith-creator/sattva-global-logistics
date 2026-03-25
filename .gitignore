@@ -5,3 +5,5 @@ dist/
 src/App.jsx.bak
 migrate_to_router.py
 fix_jsx.py
+
+set_secret.bat
