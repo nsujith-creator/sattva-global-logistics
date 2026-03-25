@@ -1,10 +1,9 @@
-﻿// FAIL-24: Route-level code splitting — pages loaded only when route is visited
+// FAIL-24: Route-level code splitting — pages loaded only when route is visited
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
-import emailjs from "@emailjs/browser";
 import { ErrMsg } from "./components/forms/ErrMsg";
-import { RateGate } from "./components/forms/RateGate";
+import RateGate from "./components/forms/RateGate";
 import { PhoneField } from "./components/forms/PhoneField";
 import { CTA } from "./components/layout/CTA";
 import { Footer } from "./components/layout/Footer";
@@ -13,7 +12,7 @@ import { ScrollToTop } from "./components/routing/ScrollToTop";
 import { CarrierBadge } from "./components/shared/CarrierBadge";
 import { I } from "./components/shared/icons";
 import { useIsMobile } from "./hooks/useIsMobile";
-import { lr, saveRateAPI, deleteRateAPI, logSearchAPI } from "./api/rates";
+import { lr, saveRateAPI, deleteRateAPI, logSearchAPI, submitQuoteAPI } from "./api/rates";
 import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { IndustriesPage } from "./pages/IndustriesPage";
@@ -21,7 +20,7 @@ import { ServicesPage } from "./pages/ServicesPage";
 // Heavy pages lazy-loaded — only fetched when route is visited
 const KnowledgePage   = lazy(()=>import("./pages/KnowledgePage").then(m=>({default:m.KnowledgePage})));
 const TestimonialsPage = lazy(()=>import("./pages/TestimonialsPage").then(m=>({default:m.TestimonialsPage})));
-import { EJS } from "./config/emailjs";
+import { supabase } from "./config/supabase";
 import { CARRIERS } from "./data/carriers";
 import { PACK_TYPES, OT_FR_EQ, EQ, EQ_L, CARGO } from "./data/equipment";
 import { POL, POD_R, ALL_POD } from "./data/ports";
@@ -29,30 +28,10 @@ import { B, F, FF } from "./theme/tokens";
 import { st } from "./styles/sharedStyles";
 import { waLink } from "./utils/links";
 import { pn } from "./utils/ports";
-import { saveSession, loadSession, clearSession, lp, sp } from "./utils/session";
+import { saveSession, loadSession, clearSession } from "./utils/session";
 import { searchCargo } from "./utils/cargoSearch";
 import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
 import { saveFormState, loadFormState, clearFormState } from "./utils/formState";
-/* EmailJS config */
-/* Responsive hook */
-/* Packing types */
-/* Brand: Sattva palette */
-/* Port data */
-/* Google Sheets backend */
-/* Icons */
-/* Styles */
-/* Nav */
-/* Footer */
-/* CTA */
-/* Home */
-/* About */
-/* Services */
-/* Industries */
-/* Knowledge */
-/* Testimonials */
-/* Country phone data */
-/* Rate gate: email OTP verification */
-/* Quote page: instant rate lookup */
 
 /* ─── Search-as-you-type port combobox with user history ─── */
 function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) {
@@ -63,19 +42,12 @@ function PortCombo({label,value,onChange,options,error,placeholder,history=[]}) 
   const selected=options.find(o=>o.c===value);
   const display=focused?q:(selected?`${selected.n} (${selected.c})`:"");
 
-  // Build dropdown: history first (if no query), then search results
   let items=[];
   if(q.length===0&&history.length>0){
-    const histItems=history
-      .map(code=>options.find(o=>o.c===code))
-      .filter(Boolean)
-      .map(o=>({...o,isHistory:true}));
+    const histItems=history.map(code=>options.find(o=>o.c===code)).filter(Boolean).map(o=>({...o,isHistory:true}));
     items=histItems;
   } else if(q.length>0){
-    items=options.filter(o=>
-      o.n.toLowerCase().includes(q.toLowerCase())||
-      o.c.toLowerCase().includes(q.toLowerCase())
-    ).slice(0,12);
+    items=options.filter(o=>o.n.toLowerCase().includes(q.toLowerCase())||o.c.toLowerCase().includes(q.toLowerCase())).slice(0,12);
   }
 
   React.useEffect(()=>{
@@ -118,7 +90,7 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   const[focused,setFocused]=useState(false);
   const[results,setResults]=useState([]);
   const[loading,setLoading]=useState(false);
-  const[chunkErr,setChunkErr]=useState(false);  // FAIL-25
+  const[chunkErr,setChunkErr]=useState(false);
   const ref=React.useRef(null);
   const display=focused?q:(value||"");
 
@@ -132,7 +104,6 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
     }).catch(()=>{setLoading(false);setChunkErr(true);});
   },[q]);
 
-  // Show history when focused with no query
   const showHistory=focused&&q.length===0&&history.length>0;
 
   React.useEffect(()=>{
@@ -142,9 +113,7 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   },[]);
   const pick=(v)=>{onChange(v);setQ("");setOpen(false);setFocused(false);};
   const inp={width:"100%",padding:"11px 14px",border:`1.5px solid ${error?"#ef4444":"#d1d5db"}`,borderRadius:8,fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",background:"#fff"};
-  const dropItems=showHistory
-    ?history.map(h=>({name:h,code:"",isHistory:true}))
-    :results;
+  const dropItems=showHistory?history.map(h=>({name:h,code:"",isHistory:true})):results;
   return(
     <div ref={ref} style={{position:"relative"}}>
       <label style={{display:"block",fontSize:12,fontWeight:600,color:"#374151",marginBottom:6,textTransform:"uppercase",letterSpacing:.5}}>{label}</label>
@@ -173,11 +142,9 @@ function CargoCombo({label,value,onChange,error,placeholder,history=[]}){
   );
 }
 
-function QuotePage({rates:ratesProp,ratesErr:ratesErrProp,setRates,setRatesErr}){const go=useNavigate();
-// Lazy-load rates on /quote mount only
+function QuotePage({rates,ratesErr,setRates,setRatesErr}){const go=useNavigate();
 React.useEffect(()=>{
-  lr().then(r=>{setRates(r);setRatesErr(false);})
-    .catch(()=>setRatesErr(true));
+  lr().then(r=>{setRates(r);setRatesErr(false);}).catch(()=>setRatesErr(true));
 },[]);
 const m=useIsMobile();
 const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
@@ -189,29 +156,20 @@ const[sendErr,setSendErr]=useState("");
 const[files,setFiles]=useState([]);
 const[fileErr,setFileErr]=useState("");
 const[captcha,setCaptcha]=useState(()=>{const a=Math.ceil(Math.random()*9),b=Math.ceil(Math.random()*9);return{a,b,ans:a+b};});
-const[gateUser,setGateUser]=useState(()=>loadSession());
+const sessionData=loadSession();
+const[gateUser,setGateUser]=useState(()=>sessionData?.user||null);
+const[sessionToken,setSessionToken]=useState(()=>sessionData?.token||null);
 const[lastLoggedRk,setLastLoggedRk]=useState(null);
 const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
-const setVerifiedUser=(user)=>{saveSession(user);setGateUser(user);setHist(getQuoteHistory(user.email));};
-// FAIL-13: sync session across tabs via storage event
+const setVerifiedUser=(user,token)=>{saveSession(user,token);setGateUser(user);setSessionToken(token);setHist(getQuoteHistory(user.email));};
 React.useEffect(()=>{
-  const handler=(e)=>{
-    if(e.key==="sattva-verified-user"){
-      const u=loadSession();
-      setGateUser(u);
-      if(u) setHist(getQuoteHistory(u.email));
-    }
-  };
+  const handler=(e)=>{if(e.key==="sattva-verified-user"){const u=loadSession();setGateUser(u);if(u)setHist(getQuoteHistory(u.email));}};
   window.addEventListener("storage",handler);
   return()=>window.removeEventListener("storage",handler);
 },[]);
 const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
-// Auto-save history whenever pol+pod+cargo are all selected
 React.useEffect(()=>{
-  if(gateUser?.email&&f.pol&&f.pod&&f.cargo){
-    saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);
-    setHist(getQuoteHistory(gateUser.email));
-  }
+  if(gateUser?.email&&f.pol&&f.pod&&f.cargo){saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));}
 },[f.pol,f.pod,f.cargo,gateUser?.email]);
 const pods=f.podR?POD_R[f.podR]||[]:[];
 const rk=f.pol&&f.pod&&f.eq?`${f.pol}:${f.pod}:${f.eq}`:null;
@@ -221,69 +179,39 @@ const isOTFR=OT_FR_EQ.includes(f.eq);
 const MAX_MB=5;const MAX_FILES=3;
 const refreshCaptcha=()=>{const a=Math.ceil(Math.random()*9),b=Math.ceil(Math.random()*9);setCaptcha({a,b,ans:a+b});up("captchaAns","");};
 const handleFiles=(e)=>{const chosen=Array.from(e.target.files);if(chosen.filter(f=>f.size>MAX_MB*1024*1024).length){setFileErr(`Max file size is ${MAX_MB}MB.`);return;}if(chosen.length>MAX_FILES){setFileErr(`Max ${MAX_FILES} files.`);return;}setFileErr("");setFiles(chosen);};
-
-// Log each unique route lookup after gate is unlocked
 useEffect(()=>{
   if(rk&&gateUser&&rk!==lastLoggedRk){
     setLastLoggedRk(rk);
     const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;
     const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
-    logSearchAPI({
-      name:gateUser.name,email:gateUser.email,
-      company:gateUser.company||"(not provided)",phone:gateUser.phone,
-      pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,
-      eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Route lookup"
-    });
+    logSearchAPI({name:gateUser.name,email:gateUser.email,company:gateUser.company||"(not provided)",phone:gateUser.phone,pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Route lookup"});
   }
 },[rk,gateUser]);
 const validate=()=>{
   const e={};
-  if(!f.pol)e.pol="Required";
-  if(!f.pod)e.pod="Required";
-  if(!f.cargo)e.cargo="Required";
-  if(!f.eq)e.eq="Required";
+  if(!f.pol)e.pol="Required";if(!f.pod)e.pod="Required";if(!f.cargo)e.cargo="Required";if(!f.eq)e.eq="Required";
   if(isOTFR){if(!f.dimL.trim()||!f.dimW.trim()||!f.dimH.trim())e.dims="All dimensions required";if(!f.packType)e.packType="Required";}
   if(parseInt(f.captchaAns)!==captcha.ans)e.captcha="Incorrect answer";
   setErrs(e);return Object.keys(e).length===0;
 };
 const handleSubmit=async()=>{
-  if(sending){return;}  // FAIL-21: hard guard against double-click/double-tap
+  if(sending){return;}
   if(!gateUser){setSendErr("Please select your route and verify your identity first.");return;}
   if(!validate())return;
   setSending(true);setSendErr("");
   const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;
   const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
-  const params={
-    from_name:gateUser.name,company:gateUser.company||"(not provided)",
-    from_email:gateUser.email,phone:gateUser.phone,
-    pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,
-    cargo:f.cargo,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:f.vol,
-    dimensions:isOTFR?`L:${f.dimL}m x W:${f.dimW}m x H:${f.dimH}m`:"N/A",
-    packing:isOTFR?f.packType:"N/A",
-    attachments:"(not supported — email us directly with supporting documents)",
-    notes:f.msg||"(none)",reply_to:gateUser.email
-  };
-  // Always log to Google Sheets regardless of email success
-  logSearchAPI({
-    name:gateUser.name,email:gateUser.email,
-    company:gateUser.company||"(not provided)",phone:gateUser.phone,
-    pol:params.pol,pod:params.pod,eq:f.eq,
-    found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"
-  });
-  // Save quote history for returning customer personalisation
-  saveQuoteHistory(gateUser.email, f.pol, f.pod, f.cargo);
+  const params={from_name:gateUser.name,company:gateUser.company||"(not provided)",from_email:gateUser.email,phone:gateUser.phone,pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,cargo:f.cargo,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:f.vol,dimensions:isOTFR?`L:${f.dimL}m x W:${f.dimW}m x H:${f.dimH}m`:"N/A",packing:isOTFR?f.packType:"N/A",attachments:"(not supported — email us directly with supporting documents)",notes:f.msg||"(none)",reply_to:gateUser.email};
+  logSearchAPI({name:gateUser.name,email:gateUser.email,company:gateUser.company||"(not provided)",phone:gateUser.phone,pol:params.pol,pod:params.pod,eq:f.eq,found:rate?"1":"0",total:rate?rate.total:"—",note:"Quote submitted"});
+  saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);
   setHist(getQuoteHistory(gateUser.email));
   try{
-    await emailjs.send(EJS.serviceId,EJS.templateId,params,EJS.publicKey);
-    clearFormState();
-    setDone(true);
+    await submitQuoteAPI({pol:params.pol,pod:params.pod,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!rate,rateTotal:rate?.total||null},sessionToken);
+    clearFormState();setDone(true);
   }catch(err){
-    console.error("EmailJS error:",err);
-    // Even if email fails, show success since we logged to Sheets
-    // and give user the WhatsApp fallback
-    setSendErr("Email delivery failed. Please use WhatsApp button below to send your request, or email quotes@sattvaglobal.in directly.");
-  }
-  finally{setSending(false);}
+    console.error("submitQuote error:",err);
+    setSendErr("Submission failed. Please use WhatsApp button below or email quotes@sattvaglobal.in directly.");
+  }finally{setSending(false);}
 };
 const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} → POD: ${f.pod}\nCargo: ${f.cargo} | ${f.eq} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
 const resetForm=()=>{setDone(false);setF(BLANK_F);clearFormState();setFiles([]);setErrs({});refreshCaptcha();};
@@ -299,12 +227,10 @@ return(
 <div style={{...st.cd,padding:m?20:36}}>
 {ratesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded — your network or a corporate proxy may be blocking the connection. You can still submit a quote request and we'll respond within 24 hours.</div>}
 <h3 style={{...st.h3,marginBottom:28}}>Route & Cargo Details</h3>
-{/* POL + POD side by side — search-as-you-type combobox */}
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
 <PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…" history={hist.podHistory}/>
 </div>
-{/* Cargo Type + Equipment side by side */}
 <div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
 <CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} error={errs.cargo} placeholder="Search cargo type or HS code…" history={hist.cargoHistory}/>
 <div><label style={st.lb}>Equipment *</label><select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>{up("eq",e.target.value);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");}}><option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select><ErrMsg msg={errs.eq}/></div>
@@ -323,7 +249,17 @@ return(
 <div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
 <div><label style={st.lb}>Upload Images / Brochure / PDF <span style={{fontWeight:400,color:B.g5}}>(optional — max {MAX_FILES} files, {MAX_MB}MB each, JPG/PNG/PDF only)</span></label><input type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={handleFiles} style={{display:"block",marginTop:6,fontSize:13,fontFamily:F,color:B.g7}}/>{fileErr&&<div style={{fontSize:11,color:B.red,marginTop:4}}>{fileErr}</div>}{files.length>0&&<div style={{fontSize:12,color:B.amber,marginTop:6}}>⚠ {files.length} file(s) selected. Note: files cannot be attached to quote emails — please send them separately to <a href="mailto:quotes@sattvaglobal.in">quotes@sattvaglobal.in</a> quoting your submission.</div>}</div>
 </div>)}
-{rk&&!gateUser&&<RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>}
+{rk&&!gateUser&&(
+<div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
+  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    <h4 style={{fontSize:15,fontWeight:700,color:B.dark,margin:0}}>Verify Your Identity to View Rates</h4>
+  </div>
+  <p style={{fontSize:12,color:B.g5,marginBottom:18,lineHeight:1.6}}>Enter your <strong>company email</strong> to receive a one-time access code. Personal email addresses (Gmail, Yahoo, etc.) are not accepted.</p>
+  <RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>
+  <p style={{fontSize:11,color:B.g5,marginTop:12}}>🔒 Your details are kept confidential and used only for rate access purposes.</p>
+</div>
+)}
 {gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
 {rk&&gateUser&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:rate?B.gBg:B.aBg,border:`1px solid ${rate?B.green:B.amber}22`}}>
 {rate?(<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}><div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}><h4 style={{fontSize:15,fontWeight:700,color:B.green,margin:0}}>✓ Instant Rate Available</h4>{rate.carrier&&<CarrierBadge name={rate.carrier}/>}</div><span style={{fontSize:12,color:B.g5}}>Valid: {rate.validFrom||"—"} to {rate.validTo||"—"}</span></div>
@@ -351,26 +287,23 @@ return(
 <div style={st.cd}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Why Get a Quote?</h4>{["Multi-carrier rates","Transparent breakdown","24hr response","No hidden charges","Expert routing advice"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}><div style={{flexShrink:0,marginTop:2}}><I.Ck/></div><span style={{fontSize:13,color:B.g7}}>{t}</span></div>)}</div>
 </div>
 </div></div></div>);}
-/* Admin panel: rate management backend */
+
+/* Admin panel */
 function AdminPage({rates,setRates}){const go=useNavigate();
 const[authed,setAuthed]=useState(false);
-const[pin,setPin]=useState("");
-const[pinErr,setPinErr]=useState("");
-const[storedPin,setStoredPin]=useState(null);
-const[setup,setSetup]=useState(false);
-const[newPin,setNewPin]=useState("");
+const[adminToken,setAdminToken]=useState(null);
+const[email,setEmail]=useState("");
+const[pass,setPass]=useState("");
+const[loginErr,setLoginErr]=useState("");
 const[tab,setTab]=useState("rates");
 const[editKey,setEditKey]=useState(null);
 const[fm,setFm]=useState({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});
-const[extraItems,setExtraItems]=useState([]); // [{label:"",value:""}]
+const[extraItems,setExtraItems]=useState([]);
 const[bulk,setBulk]=useState("");
 const[msg,setMsg]=useState("");
 const[search,setSearch]=useState("");
-
-useEffect(()=>{lp().then(p=>{setStoredPin(p);if(!p)setSetup(true);});},[]);
-
-const doLogin=()=>{if(pin===storedPin){setAuthed(true);setPinErr("");}else setPinErr("Wrong PIN.");};
-const doSetup=async()=>{if(newPin.length<4)return;await sp(newPin);setStoredPin(newPin);setSetup(false);setAuthed(true);};
+const doLogin=async()=>{setLoginErr("");const{data,error}=await supabase.auth.signInWithPassword({email,password:pass});if(error||!data?.session){setLoginErr("Invalid email or password.");return;}setAdminToken(data.session.access_token);setAuthed(true);};
+const doLogout=async()=>{await supabase.auth.signOut();setAuthed(false);setAdminToken(null);};
 const up=(k,v)=>setFm(p=>({...p,[k]:v}));
 const pods=fm.podR?POD_R[fm.podR]||[]:[];
 const extraTotal=()=>extraItems.reduce((a,x)=>a+(parseFloat(x.value)||0),0);
@@ -378,74 +311,30 @@ const tot=()=>["of","to","td","bl","su"].map(k=>parseFloat(fm[k])||0).reduce((a,
 const addExtraItem=()=>setExtraItems(p=>[...p,{label:"",value:""}]);
 const removeExtraItem=(i)=>setExtraItems(p=>p.filter((_,idx)=>idx!==i));
 const upExtra=(i,k,v)=>setExtraItems(p=>p.map((x,idx)=>idx===i?{...x,[k]:v}:x));
-
 const saveRate=async()=>{
 if(!fm.pol||!fm.pod||!fm.eq){setMsg("Fill POL, POD, Equipment.");return;}
 const key=`${fm.pol}:${fm.pod}:${fm.eq}`;
 const entry={oceanFreight:parseFloat(fm.of)||0,thcOrigin:parseFloat(fm.to)||0,thcDest:parseFloat(fm.td)||0,blFee:parseFloat(fm.bl)||0,surcharges:parseFloat(fm.su)||0,extraItems:extraItems.filter(x=>x.label&&parseFloat(x.value)),total:tot(),validFrom:fm.vf,validTo:fm.vt,carrier:fm.cr||null,updatedAt:new Date().toISOString()};
 setMsg("Saving…");
-const ok=await saveRateAPI(key,entry);
-if(ok){
-  const updated={...rates,[key]:entry};
-  setRates(updated);
-  setMsg(`✓ Saved to Google Sheets: ${key} — $${entry.total}/ctr`);
-  setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});
-  setExtraItems([]);
-  setEditKey(null);setTab("rates");
-}else setMsg("⚠ Save failed. Check your SCRIPT_URL in App.jsx.");};
-
-const del=async(key)=>{
-  setMsg("Deleting…");
-  await deleteRateAPI(key);
-  const u={...rates};delete u[key];
-  setRates(u);
-  setMsg(`✓ Deleted: ${key}`);
-};;
-
-const edit=(key)=>{
-const r=rates[key];const[pol,pod,eq]=key.split(":");
-let podR="";for(const[rg,ps]of Object.entries(POD_R)){if(ps.find(p=>p.c===pod)){podR=rg;break;}}
-setFm({pol,pod,podR,eq,of:String(r.oceanFreight),to:String(r.thcOrigin),td:String(r.thcDest),bl:String(r.blFee),su:String(r.surcharges||0),vf:r.validFrom||"",vt:r.validTo||"",cr:r.carrier||""});
-setExtraItems(r.extraItems||[]);
-setEditKey(key);setTab("add");};
-
-const importBulk=async()=>{
-  try{
-    const p=JSON.parse(bulk);
-    setMsg(`Saving ${Object.keys(p).length} rates to Google Sheets…`);
-    let count=0;
-    for(const[key,entry]of Object.entries(p)){
-      const ok=await saveRateAPI(key,entry);
-      if(ok)count++;
-    }
-    const m={...rates,...p};
-    setRates(m);
-    setMsg(`✓ Imported ${count}/${Object.keys(p).length} rates to Google Sheets.`);
-    setBulk("");
-  }catch{setMsg("Invalid JSON.");}
-};;
-
+const ok=await saveRateAPI(key,entry,adminToken);
+if(ok){const updated={...rates,[key]:entry};setRates(updated);setMsg(`✓ Saved: ${key} — $${entry.total}/ctr`);setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});setExtraItems([]);setEditKey(null);setTab("rates");}
+else setMsg("⚠ Save failed.");};
+const del=async(key)=>{setMsg("Deleting…");await deleteRateAPI(key,adminToken);const u={...rates};delete u[key];setRates(u);setMsg(`✓ Deleted: ${key}`);};
+const edit=(key)=>{const r=rates[key];const[pol,pod,eq]=key.split(":");let podR="";for(const[rg,ps]of Object.entries(POD_R)){if(ps.find(p=>p.c===pod)){podR=rg;break;}}setFm({pol,pod,podR,eq,of:String(r.oceanFreight),to:String(r.thcOrigin),td:String(r.thcDest),bl:String(r.blFee),su:String(r.surcharges||0),vf:r.validFrom||"",vt:r.validTo||"",cr:r.carrier||""});setExtraItems(r.extraItems||[]);setEditKey(key);setTab("add");};
+const importBulk=async()=>{try{const p=JSON.parse(bulk);setMsg(`Saving ${Object.keys(p).length} rates…`);let count=0;for(const[key,entry]of Object.entries(p)){const ok=await saveRateAPI(key,entry);if(ok)count++;}const m={...rates,...p};setRates(m);setMsg(`✓ Imported ${count}/${Object.keys(p).length} rates.`);setBulk("");}catch{setMsg("Invalid JSON.");}};
 const exportRates=()=>{const b=new Blob([JSON.stringify(rates,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="sattva-rates.json";a.click();URL.revokeObjectURL(u);};
-
 const entries=Object.entries(rates).filter(([k])=>!search||k.toLowerCase().includes(search.toLowerCase()));
-
 if(!authed) return(
 <div style={{paddingTop:68,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:B.g1}}>
 <div style={{...st.cd,maxWidth:400,width:"100%",textAlign:"center",padding:40}}>
 <I.Lk/><h2 style={{fontSize:22,fontWeight:700,color:B.dark,marginTop:16,marginBottom:8,fontFamily:FF}}>Admin Panel</h2>
-{setup?(<>
-<p style={{...st.bd,fontSize:14,marginBottom:20}}>First time? Set a 4+ digit PIN.</p>
-<input type="password" style={{...st.inp,textAlign:"center",fontSize:24,letterSpacing:8}} value={newPin} onChange={e=>setNewPin(e.target.value)} placeholder="PIN" maxLength={8}/>
-<button onClick={doSetup} style={{...st.bp,marginTop:16,width:"100%",justifyContent:"center"}} disabled={newPin.length<4}>Set PIN & Enter</button>
-</>):(<>
-<p style={{...st.bd,fontSize:14,marginBottom:20}}>Enter PIN to manage rates.</p>
-<input type="password" style={{...st.inp,textAlign:"center",fontSize:24,letterSpacing:8}} value={pin} onChange={e=>setPin(e.target.value)} placeholder="PIN" maxLength={8} onKeyDown={e=>e.key==="Enter"&&doLogin()}/>
-{pinErr&&<p style={{color:B.red,fontSize:13,marginTop:8}}>{pinErr}</p>}
-<button onClick={doLogin} style={{...st.bp,marginTop:16,width:"100%",justifyContent:"center"}}>Unlock</button>
-</>)}
+<p style={{...st.bd,fontSize:14,marginBottom:20}}>Sign in to manage rates.</p>
+<input type="email" style={{...st.inp,marginBottom:12}} value={email} onChange={e=>setEmail(e.target.value)} placeholder="sujith@sattvaglobal.in" autoComplete="email"/>
+<input type="password" style={{...st.inp,marginBottom:12}} value={pass} onChange={e=>setPass(e.target.value)} placeholder="Password" onKeyDown={e=>e.key==="Enter"&&doLogin()}/>
+{loginErr&&<p style={{color:B.red,fontSize:13,marginBottom:8}}>{loginErr}</p>}
+<button onClick={doLogin} style={{...st.bp,width:"100%",justifyContent:"center"}}>Sign In</button>
 <button onClick={()=>go("/")} style={{...st.bs,marginTop:12,width:"100%",justifyContent:"center",fontSize:13}}>← Website</button>
 </div></div>);
-
 return(
 <div style={{paddingTop:68,minHeight:"100vh",background:B.g1}}>
 <div style={{maxWidth:1200,margin:"0 auto",padding:"32px 24px"}}>
@@ -453,16 +342,14 @@ return(
 <div><h1 style={{fontSize:26,fontWeight:700,color:B.dark,fontFamily:FF,margin:0}}>Rate Management</h1><p style={{fontSize:13,color:B.g5,marginTop:4}}>{Object.keys(rates).length} rates · Auto-saved</p></div>
 <div style={{display:"flex",gap:10}}>
 <button onClick={exportRates} style={{...st.bs,padding:"8px 16px",fontSize:12}}><I.Dw/> Export</button>
+<button onClick={doLogout} style={{...st.bs,padding:"8px 16px",fontSize:12}}>Sign Out</button>
 <button onClick={()=>go("/")} style={{...st.bs,padding:"8px 16px",fontSize:12}}>← Site</button>
 </div></div>
-
 {msg&&<div style={{padding:"10px 16px",borderRadius:8,background:msg.startsWith("✓")?B.gBg:B.aBg,color:msg.startsWith("✓")?B.green:B.amber,fontSize:13,marginBottom:16,fontWeight:500}}>{msg}</div>}
-
 <div style={{display:"flex",gap:4,marginBottom:24}}>
 {[["rates","All Rates"],["add",editKey?"Edit Rate":"Add Rate"],["bulk","Bulk Import"]].map(([id,lb])=>
 <button key={id} onClick={()=>{setTab(id);if(id!=="add")setEditKey(null);}} style={{padding:"10px 20px",borderRadius:"8px 8px 0 0",border:"none",cursor:"pointer",fontWeight:600,fontSize:13,fontFamily:F,background:tab===id?"#fff":"transparent",color:tab===id?B.primary:B.g5,boxShadow:tab===id?"0 -1px 4px rgba(0,0,0,.05)":"none"}}>{lb}</button>)}
 </div>
-
 {tab==="rates"&&(
 <div style={{...st.cd,padding:0,overflow:"hidden"}}>
 <div style={{padding:"16px 20px",borderBottom:`1px solid ${B.g1}`,display:"flex",gap:12,alignItems:"center"}}>
@@ -494,7 +381,6 @@ return(
 </td></tr>);})}</tbody>
 </table></div>)}
 </div>)}
-
 {tab==="add"&&(
 <div style={{...st.cd,maxWidth:720}}>
 <h3 style={{...st.h3,marginBottom:24}}>{editKey?"Edit Rate":"Add New Rate"}</h3>
@@ -538,7 +424,6 @@ return(
 <button onClick={saveRate} style={{...st.bp,flex:1,justifyContent:"center"}}>{editKey?"Update":"Save"} Rate</button>
 {editKey&&<button onClick={()=>{setEditKey(null);setFm({pol:"",pod:"",podR:"",eq:"",of:"",to:"",td:"",bl:"",su:"",vf:"",vt:"",cr:""});setExtraItems([]);setTab("rates");}} style={{...st.bs,padding:"10px 20px"}}>Cancel</button>}
 </div></div>)}
-
 {tab==="bulk"&&(
 <div style={{...st.cd,maxWidth:720}}>
 <h3 style={{...st.h3,marginBottom:10}}>Bulk Import</h3>
@@ -563,7 +448,6 @@ return(
 export default function App(){
 const[rates,setRates]=useState({});
 const[ratesErr,setRatesErr]=useState(false);
-// Rates loaded lazily inside QuotePage — removed from App mount
 const WA_FLOAT=`https://wa.me/919136121123?text=${encodeURIComponent("Hi, I'd like to enquire about freight forwarding services from Sattva Global Logistics.")}`;
 return(
 <HelmetProvider>
@@ -579,11 +463,10 @@ return(
 <Route path="/knowledge" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense>}/>
 <Route path="/testimonials" element={<Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense>}/>
 <Route path="/quote" element={<QuotePage rates={rates} ratesErr={ratesErr} setRates={setRates} setRatesErr={setRatesErr}/>}/>
-<Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p><button onClick={()=>go("/")} style={st.bp}>Back to Home</button></div>}/>
+<Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p></div>}/>
 </Routes><Footer I={I}/></>}/>
 <Route path="/admin" element={<AdminPage rates={rates} setRates={setRates}/>}/>
 </Routes>
-{/* WhatsApp float shown on all non-admin routes */}
 <Routes><Route path="/*" element={
 <a href={WA_FLOAT} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp"
   style={{position:"fixed",bottom:28,right:28,zIndex:999,width:56,height:56,borderRadius:"50%",background:"#25D366",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(37,211,102,.5)",textDecoration:"none",transition:"transform .2s"}}
@@ -594,15 +477,3 @@ return(
 </div>
 </BrowserRouter>
 </HelmetProvider>);}
-
-
-
-
-
-
-
-
-
-
-
-
