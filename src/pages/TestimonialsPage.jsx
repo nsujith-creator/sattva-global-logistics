@@ -1,74 +1,161 @@
-﻿import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
 import { B, FF } from "../theme/tokens";
-export function TestimonialsPage({ st, I }){const go=useNavigate();
-const d=[
-{text:"Our buyers stopped raising discrepancy claims after we switched to Sattva. The documentation is always clean and the vessel bookings are never missed.",from:"Ravi M., Export Manager",co:"Garments Manufacturer, Mumbai",route:"JNPT → Jebel Ali"},
-{text:"Sattva handled every FSSAI certificate and fumigation requirement without us having to follow up even once. Our first Africa shipments went without a single customs hold.",from:"Haresh P., Proprietor",co:"Food Products Exporter, Surat",route:"Mundra → Mombasa"},
-{text:"Pharma exports need a forwarder who understands regulatory compliance, not just freight rates. Sattva has never missed a documentation deadline.",from:"Priya S., GM Logistics",co:"Pharma API Manufacturer, Thane",route:"JNPT → Jeddah"},
-{text:"Proactive updates at every milestone — we always know where our cargo is without having to call. That kind of transparency is rare in this industry.",from:"Anand K., Director",co:"Engineering Goods Exporter, Pune",route:"JNPT → Dammam"},
-{text:"Switched to Sattva after a bad experience with documentation errors on our previous forwarder. Not a single BL amendment in 14 months.",from:"Farida T., CFO",co:"Chemical Exporter, Ankleshwar",route:"Mundra → Port Said"},
-{text:"Their understanding of Indian customs procedures and DGFT compliance gave us confidence when we started exporting for the first time.",from:"Suresh N., MD",co:"Auto Components Manufacturer, Chennai",route:"Chennai → Durban"},
-];
 
-const cases=[
-{tag:"Readymade Garments · Mumbai",headline:"Zero BL amendments across 18 months for a Mumbai garment exporter shipping to the Gulf",challenge:"A mid-sized garments manufacturer from Andheri was regularly facing BL amendments and customs examination delays — costing them buyer penalties and L/C discrepancy charges on every second shipment.",solution:"Sattva implemented a pre-shipment documentation checklist aligned with their buyer's L/C terms, coordinated directly with their CHA for Shipping Bill filing, and set up structured pickup-to-vessel cut-off timelines.",stats:[["18 months","zero BL amendments"],["40HC / 20GP","JNPT → Jebel Ali, weekly"],["100%","on-vessel before cut-off"]],quote:"Our buyers stopped raising discrepancy claims after we switched to Sattva. The documentation is always clean and the vessel bookings are never missed.",attr:"Export Manager, Garments Manufacturer, Mumbai"},
-{tag:"Food Products / FMCG · Gujarat",headline:"Seamless FSSAI-compliant exports to East Africa for a Gujarat food products manufacturer",challenge:"A packaged food exporter from Surat was expanding into East Africa for the first time. The key challenge: FSSAI labelling compliance, fumigation certificates, and phytosanitary requirements that their previous forwarder had no experience handling.",solution:"Sattva managed end-to-end — coordinating fumigation at the warehouse, obtaining FSSAI export certificates, filing the Shipping Bill with correct HS codes to avoid customs holds at Mombasa, and arranging inland haulage from Surat to Mundra.",stats:[["Mundra → Mombasa","primary trade lane"],["0 customs holds","across first 12 shipments"],["Full compliance","FSSAI + fumigation + COO"]],quote:"We were nervous about our first Africa shipments given the documentation complexity. Sattva handled every certificate and requirement without us having to follow up once.",attr:"Proprietor, Food Products Exporter, Surat"},
-{tag:"Pharma API · Mumbai",headline:"Time-critical pharma API exports to the Red Sea corridor — with zero compliance failures",challenge:"A pharmaceutical API manufacturer from Thane needed a freight partner who could handle CDSCO export NOC, MSDS, dangerous goods declarations, and strict temperature-monitoring requirements during port dwell time.",solution:"Sattva coordinated all regulatory documentation, sourced reefer containers for temperature-sensitive consignments, and established a dedicated communication protocol ensuring the client received updates at every milestone.",stats:[["JNPT → Jeddah","fortnightly, regular"],["100% GDP","cold chain compliance"],["Zero delays","CDSCO NOC + customs"]],quote:"Pharma exports require a forwarder who understands regulatory compliance, not just freight rates. Sattva has never missed a documentation deadline.",attr:"GM Logistics, Pharma API Manufacturer, Thane"},
-];
+export function TestimonialsPage({ st, I }) {
+  const quotes = [
+    {
+      text: "Our buyers stopped raising BL discrepancy concerns after we shifted these shipments to Sattva. The communication is cleaner and the movement feels more controlled.",
+      from: "Export Manager",
+      co: "Readymade Garments Exporter, Mumbai",
+      route: "JNPT to Jebel Ali",
+    },
+    {
+      text: "We handle repeat food product shipments, and what we value most is consistency. Sattva keeps the shipment steps organized instead of reactive.",
+      from: "Director",
+      co: "Food Products Exporter, Gujarat",
+      route: "Mundra to Mombasa",
+    },
+    {
+      text: "For cotton yarn and fabric exports, buyer timing matters. We prefer working with a team that understands that the quote is only the beginning.",
+      from: "Commercial Head",
+      co: "Textile Exporter, Tamil Nadu",
+      route: "Chennai to Jeddah",
+    },
+    {
+      text: "The difference is not just pricing. It is the quality of follow-up once the shipment starts moving.",
+      from: "Director",
+      co: "Engineering Goods Exporter, Pune",
+      route: "JNPT to Dammam",
+    },
+    {
+      text: "We move repeat kitchenware and paper cargo. Sattva gives us a more dependable commercial and operational rhythm than our previous setup.",
+      from: "Partner",
+      co: "Consumer Goods Exporter, Mumbai",
+      route: "Mundra to Jebel Ali",
+    },
+    {
+      text: "For towels and home textile cargo, it helps to have a forwarder that keeps details aligned before the buyer starts asking questions.",
+      from: "Logistics Lead",
+      co: "Home Textile Exporter, Karur",
+      route: "Tuticorin corridor shipments",
+    },
+  ];
 
-return(
-<div style={{paddingTop:68}}><Helmet><title>Client Testimonials | Indian Exporter Success Stories | Sattva Global Logistics</title><meta name="description" content="Real results from Indian exporters shipping garments, pharma, food, engineering goods and chemicals to the Middle East, Africa and beyond with Sattva Global Logistics." /><link rel="canonical" href="https://www.sattvaglobal.in/testimonials" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px",textAlign:"center"}}>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)",maxWidth:700,margin:"0 auto"}}>Trusted by Exporters Who <span style={{color:B.primary}}>Move the World</span></h1>
-<p style={{...st.bd,fontSize:17,maxWidth:600,margin:"18px auto 0"}}>Real results from Indian exporters shipping to the Middle East, Africa and beyond.</p>
-</section>
+  const cases = [
+    {
+      tag: "Readymade Garments � Mumbai",
+      headline: "Cleaner buyer-facing execution for repeat garment exports into the Gulf",
+      challenge: "A garment exporter was not struggling to get quotes. The real issue was inconsistent follow-up, avoidable BL corrections and buyer-side stress whenever dispatch windows tightened.",
+      solution: "Sattva introduced a more disciplined pre-shipment coordination flow, cleaner document handling and clearer communication around cargo readiness and shipment movement.",
+      stats: [["Repeat FCL", "gulf-bound commercial cargo"], ["Lower friction", "during buyer-facing dispatch cycles"], ["Cleaner docs", "before release and departure"]],
+      quote: "The movement feels more controlled now. That matters more to us than headline promises.",
+      attr: "Export Manager, Garments Exporter",
+    },
+    {
+      tag: "Food Products & FMCG � Gujarat",
+      headline: "A steadier export rhythm for food and FMCG shipments heading into East Africa",
+      challenge: "The exporter needed a forwarder that could help keep communication, shipment planning and documentation aligned across repeat cargo movements instead of forcing the team into last-minute firefighting.",
+      solution: "Sattva supported the lane with stronger pre-departure coordination, cleaner cargo handover and a more reliable commercial-to-operational flow.",
+      stats: [["Repeat cargo", "food and FMCG shipments"], ["East Africa", "better route and handover control"], ["More consistency", "across shipment cycles"]],
+      quote: "What we value is consistency. The shipment process feels more predictable now.",
+      attr: "Director, Food Products Exporter",
+    },
+    {
+      tag: "Engineering Goods � Maharashtra",
+      headline: "More useful follow-through for engineering cargo moving on Gulf routes",
+      challenge: "The exporter had no shortage of freight options, but needed better shipment ownership after the quote stage because commercial discussions kept getting disconnected from the actual movement.",
+      solution: "Sattva helped tighten route communication, execution follow-through and the general handoff between commercial expectations and shipment action.",
+      stats: [["Gulf lanes", "repeat engineering cargo"], ["Better ownership", "after the quote stage"], ["Clearer updates", "through pre-departure execution"]],
+      quote: "The difference is in the follow-up. We spend less time chasing the shipment.",
+      attr: "Director, Engineering Goods Exporter",
+    },
+  ];
 
-<div style={st.sec}>
-<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:20}}>
-{d.map((t,i)=>(
-<div key={i} style={{...st.cd,display:"flex",flexDirection:"column",gap:12}}>
-<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}>
-<div style={{display:"flex",gap:2}}>{[1,2,3,4,5].map(x=><I.St key={x}/>)}</div>
-<span style={{fontSize:11,background:`${B.primary}10`,color:B.primary,padding:"3px 8px",borderRadius:6,fontWeight:600}}>{t.route}</span>
-</div>
-<p style={{...st.bd,fontSize:14,fontStyle:"italic",flex:1}}>"{t.text}"</p>
-<div>
-<div style={{fontSize:13,fontWeight:600,color:B.dark}}>{t.from}</div>
-<div style={{fontSize:12,color:B.g5}}>{t.co}</div>
-</div>
-</div>))}
-</div>
+  return (
+    <div style={{ paddingTop: 68 }}>
+      <Helmet>
+        <title>Client Testimonials | Exporter Success Stories | Sattva Global Logistics</title>
+        <meta
+          name="description"
+          content="Proof and success stories from Indian exporters shipping garments, yarn, food products, FMCG cargo, paper, towels, engineering goods and machinery with Sattva."
+        />
+        <link rel="canonical" href="https://www.sattvaglobal.in/testimonials" />
+      </Helmet>
 
-<div style={{marginTop:64}}>
-<h2 style={st.h2}>Client Success Stories</h2>
-<p style={{...st.sub,marginBottom:48}}>How Indian exporters achieved documentation accuracy and shipment reliability with Sattva.</p>
-<div style={{display:"grid",gap:32}}>
-{cases.map((c,i)=>(
-<div key={i} style={{...st.cd,borderLeft:`4px solid ${B.primary}`}}>
-<div style={{fontSize:11,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:2,marginBottom:10}}>{c.tag}</div>
-<h3 style={{...st.h3,fontSize:20,marginBottom:14}}>{c.headline}</h3>
-<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:16}}>
-<div><div style={{fontSize:12,fontWeight:600,color:B.g5,marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>The Challenge</div><p style={{...st.bd,fontSize:13}}>{c.challenge}</p></div>
-<div><div style={{fontSize:12,fontWeight:600,color:B.g5,marginBottom:6,textTransform:"uppercase",letterSpacing:1}}>What We Did</div><p style={{...st.bd,fontSize:13}}>{c.solution}</p></div>
-</div>
-<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:16}}>
-{c.stats.map(([n,l],j)=>(
-<div key={j} style={{background:B.g1,borderRadius:10,padding:"12px 16px",textAlign:"center"}}>
-<div style={{fontSize:n.length>8?13:18,fontWeight:700,color:B.primary,fontFamily:FF}}>{n}</div>
-<div style={{fontSize:11,color:B.g5,marginTop:4}}>{l}</div>
-</div>))}
-</div>
-<div style={{background:`${B.primary}06`,borderRadius:10,padding:16}}>
-<p style={{fontSize:14,fontStyle:"italic",color:B.g7,margin:"0 0 6px"}}>"{c.quote}"</p>
-<div style={{fontSize:12,fontWeight:600,color:B.primary}}>— {c.attr}</div>
-</div>
-</div>))}
-</div>
-</div>
-<CTA st={st} I={I}/>
-</div></div>);}
+      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(56px,8vw,88px) 20px 48px", textAlign: "center" }}>
+        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", maxWidth: 720, margin: "0 auto" }}>
+          Proof from exporters who value <span style={{ color: B.primary }}>follow-through</span>
+        </h1>
+        <p style={{ ...st.bd, fontSize: 17, maxWidth: 640, margin: "18px auto 0" }}>
+          Practical trust signals for exporters shipping garments, fabrics, yarn, FMCG cargo, paper products, towels, engineering goods and machinery.
+        </p>
+      </section>
 
+      <div style={st.sec}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 20 }}>
+          {quotes.map((t, i) => (
+            <div key={i} style={{ ...st.cd, display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "flex", gap: 2 }}>{[1, 2, 3, 4, 5].map((x) => <I.St key={x} />)}</div>
+                <span style={{ fontSize: 11, background: `${B.primary}10`, color: B.primary, padding: "3px 8px", borderRadius: 6, fontWeight: 600 }}>{t.route}</span>
+              </div>
+              <p style={{ ...st.bd, fontSize: 14, fontStyle: "italic", flex: 1 }}>&quot;{t.text}&quot;</p>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: B.dark }}>{t.from}</div>
+                <div style={{ fontSize: 12, color: B.g5 }}>{t.co}</div>
+              </div>
+            </div>
+          ))}
+        </div>
 
+        <div style={{ marginTop: 64 }}>
+          <h2 style={st.h2}>Exporter success stories</h2>
+          <p style={{ ...st.sub, marginBottom: 48 }}>How Indian exporters use Sattva when they want clearer shipment handling instead of generic forwarding language.</p>
+          <div style={{ display: "grid", gap: 32 }}>
+            {cases.map((c, i) => (
+              <div key={i} style={{ ...st.cd, borderLeft: `4px solid ${B.primary}` }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: B.primary, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>{c.tag}</div>
+                <h3 style={{ ...st.h3, fontSize: 20, marginBottom: 14 }}>{c.headline}</h3>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 16 }}>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: B.g5, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>The Challenge</div>
+                    <p style={{ ...st.bd, fontSize: 13 }}>{c.challenge}</p>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: B.g5, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>What We Did</div>
+                    <p style={{ ...st.bd, fontSize: 13 }}>{c.solution}</p>
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 16 }}>
+                  {c.stats.map(([n, l], j) => (
+                    <div key={j} style={{ background: B.g1, borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
+                      <div style={{ fontSize: n.length > 10 ? 13 : 18, fontWeight: 700, color: B.primary, fontFamily: FF }}>{n}</div>
+                      <div style={{ fontSize: 11, color: B.g5, marginTop: 4 }}>{l}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ background: `${B.primary}06`, borderRadius: 10, padding: 16 }}>
+                  <p style={{ fontSize: 14, fontStyle: "italic", color: B.g7, margin: "0 0 6px" }}>&quot;{c.quote}&quot;</p>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: B.primary }}>- {c.attr}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
+        <CTA
+          eyebrow="Move Forward"
+          headline="Use the quote page when you want the conversation to move beyond generic freight talk"
+          copy="If your route and cargo are ready, start with the quote flow. If not, the team can still review the enquiry manually."
+          primaryLabel="Get a Freight Quote"
+          primaryTo="/quote"
+          secondaryLabel="Why Sattva"
+          secondaryTo="/why-sattva"
+          st={st}
+          I={I}
+        />
+      </div>
+    </div>
+  );
+}
