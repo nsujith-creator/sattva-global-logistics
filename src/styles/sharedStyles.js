@@ -1,7 +1,7 @@
 ﻿import { B, F, FF } from '../theme/tokens';
 
 export const st={
-sec:{padding:"72px 20px",maxWidth:1200,margin:"0 auto",boxSizing:"border-box",width:"100%"},
+sec:{padding:"clamp(40px,6vw,72px) clamp(16px,4vw,24px)",maxWidth:1200,margin:"0 auto",boxSizing:"border-box",width:"100%"},
 h1:{fontSize:"clamp(28px,6vw,52px)",fontWeight:700,color:B.dark,lineHeight:1.12,fontFamily:FF,margin:0},
 h2:{fontSize:"clamp(24px,3.5vw,38px)",fontWeight:700,color:B.dark,lineHeight:1.2,fontFamily:FF,margin:0,textAlign:"center"},
 h3:{fontSize:20,fontWeight:600,color:B.dark,fontFamily:F,margin:0},

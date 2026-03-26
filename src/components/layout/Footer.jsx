@@ -4,7 +4,7 @@ import { B } from "../../theme/tokens";
 export function Footer({ I }) {
   const go = useNavigate();
   return (
-    <footer style={{ background: B.dark, color: B.g3, padding: "56px 24px 28px" }}>
+    <footer style={{ background: B.dark, color: B.g3, padding: "clamp(40px,5vw,56px) clamp(16px,4vw,24px) 28px", overflowX: "hidden" }}>
       {/* ── FOOTER CTA BAR ── */}
       <div
         style={{

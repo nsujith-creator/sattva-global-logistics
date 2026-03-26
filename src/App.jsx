@@ -254,7 +254,7 @@ function QuoteDisplay({quote,selectedEq,gateUser,pol,pod,cargo,vol}){
   const switchOption=(i)=>{setActiveOption(i);};
 
   return(
-    <div style={{marginTop:12,borderRadius:12,border:`1px solid ${B.primary}22`,overflow:"hidden"}}>
+    <div style={{marginTop:12,borderRadius:12,border:`1px solid ${B.primary}22`,overflow:"hidden",maxWidth:"100%"}}>
       <div style={{background:B.primary,padding:"12px 18px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
         <div style={{color:"#fff",fontWeight:700,fontSize:14}}>✓ Indicative Rates — {EQ_L[selectedEq]||selectedEq}</div>
         {quote.validUntil&&<div style={{color:"#fff",opacity:.8,fontSize:12}}>Valid until: {quote.validUntil}</div>}
@@ -284,7 +284,7 @@ function QuoteDisplay({quote,selectedEq,gateUser,pol,pod,cargo,vol}){
         </table>
       </div>
       {/* Footer: disclaimer + CTA */}
-      <div style={{padding:"14px 18px",background:"#f8faff",borderTop:`1px solid ${B.g3}22`,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
+      <div style={{padding:"14px 18px",background:"#f8faff",borderTop:`1px solid ${B.g3}22`,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12,boxSizing:"border-box"}}>
         <div style={{fontSize:11,color:B.g5,fontStyle:"italic",flex:1,minWidth:200}}>
           * Indicative rates only. Final charges subject to space availability, carrier confirmation, and applicable exchange rates at time of booking.
         </div>
@@ -371,7 +371,7 @@ const resetForm=()=>{setDone(false);setF(BLANK_F);setExtraEqs([]);clearFormState
 if(done)return(<div style={{paddingTop:68,minHeight:"80vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"68px 24px 40px"}}><div style={{textAlign:"center",maxWidth:480}}><div style={{width:72,height:72,borderRadius:"50%",background:B.gBg,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h2 style={{...st.h2,fontSize:26}}>Quote Request Received!</h2><p style={{...st.bd,marginTop:14}}>Our team will review your route, cargo and equipment details and respond with the next best step. If you want a manual commercial discussion sooner, please call or email us directly as well.</p><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:28}}><button onClick={resetForm} style={st.bp}>Submit Another</button><button onClick={()=>go("/")} style={st.bs}>Back to Home</button></div></div></div>);
 return(
 <div style={{paddingTop:68}}><Helmet><title>Get an Export Freight Quote from India | Sattva Global Logistics</title><meta name="description" content="Check route fit, unlock indicative pricing on supported lanes, and request an export freight quote from India for Gulf, Red Sea and Africa shipments." /><link rel="canonical" href="https://www.sattvaglobal.in/quote" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(56px,8vw,88px) 20px 48px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
+<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(32px,4vw,48px)"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
 <div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Get a Quote</div>
 <h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Check Your Route & Pricing <span style={{color:B.primary}}>Before You Commit to a Forwarder</span></h1>
 <p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:680}}>Avoid pricing surprises and last-minute issues. Validate your route, cargo fit, and next steps before you commit.</p>
@@ -382,7 +382,7 @@ return(
   • Typical response time: within the same working day
 </div>
 </div></section>
-<div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:40}}>
+<div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:m?24:40,alignItems:"start"}}>
 <div style={{...st.cd,padding:m?20:36}}>
 {quotesLoading&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#eff6ff",border:"1px solid #bfdbfe",fontSize:12,color:"#1e40af",display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:12,height:12,border:"2px solid #bfdbfe",borderTopColor:"#3b82f6",borderRadius:"50%",animation:"spin .6s linear infinite",flexShrink:0}}/>Checking route availability…</div>}
 {!quotesLoading&&quotesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded right now. You can still submit your shipment request and our team will review it manually.</div>}
@@ -744,7 +744,7 @@ return(
 <HelmetProvider>
 <BrowserRouter>
 <ScrollToTop/>
-<div style={{fontFamily:F,color:B.g7,background:B.w,minHeight:"100vh",overflowX:"hidden",width:"100%"}}>
+<div style={{fontFamily:F,color:B.g7,background:B.w,minHeight:"100vh",overflowX:"hidden",width:"100%",maxWidth:"100vw"}}>
 <Routes>
 <Route path="/*" element={<><Nav st={st}/><Routes>
 <Route path="/" element={<HomePage st={st} I={I}/>}/>

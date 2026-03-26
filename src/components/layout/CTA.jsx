@@ -17,7 +17,7 @@ export function CTA({
     <div
       style={{
         textAlign: "center",
-        padding: "56px 24px",
+        padding: "clamp(32px,5vw,56px) clamp(16px,4vw,24px)",
         background: `linear-gradient(135deg,${B.primary}06,${B.primary}12)`,
         borderRadius: 20,
         marginTop: 56,

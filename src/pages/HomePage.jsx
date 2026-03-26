@@ -237,7 +237,7 @@ export function HomePage({ st, I }) {
       </section>
 
       {/* ── TRADE LANES DARK SECTION ─────────────────────────────────────── */}
-      <section style={{ background: B.dark, padding: m ? "48px 20px" : "64px 24px" }}>
+      <section style={{ background: B.dark, padding: m ? "40px 16px" : "64px 24px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: B.accent, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Trade Lanes</div>

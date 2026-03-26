@@ -52,7 +52,7 @@ export function ServicesPage({ st, I }) {
       </Helmet>
 
       {/* ── HERO ── */}
-      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(56px,8vw,88px) 20px 48px" }}>
+      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(32px,4vw,48px)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Export Logistics Services</div>
           <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)" }}>
@@ -76,12 +76,14 @@ export function ServicesPage({ st, I }) {
         {/* ── SERVICE CARDS ── */}
         <div style={{ display: "grid", gap: 24 }}>
           {services.map((x) => (
-            <div key={x.t} style={{ ...st.cd, display: "grid", gridTemplateColumns: "auto 1fr", gap: 28, alignItems: "start" }}>
-              <div style={{ width: 72, height: 72, borderRadius: 18, background: `${B.primary}08`, display: "flex", alignItems: "center", justifyContent: "center" }}>{x.icon}</div>
-              <div>
-                <h3 style={{ ...st.h3, marginBottom: 12 }}>{x.t}</h3>
-                <p style={{ ...st.bd, fontSize: 14, marginBottom: 10 }}>{x.d}</p>
-                <div style={{ fontSize: 12, color: B.primary, fontWeight: 700, background: `${B.primary}08`, display: "inline-block", padding: "4px 10px", borderRadius: 6 }}>{x.fit}</div>
+            <div key={x.t} style={{ ...st.cd }}>
+              <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
+                <div style={{ width: 56, height: 56, borderRadius: 14, background: `${B.primary}08`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{x.icon}</div>
+                <div style={{ flex: 1, minWidth: 200 }}>
+                  <h3 style={{ ...st.h3, marginBottom: 12 }}>{x.t}</h3>
+                  <p style={{ ...st.bd, fontSize: 14, marginBottom: 10 }}>{x.d}</p>
+                  <div style={{ fontSize: 12, color: B.primary, fontWeight: 700, background: `${B.primary}08`, display: "inline-block", padding: "4px 10px", borderRadius: 6 }}>{x.fit}</div>
+                </div>
               </div>
             </div>
           ))}
