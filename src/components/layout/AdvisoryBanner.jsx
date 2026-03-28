@@ -80,7 +80,7 @@ export function AdvisoryBanner() {
           </span>
         </span>
         <span style={{ fontSize: 13, color: "rgba(255,255,255,.9)", fontFamily: F, fontWeight: 500 }}>
-          Middle East Shipping Disruption — Active carrier and surcharge updates for India origin cargo
+          Middle East Crisis — Active carrier and surcharge updates for India origin cargo
         </span>
         {updatedAt && (
           <span style={{ fontSize: 11, color: "rgba(255,255,255,.45)", fontFamily: F, flexShrink: 0 }}>

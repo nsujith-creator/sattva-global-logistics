@@ -27,7 +27,7 @@ export function Nav({ st }) {
     ["why-sattva", "Why Sattva"],
     ["services", "Services"],
     ["trade-lanes", "Trade Lanes"],
-    ["trade-advisory", "⚠ Advisory"],
+    ["trade-advisory", "⚠ Middle East Crisis"],
     ["industries", "Industries"],
     ["knowledge", "Knowledge"],
     ["testimonials", "Proof"],

@@ -70,7 +70,7 @@ export function TradeAdvisoryPage({ st, I }) {
   return (
     <>
       <Helmet>
-        <title>Middle East Shipping Advisory — India Export Impact | Sattva Global Logistics</title>
+        <title>Middle East Crisis — India Export Advisory | Sattva Global Logistics</title>
         <meta
           name="description"
           content="Live trade advisory for Indian exporters shipping to Gulf, Red Sea and Middle East. Carrier disruptions, surcharges, port workarounds, India-specific impact. Updated twice daily."
@@ -107,7 +107,7 @@ export function TradeAdvisoryPage({ st, I }) {
           </div>
 
           <h1 style={{ ...st.h1, maxWidth: 780 }}>
-            Middle East Shipping Disruption —{" "}
+            Middle East Crisis —{" "}
             <span style={{ color: B.red }}>India Export Advisory</span>
           </h1>
 
