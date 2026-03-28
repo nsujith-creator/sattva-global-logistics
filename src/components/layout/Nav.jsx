@@ -27,6 +27,7 @@ export function Nav({ st }) {
     ["why-sattva", "Why Sattva"],
     ["services", "Services"],
     ["trade-lanes", "Trade Lanes"],
+    ["trade-advisory", "⚠ Advisory"],
     ["industries", "Industries"],
     ["knowledge", "Knowledge"],
     ["testimonials", "Proof"],
@@ -77,7 +78,9 @@ export function Nav({ st }) {
                   <span
                     onClick={() => go(id === "home" ? "/" : `/${id}`)}
                     style={{
-                      color: activePage === id || (!activePage && id === "home") ? B.primary : B.g7,
+                      color: id === "trade-advisory"
+                        ? B.red
+                        : activePage === id || (!activePage && id === "home") ? B.primary : B.g7,
                       fontWeight: activePage === id || (!activePage && id === "home") ? 700 : 500,
                       fontSize: 13,
                       cursor: "pointer",

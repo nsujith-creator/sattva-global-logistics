@@ -23,6 +23,7 @@ import { PhoneField } from "./components/forms/PhoneField";
 import { CTA } from "./components/layout/CTA";
 import { Footer } from "./components/layout/Footer";
 import { Nav } from "./components/layout/Nav";
+import { AdvisoryBanner } from "./components/layout/AdvisoryBanner";
 import { ScrollToTop } from "./components/routing/ScrollToTop";
 import { CarrierBadge } from "./components/shared/CarrierBadge";
 import { I } from "./components/shared/icons";
@@ -33,6 +34,7 @@ import { HomePage } from "./pages/HomePage";
 import { IndustriesPage } from "./pages/IndustriesPage";
 import { ServicesPage } from "./pages/ServicesPage";
 import { TradeLanesPage } from "./pages/TradeLanesPage";
+import { TradeAdvisoryPage } from "./pages/TradeAdvisoryPage";
 import { WhySattvaPage } from "./pages/WhySattvaPage";
 const KnowledgePage   = lazy(()=>import("./pages/KnowledgePage").then(m=>({default:m.KnowledgePage})));
 const TestimonialsPage = lazy(()=>import("./pages/TestimonialsPage").then(m=>({default:m.TestimonialsPage})));
@@ -756,8 +758,10 @@ return(
 <Route path="/knowledge" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
 <Route path="/testimonials" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
 <Route path="/quote" element={<QuotePage quotes={quotes} quotesErr={quotesErr} setQuotes={setQuotes} setQuotesErr={setQuotesErr}/>}/>
+<Route path="/trade-advisory" element={<TradeAdvisoryPage st={st} I={I}/>}/>
 <Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p></div>}/>
-</Routes><Footer I={I}/></>}/>
+</Routes><Footer I={I}/><AdvisoryBanner/></>}/>
+
 <Route path="/admin" element={<AdminPage quotes={quotes} setQuotes={setQuotes}/>}/>
 </Routes>
 <Routes><Route path="/*" element={
