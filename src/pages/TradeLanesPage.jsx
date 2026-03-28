@@ -1,8 +1,10 @@
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 import { CTA } from "../components/layout/CTA";
-import { B } from "../theme/tokens";
+import { B, F } from "../theme/tokens";
 
 export function TradeLanesPage({ st, I }) {
+  const go = useNavigate();
   const lanes = [
     {
       title: "Middle East & Upper Gulf",
@@ -66,6 +68,28 @@ export function TradeLanesPage({ st, I }) {
       </section>
 
       <div style={st.sec}>
+        {/* ── ADVISORY CALLOUT ── */}
+        <div
+          onClick={() => go("/trade-advisory")}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            gap: 16, flexWrap: "wrap",
+            background: "#fef2f2", border: `1.5px solid ${B.red}44`,
+            borderRadius: 12, padding: "16px 22px", marginBottom: 28, cursor: "pointer",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: B.red, display: "inline-block", flexShrink: 0, animation: "pulse 1.8s infinite" }} />
+            <div>
+              <span style={{ fontSize: 11, fontWeight: 700, color: B.red, textTransform: "uppercase", letterSpacing: 1.2, fontFamily: F }}>Active Disruption</span>
+              <p style={{ margin: "2px 0 0", fontSize: 13, color: B.dark, fontFamily: F, fontWeight: 500 }}>
+                Middle East shipping crisis is affecting Gulf and Red Sea trade lanes from India — carrier surcharges, booking suspensions and port diversions in effect.
+              </p>
+            </div>
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 700, color: B.red, fontFamily: F, flexShrink: 0 }}>View Advisory →</span>
+        </div>
+
         {/* ── INTRO ── */}
         <div style={{ ...st.cd, borderTop: `4px solid ${B.primary}`, marginBottom: 28 }}>
           <h2 style={{ ...st.h2, textAlign: "left", marginBottom: 14 }}>Focused lanes, not a global brochure</h2>
