@@ -69,17 +69,42 @@ export function TradeAdvisoryPage({ st, I }) {
   const [err, setErr] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
-  useEffect(() => {
+  const fetchAdvisory = () => {
     supabase
       .from("trade_advisory")
       .select("*")
       .eq("id", "current")
       .single()
+      // cache: 0 forces Supabase client to skip any local cache
       .then(({ data: d, error: e }) => {
-        if (e) setErr(true);
-        else setData(d);
+        if (e) { setErr(true); return; }
+        setData(d);
         setLoading(false);
+        setErr(false);
       });
+  };
+
+  useEffect(() => {
+    fetchAdvisory();
+    // Re-fetch every 5 minutes silently — no page reload needed
+    const interval = setInterval(fetchAdvisory, 5 * 60 * 1000);
+
+    // Supabase Realtime — push update the instant DB row changes
+    const channel = supabase
+      .channel("trade_advisory_live")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "trade_advisory", filter: "id=eq.current" },
+        (payload) => {
+          setData(payload.new);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fmtDate = (iso) => {
