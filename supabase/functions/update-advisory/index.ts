@@ -1,7 +1,7 @@
 // update-advisory Edge Function
 // Called by Cowork digest at 9am and 3pm IST every day
-// Accepts POST with JSON body matching trade_advisory schema
 // Authenticated via ADVISORY_SECRET header token
+// Rejects test/garbage payloads at the gate
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders, escapeHtml } from "../_shared/cors.ts";
@@ -10,6 +10,10 @@ const ADVISORY_SECRET = Deno.env.get("ADVISORY_SECRET") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY") ?? "";
 
+// Test/garbage patterns — reject if situation matches these
+const TEST_PATTERNS = [/^test\b/i, /test check/i, /test only/i, /test ping/i, /verifying db/i];
+const MIN_SITUATION_LENGTH = 80; // Real digest content is always much longer
+
 Deno.serve(async (req: Request) => {
   const cors = getCorsHeaders(req);
 
@@ -17,7 +21,7 @@ Deno.serve(async (req: Request) => {
     return new Response("ok", { headers: cors });
   }
 
-  // Auth check — Cowork must send X-Advisory-Secret header
+  // Auth check
   const secret = req.headers.get("x-advisory-secret") ?? "";
   if (!ADVISORY_SECRET || secret !== ADVISORY_SECRET) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -40,6 +44,7 @@ Deno.serve(async (req: Request) => {
     india_impact?: string;
     source_tags?: string[];
     updated_by?: string;
+    force?: boolean; // set true to bypass content validation (admin override only)
   };
 
   try {
@@ -51,8 +56,35 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  // Sanitise all text fields
-  const situation = escapeHtml(body.situation ?? "");
+  const rawSituation = body.situation ?? "";
+  const force = body.force === true;
+
+  // Content validation gate — reject test/garbage payloads
+  if (!force) {
+    if (rawSituation.length < MIN_SITUATION_LENGTH) {
+      return new Response(JSON.stringify({
+        error: "Payload rejected: situation too short",
+        detail: `Minimum ${MIN_SITUATION_LENGTH} characters required. Got ${rawSituation.length}. Use force:true to override.`,
+      }), {
+        status: 422,
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+    for (const pattern of TEST_PATTERNS) {
+      if (pattern.test(rawSituation)) {
+        return new Response(JSON.stringify({
+          error: "Payload rejected: situation looks like test content",
+          detail: `Matched pattern: ${pattern}. Use force:true to override.`,
+        }), {
+          status: 422,
+          headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
+    }
+  }
+
+  // Sanitise all fields
+  const situation = escapeHtml(rawSituation);
   const india_impact = escapeHtml(body.india_impact ?? "");
   const updated_by = escapeHtml(body.updated_by ?? "cowork-digest");
   const source_tags = (body.source_tags ?? []).map((t) => escapeHtml(t));
