@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { B, F, FF } from "../theme/tokens";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -34,7 +34,7 @@ function StatusPill({ status }) {
   );
 }
 
-/* ── Static FAQ data — hard-coded for Google crawlability ── */
+/* â”€â”€ Static FAQ data â€” hard-coded for Google crawlability â”€â”€ */
 const FAQ = [
   {
     q: "Is Jebel Ali port open for Indian cargo right now?",
@@ -86,10 +86,10 @@ export function TradeAdvisoryPage({ st, I }) {
 
   useEffect(() => {
     fetchAdvisory();
-    // Re-fetch every 5 minutes silently — no page reload needed
+    // Re-fetch every 5 minutes silently â€” no page reload needed
     const interval = setInterval(fetchAdvisory, 5 * 60 * 1000);
 
-    // Supabase Realtime — push update the instant DB row changes
+    // Supabase Realtime â€” push update the instant DB row changes
     const channel = supabase
       .channel("trade_advisory_live")
       .on(
@@ -115,7 +115,7 @@ export function TradeAdvisoryPage({ st, I }) {
     }) + " IST";
   };
 
-  /* ── Structured data schemas ── */
+  /* â”€â”€ Structured data schemas â”€â”€ */
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -139,7 +139,7 @@ export function TradeAdvisoryPage({ st, I }) {
   const newsArticleSchema = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    headline: "Middle East Shipping Crisis — India Export Advisory 2026",
+    headline: "Middle East Shipping Crisis â€” India Export Advisory 2026",
     description: "Live advisory for Indian exporters on the 2026 Middle East shipping crisis. Carrier disruptions, active surcharges, port workarounds and India-specific impact updated twice daily.",
     url: "https://www.sattvaglobal.in/trade-advisory",
     datePublished: "2026-03-01T09:00:00+05:30",
@@ -162,7 +162,7 @@ export function TradeAdvisoryPage({ st, I }) {
   return (
     <>
       <Helmet>
-        <title>Middle East Shipping Crisis — India Export Advisory 2026 | Sattva Global Logistics</title>
+        <title>Middle East Shipping Crisis â€” India Export Advisory 2026 | Sattva Global Logistics</title>
         <meta
           name="description"
           content="Live advisory for Indian exporters on Gulf, Red Sea and Middle East shipping disruptions. Carrier status, active surcharges, port workarounds for JNPT and Mundra cargo. Updated twice daily."
@@ -174,7 +174,7 @@ export function TradeAdvisoryPage({ st, I }) {
         <script type="application/ld+json">{JSON.stringify(newsArticleSchema)}</script>
       </Helmet>
 
-      {/* ── PAGE HEADER ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ PAGE HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{
         background: `linear-gradient(160deg, #fff5f5 0%, ${B.w} 55%, ${B.g1} 100%)`,
         paddingTop: m ? 96 : 112,
@@ -194,7 +194,7 @@ export function TradeAdvisoryPage({ st, I }) {
           </div>
 
           <h1 style={{ ...st.h1, maxWidth: 780 }}>
-            Middle East Crisis —{" "}
+            Middle East Crisis â€”{" "}
             <span style={{ color: B.red }}>India Export Advisory</span>
           </h1>
 
@@ -212,23 +212,23 @@ export function TradeAdvisoryPage({ st, I }) {
         </div>
       </section>
 
-      {/* ── STATIC INTRO — always visible to Google crawler ─────────────── */}
+      {/* â”€â”€ STATIC INTRO â€” always visible to Google crawler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: `${B.primary}05`, borderBottom: `1px solid ${B.g3}44` }}>
         <div style={{ ...st.sec, paddingTop: 28, paddingBottom: 28 }}>
           <p style={{ ...st.bd, fontSize: 14, margin: 0, maxWidth: 900, lineHeight: 1.8 }}>
             This page tracks the ongoing <strong>Middle East shipping crisis and its impact on Indian exporters</strong> shipping FCL cargo from JNPT (Nhava Sheva), Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations.
-            We monitor carrier advisories from <strong>Maersk, CMA CGM, Hapag-Lloyd, MSC, ONE Line, COSCO, OOCL and Emirates Shipping</strong> and update this page twice daily — at 9:00 AM IST and 3:00 PM IST.
+            We monitor carrier advisories from <strong>Maersk, CMA CGM, Hapag-Lloyd, MSC, ONE Line, COSCO, OOCL and Emirates Shipping</strong> and update this page twice daily â€” at 9:00 AM IST and 3:00 PM IST.
             The 2026 Strait of Hormuz crisis has disrupted India-Gulf shipping lanes since late February 2026, affecting FCL cargo movements to Jebel Ali, Dammam, Jeddah, Sohar, Shuwaikh and Red Sea ports.
             Indian exporters shipping <strong>garments, fabrics, FMCG, agro commodities, engineering goods and machinery</strong> to the Gulf and Middle East are directly impacted by carrier booking suspensions, emergency surcharges and port diversions covered on this page.
           </p>
         </div>
       </section>
 
-      {/* ── LOADING / ERROR ──────────────────────────────────────────────── */}
+      {/* â”€â”€ LOADING / ERROR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {loading && (
         <section>
           <div style={{ ...st.sec, textAlign: "center", paddingTop: 60, paddingBottom: 60 }}>
-            <p style={{ ...st.bd, color: B.g5 }}>Loading advisory…</p>
+            <p style={{ ...st.bd, color: B.g5 }}>Loading advisoryâ€¦</p>
           </div>
         </section>
       )}
@@ -243,7 +243,7 @@ export function TradeAdvisoryPage({ st, I }) {
 
       {data && !loading && (
         <>
-          {/* ── SITUATION SUMMARY ───────────────────────────────────────── */}
+          {/* â”€â”€ SITUATION SUMMARY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section>
             <div style={st.sec}>
               <div style={{ marginBottom: 12 }}>
@@ -257,7 +257,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </div>
           </section>
 
-          {/* ── CARRIER NOTES ───────────────────────────────────────────── */}
+          {/* â”€â”€ CARRIER NOTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {data.carrier_notes?.length > 0 && (
             <section style={{ background: B.g1 }}>
               <div style={st.sec}>
@@ -284,7 +284,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </section>
           )}
 
-          {/* ── SURCHARGES ──────────────────────────────────────────────── */}
+          {/* â”€â”€ SURCHARGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {data.surcharges?.length > 0 && (
             <section>
               <div style={st.sec}>
@@ -293,14 +293,14 @@ export function TradeAdvisoryPage({ st, I }) {
                     Active Surcharges
                   </span>
                   <h2 style={{ ...st.h2, textAlign: "left", fontSize: m ? 22 : 28, marginTop: 8 }}>
-                    Surcharges in effect for India origin cargo
+                    Carrier surcharge updates — most recent first
                   </h2>
                 </div>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: F, fontSize: 13 }}>
                     <thead>
                       <tr style={{ background: B.g1 }}>
-                        {["Surcharge", "Amount", "Currency", "Trade Lane", "Effective"].map((h) => (
+                        {["Date", "Carrier", "Surcharge", "Amount (USD/TEU)", "Trade Lane"].map((h) => (
                           <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 10, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.8, borderBottom: `2px solid ${B.g3}55` }}>
                             {h}
                           </th>
@@ -309,12 +309,12 @@ export function TradeAdvisoryPage({ st, I }) {
                     </thead>
                     <tbody>
                       {data.surcharges.map((s, i) => (
-                        <tr key={i} style={{ borderBottom: `1px solid ${B.g1}` }}>
-                          <td style={{ padding: "12px 16px", fontWeight: 600, color: B.dark }}>{s.name}</td>
-                          <td style={{ padding: "12px 16px", color: B.red, fontWeight: 700 }}>{s.amount}</td>
-                          <td style={{ padding: "12px 16px", color: B.g5 }}>{s.currency}</td>
-                          <td style={{ padding: "12px 16px", color: B.g7 }}>{s.trade}</td>
-                          <td style={{ padding: "12px 16px", color: B.g5 }}>{s.effective}</td>
+                        <tr key={i} style={{ borderBottom: `1px solid ${B.g1}`, background: i % 2 === 0 ? "#fff" : `${B.g1}88` }}>
+                          <td style={{ padding: "10px 16px", color: B.g5, fontFamily: F, fontSize: 12, whiteSpace: "nowrap" }}>{s.date}</td>
+                          <td style={{ padding: "10px 16px", fontWeight: 700, color: B.primary, fontFamily: F }}>{s.carrier}</td>
+                          <td style={{ padding: "10px 16px", fontWeight: 600, color: B.dark }}>{s.name}</td>
+                          <td style={{ padding: "10px 16px", color: B.red, fontWeight: 700 }}>{s.amount}</td>
+                          <td style={{ padding: "10px 16px", color: B.g7 }}>{s.trade}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -324,7 +324,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </section>
           )}
 
-          {/* ── INDIA IMPACT ─────────────────────────────────────────────── */}
+          {/* â”€â”€ INDIA IMPACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {data.india_impact && (
             <section style={{ background: B.g1 }}>
               <div style={st.sec}>
@@ -340,7 +340,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </section>
           )}
 
-          {/* ── SOURCE TAGS ──────────────────────────────────────────────── */}
+          {/* â”€â”€ SOURCE TAGS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {data.source_tags?.length > 0 && (
             <section>
               <div style={{ ...st.sec, paddingTop: 24, paddingBottom: 24 }}>
@@ -356,7 +356,7 @@ export function TradeAdvisoryPage({ st, I }) {
         </>
       )}
 
-      {/* ── FAQ — static, always rendered, Google-crawlable ─────────────── */}
+      {/* â”€â”€ FAQ â€” static, always rendered, Google-crawlable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: B.g1 }}>
         <div style={st.sec}>
           <div style={{ textAlign: "center", marginBottom: 36 }}>
@@ -365,7 +365,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </div>
             <h2 style={st.h2}>What Indian exporters are asking about the Middle East shipping crisis</h2>
             <p style={{ ...st.sub, marginTop: 12 }}>
-              Questions about Jebel Ali diversions, active surcharges, carrier booking suspensions and India port impact — answered from current intelligence.
+              Questions about Jebel Ali diversions, active surcharges, carrier booking suspensions and India port impact â€” answered from current intelligence.
             </p>
           </div>
           <div style={{ display: "grid", gap: 12, maxWidth: 860, margin: "0 auto" }}>
@@ -378,7 +378,7 @@ export function TradeAdvisoryPage({ st, I }) {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
                   <h3 style={{ ...st.h3, fontSize: m ? 15 : 17, margin: 0, flex: 1 }}>{f.q}</h3>
                   <span style={{ fontSize: 20, color: B.g5, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>
-                    {openFaq === i ? "−" : "+"}
+                    {openFaq === i ? "âˆ’" : "+"}
                   </span>
                 </div>
                 {openFaq === i && (
@@ -390,7 +390,7 @@ export function TradeAdvisoryPage({ st, I }) {
         </div>
       </section>
 
-      {/* ── CTA ─────────────────────────────────────────────────────────── */}
+      {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: B.dark, padding: m ? "40px 16px" : "56px 24px" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: B.accent, textTransform: "uppercase", letterSpacing: 2.4, marginBottom: 14, fontFamily: F }}>
@@ -422,3 +422,4 @@ export function TradeAdvisoryPage({ st, I }) {
     </>
   );
 }
+
