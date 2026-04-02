@@ -300,7 +300,7 @@ export function TradeAdvisoryPage({ st, I }) {
                   <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: F, fontSize: 13 }}>
                     <thead>
                       <tr style={{ background: B.g1 }}>
-                        {["Date", "Carrier", "Surcharge", "Amount (USD/TEU)", "Trade Lane"].map((h) => (
+                        {["Date", "Carrier", "Surcharge", "Amount (USD)", "Trade Lane"].map((h) => (
                           <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 10, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.8, borderBottom: `2px solid ${B.g3}55` }}>
                             {h}
                           </th>
