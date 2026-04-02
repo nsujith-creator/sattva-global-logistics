@@ -34,7 +34,7 @@ function StatusPill({ status }) {
   );
 }
 
-/* â”€â”€ Static FAQ data â€” hard-coded for Google crawlability â”€â”€ */
+/* â”€â”€ Static FAQ data — hard-coded for Google crawlability â”€â”€ */
 const FAQ = [
   {
     q: "Is Jebel Ali port open for Indian cargo right now?",
@@ -86,10 +86,10 @@ export function TradeAdvisoryPage({ st, I }) {
 
   useEffect(() => {
     fetchAdvisory();
-    // Re-fetch every 5 minutes silently â€” no page reload needed
+    // Re-fetch every 5 minutes silently — no page reload needed
     const interval = setInterval(fetchAdvisory, 5 * 60 * 1000);
 
-    // Supabase Realtime â€” push update the instant DB row changes
+    // Supabase Realtime — push update the instant DB row changes
     const channel = supabase
       .channel("trade_advisory_live")
       .on(
@@ -139,7 +139,7 @@ export function TradeAdvisoryPage({ st, I }) {
   const newsArticleSchema = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    headline: "Middle East Shipping Crisis â€” India Export Advisory 2026",
+    headline: "Middle East Shipping Crisis — India Export Advisory 2026",
     description: "Live advisory for Indian exporters on the 2026 Middle East shipping crisis. Carrier disruptions, active surcharges, port workarounds and India-specific impact updated twice daily.",
     url: "https://www.sattvaglobal.in/trade-advisory",
     datePublished: "2026-03-01T09:00:00+05:30",
@@ -162,7 +162,7 @@ export function TradeAdvisoryPage({ st, I }) {
   return (
     <>
       <Helmet>
-        <title>Middle East Shipping Crisis â€” India Export Advisory 2026 | Sattva Global Logistics</title>
+        <title>Middle East Shipping Crisis — India Export Advisory 2026 | Sattva Global Logistics</title>
         <meta
           name="description"
           content="Live advisory for Indian exporters on Gulf, Red Sea and Middle East shipping disruptions. Carrier status, active surcharges, port workarounds for JNPT and Mundra cargo. Updated twice daily."
@@ -194,7 +194,7 @@ export function TradeAdvisoryPage({ st, I }) {
           </div>
 
           <h1 style={{ ...st.h1, maxWidth: 780 }}>
-            Middle East Crisis â€”{" "}
+            Middle East Crisis —{" "}
             <span style={{ color: B.red }}>India Export Advisory</span>
           </h1>
 
@@ -212,12 +212,12 @@ export function TradeAdvisoryPage({ st, I }) {
         </div>
       </section>
 
-      {/* â”€â”€ STATIC INTRO â€” always visible to Google crawler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â”€â”€ STATIC INTRO — always visible to Google crawler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: `${B.primary}05`, borderBottom: `1px solid ${B.g3}44` }}>
         <div style={{ ...st.sec, paddingTop: 28, paddingBottom: 28 }}>
           <p style={{ ...st.bd, fontSize: 14, margin: 0, maxWidth: 900, lineHeight: 1.8 }}>
             This page tracks the ongoing <strong>Middle East shipping crisis and its impact on Indian exporters</strong> shipping FCL cargo from JNPT (Nhava Sheva), Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations.
-            We monitor carrier advisories from <strong>Maersk, CMA CGM, Hapag-Lloyd, MSC, ONE Line, COSCO, OOCL and Emirates Shipping</strong> and update this page twice daily â€” at 9:00 AM IST and 3:00 PM IST.
+            We monitor carrier advisories from <strong>Maersk, CMA CGM, Hapag-Lloyd, MSC, ONE Line, COSCO, OOCL and Emirates Shipping</strong> and update this page twice daily — at 9:00 AM IST and 3:00 PM IST.
             The 2026 Strait of Hormuz crisis has disrupted India-Gulf shipping lanes since late February 2026, affecting FCL cargo movements to Jebel Ali, Dammam, Jeddah, Sohar, Shuwaikh and Red Sea ports.
             Indian exporters shipping <strong>garments, fabrics, FMCG, agro commodities, engineering goods and machinery</strong> to the Gulf and Middle East are directly impacted by carrier booking suspensions, emergency surcharges and port diversions covered on this page.
           </p>
@@ -228,7 +228,7 @@ export function TradeAdvisoryPage({ st, I }) {
       {loading && (
         <section>
           <div style={{ ...st.sec, textAlign: "center", paddingTop: 60, paddingBottom: 60 }}>
-            <p style={{ ...st.bd, color: B.g5 }}>Loading advisoryâ€¦</p>
+            <p style={{ ...st.bd, color: B.g5 }}>Loading advisory…</p>
           </div>
         </section>
       )}
@@ -356,7 +356,7 @@ export function TradeAdvisoryPage({ st, I }) {
         </>
       )}
 
-      {/* â”€â”€ FAQ â€” static, always rendered, Google-crawlable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â”€â”€ FAQ — static, always rendered, Google-crawlable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: B.g1 }}>
         <div style={st.sec}>
           <div style={{ textAlign: "center", marginBottom: 36 }}>
@@ -365,7 +365,7 @@ export function TradeAdvisoryPage({ st, I }) {
             </div>
             <h2 style={st.h2}>What Indian exporters are asking about the Middle East shipping crisis</h2>
             <p style={{ ...st.sub, marginTop: 12 }}>
-              Questions about Jebel Ali diversions, active surcharges, carrier booking suspensions and India port impact â€” answered from current intelligence.
+              Questions about Jebel Ali diversions, active surcharges, carrier booking suspensions and India port impact — answered from current intelligence.
             </p>
           </div>
           <div style={{ display: "grid", gap: 12, maxWidth: 860, margin: "0 auto" }}>
@@ -378,7 +378,7 @@ export function TradeAdvisoryPage({ st, I }) {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
                   <h3 style={{ ...st.h3, fontSize: m ? 15 : 17, margin: 0, flex: 1 }}>{f.q}</h3>
                   <span style={{ fontSize: 20, color: B.g5, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>
-                    {openFaq === i ? "âˆ’" : "+"}
+                    {openFaq === i ? "−" : "+"}
                   </span>
                 </div>
                 {openFaq === i && (
