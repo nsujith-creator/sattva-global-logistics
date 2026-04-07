@@ -1,0 +1,287 @@
+{
+  "schema_version": 2,
+  "route": {
+    "number": "18",
+    "name": "Ghansoli Depot to Kharkopar Railway Station",
+    "type": "Electric AC",
+    "via": "Palm Beach",
+    "origin_name": "Ghansoli Depot",
+    "destination_name": "Kharkopar Railway Station",
+    "source_note": "Static Route 18 data only. No live GPS or live bus ETA in this MVP."
+  },
+  "service": {
+    "profiles": {
+      "weekday": {
+        "label": "Monday to Saturday",
+        "frequency_label": "16-17-20 minutes",
+        "frequency_min_minutes": 16,
+        "frequency_typical_minutes": 17,
+        "frequency_max_minutes": 20
+      },
+      "holiday": {
+        "label": "Sunday and Holidays",
+        "frequency_label": "30-35 minutes",
+        "frequency_min_minutes": 30,
+        "frequency_typical_minutes": 32,
+        "frequency_max_minutes": 35
+      }
+    },
+    "directions": {
+      "outbound": {
+        "label": "Ghansoli Depot to Kharkopar Railway Station",
+        "from_terminal_name": "Ghansoli Depot",
+        "to_terminal_name": "Kharkopar Railway Station",
+        "first_bus": "04:30",
+        "last_bus": "22:10"
+      },
+      "inbound": {
+        "label": "Kharkopar Railway Station to Ghansoli Depot",
+        "from_terminal_name": "Kharkopar Railway Station",
+        "to_terminal_name": "Ghansoli Depot",
+        "first_bus": "06:00",
+        "last_bus": "23:55"
+      }
+    }
+  },
+  "eta_model": {
+    "default_total_runtime_minutes": 96,
+    "reference_in_bus_stop_count": 75,
+    "reference_runtime_note": "Google reference: ride 75 stops in about 1 hr 36 min",
+    "default_wait_strategy": "half_headway",
+    "display_note": "ETAs are model-based from Route 18 frequency, stop sequence, and the 96-minute in-bus baseline. They are not live bus predictions."
+  },
+  "pending_coordinate_matches": [
+    {
+      "name": "Vidharthi",
+      "lat": 18.974560230019183,
+      "lng": 73.01993603554699,
+      "note": "Needs confirmation against the current Route 18 stop list before being attached to a specific stop."
+    },
+    {
+      "name": "Vahal Fata Sector 11",
+      "lat": 18.973647099837187,
+      "lng": 73.0322527393433,
+      "note": "Currently searchable through the Vahal alias, but not yet attached as a separate stop point until the stop mapping is confirmed."
+    }
+  ],
+  "stops": [
+    { "id": "ghansoli-depot-vaishali-society", "name": "Ghansoli Depot / Vaishali Society", "location_hint": "Ghansoli Sector 15", "aliases": ["ghansoli depot", "vaishali society", "ghansoli bus depot"], "lat": null, "lng": null, "cumulative_minutes_from_origin": 0 },
+    { "id": "smashan-bhoomi", "name": "Smashan Bhoomi", "location_hint": "Ghansoli Sector 11", "aliases": ["smashan bhumi", "cremation ground"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "atlantic-society", "name": "Atlantic Society", "location_hint": "Ghansoli Sector 8 / 11", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "bhoomi-oscar-sant-nirankari-chowk", "name": "Bhoomi Oscar / Sant Nirankari Chowk", "location_hint": "Ghansoli Sector 9", "aliases": ["sant nirankari chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "rajiv-gandhi-college", "name": "Rajiv Gandhi College", "location_hint": "Ghansoli Sector 5", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "ghansoli-gharonda",
+      "name": "Ghansoli Gharonda",
+      "location_hint": "Ghansoli Village",
+      "aliases": ["gharonda", "ghansoli village"],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 19.12269261467433, "lng": 72.99943774938583 },
+        "to_kharkopar": { "lat": 19.122783212413122, "lng": 72.9997193813327 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "siddheshwar-society", "name": "Siddheshwar Society / Gharonda", "location_hint": "Ghansoli Sector 5 / 9", "aliases": ["siddheshwar society", "gharonda"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "panchavati", "name": "Panchavati", "location_hint": "Ghansoli Sector 5", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "ghansoli-railway-station",
+      "name": "Ghansoli Railway Station",
+      "location_hint": "Ghansoli",
+      "aliases": ["ghansoli station", "ghansoli stn"],
+      "lat": 19.116022458623558,
+      "lng": 73.00570338964458,
+      "geo": {
+        "shared": { "lat": 19.116022458623558, "lng": 73.00570338964458 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "peer-mehmood-shah-baba-dargah", "name": "Peer Mehmood Shah Baba Dargah", "location_hint": "Ghansoli", "aliases": ["mehmood shah baba dargah", "memood shah baba dargah", "peer dargah"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "terna-college-bridge-svn-school", "name": "Terna College Bridge / SVN School", "location_hint": "Ghansoli", "aliases": ["terna college pool", "terna college", "terna mahavidyalaya", "svn school"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "terna-engineering-college", "name": "Terna Engineering College", "location_hint": "Kopar Khairane Sector 1", "aliases": ["terna engineering"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "koparkhairane-sector-2", "name": "Kopar Khairane Sector 2 / 20", "location_hint": "Kopar Khairane", "aliases": ["koparkhairane sector 2", "kopar khairane sector 2", "sector 2/20"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "ranjan-devi-chowk", "name": "Ranjan Devi Chowk", "location_hint": "Kopar Khairane", "aliases": ["ranjan devi chowk mseb", "mseb chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "koparkhairane-bus-station",
+      "name": "Kopar Khairane Bus Station",
+      "location_hint": "Kopar Khairane Sector 3 / 19",
+      "aliases": ["koparkhairane bus station", "kopar khairane teen taki", "kopar khairane (teen taki)", "teen taki"],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 19.10399420979543, "lng": 73.00339132547377 },
+        "to_kharkopar": { "lat": 19.10403983059566, "lng": 73.00358444452283 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "shubham-palace", "name": "Shubham Palace", "location_hint": "Kopar Khairane Sector 15 / 17", "aliases": ["shubham palace sec 15/17"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "rf-naik-school", "name": "R.F. Naik School", "location_hint": "Kopar Khairane", "aliases": ["rf naik school", "r f naik school", "kopar khairane school"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "bonkode-gaon-kalash-udyan", "name": "Bonkode Village / Kalash Udyan", "location_hint": "Kopar Khairane Sector 14", "aliases": ["bonkode gaon", "bonkode village", "kalash udyan"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "oes-international-school", "name": "O.E.S. International School", "location_hint": "Mega Mart / Vashi Sector 28", "aliases": ["oes international school", "oes school", "mega mart"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "kopari-naka-sector-29", "name": "Kopari Naka Sector 29", "location_hint": "Vashi", "aliases": ["kopari naka"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "juhi-village-sector-14", "name": "Juhi Village Sector 14", "location_hint": "Vashi Sector 14 / 29", "aliases": ["juhu village sector 14", "juhi village"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "mahatma-gandhi-complex", "name": "Mahatma Gandhi Complex", "location_hint": "Juhi Nagar / Vashi Sector 11 / 14", "aliases": ["mg complex"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "vashi-sector-15-10", "name": "Vashi Sector 10 / 15", "location_hint": "Vashi", "aliases": ["vashi sector 15/10", "vashi sector 10-15", "vashi sector 10 or15"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "navi-mumbai-bank", "name": "Ward Office Vashi Sector 10 / 15", "location_hint": "Vashi", "aliases": ["navi mumbai bank", "ward office vashi", "ward office sector 10/15"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "juhu-nagar-market", "name": "Juhu Nagar Sector 11", "location_hint": "Vashi", "aliases": ["juhu nagar market", "juhu nagar sector 11"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "vashi-bus-station", "name": "Vashi Bus Station", "location_hint": "Vashi Sector 9 / 16", "aliases": ["vashi depot", "vashi bus depot"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "ssc-board-office-st-lawrence-school",
+      "name": "Saint Lawrence High School",
+      "location_hint": "Vashi Sector 16 / 17",
+      "aliases": ["ssc board office", "st lawrence school", "saint lawrence high school"],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 19.074122557893578, "lng": 73.00119191408159 },
+        "to_kharkopar": { "lat": 19.074386192127992, "lng": 73.00080567598344 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "mahatma-phule-sabhagrugh", "name": "Mahatma Phule Sabhagrah", "location_hint": "Vashi Sector 17 / 18", "aliases": ["mahatma phule sabhagrugh", "phule sabhagrah"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "maharashtra-state-cooperative-bank", "name": "Maharashtra State Co-Operative Bank", "location_hint": "Vashi Sector 17 / 18 / 30A", "aliases": ["state cooperative bank"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "mahatma-phule-auditorium", "name": "Mahatma Phule Auditorium", "location_hint": "Vashi Sector 17 / 18", "aliases": ["phule auditorium"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "shamrao-vithal-bank-moraj-residency", "name": "Shamrao Vithal Bank / Moraj Residency", "location_hint": "Sanpada", "aliases": ["sv bank", "moraj residency"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sanpada-police-station-riddhi-siddhi-petrol-pump", "name": "Riddhi Siddhi / Petrol Pump", "location_hint": "Sanpada Sector 3 / 8", "aliases": ["sanpada police station", "riddhi siddhi petrol pump"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sant-vivekanand-school", "name": "Sant Vivekanand School", "location_hint": "Sanpada Sector 4 / 7", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "nathu-joma-patil-chowk", "name": "Nathu Joma Patil Chowk", "location_hint": "Sanpada Sector 6 / 7", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sant-nirankari-bhavan", "name": "Sant Nirankari Bhavan", "location_hint": "Sanpada Sector 9 / 10", "aliases": ["sanpada sonkhar"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "juinagar-railway-station-west", "name": "Juinagar Railway Station (W)", "location_hint": "Juinagar", "aliases": ["juinagar station", "juinagar station west"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "aniruddha-bapu-bhavan", "name": "Aniruddha Bhavan", "location_hint": "Juinagar", "aliases": ["aniruddha bapu bhavan"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "juipada-gaon-sector-23-24", "name": "Jui Pada 23 / 24", "location_hint": "Juinagar", "aliases": ["juipada gaon sector 23/24", "jui pada 23-24"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "gavdevi-chowk", "name": "Jui Nagar Gangadev Chowk", "location_hint": "Juinagar Sector 24 / 25", "aliases": ["gavdevi chowk", "gangadev chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "juinagar-sector-25", "name": "Juinagar Sector 25", "location_hint": "Juinagar", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "chincholi-talav", "name": "Chincholi Talav", "location_hint": "Juinagar Sector 2 / 25", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "nerul-sector-2", "name": "Nerul Sector 2", "location_hint": "Nerul", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "nerul-sector-6", "name": "Sarsole Koliwada Sector 6", "location_hint": "Nerul / Sarsole", "aliases": ["nerul sector 6", "sarsole koliwada sector 6"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sarsole-koliwada", "name": "Sarsole Koliwada", "location_hint": "Nerul Sector 6 / 8", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sarsole-bus-station", "name": "Sarsole", "location_hint": "Nerul Sector 8 / 12", "aliases": ["sarsole bus station"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "terna-vidyalaya-gavdevi-mandir", "name": "Terna Vidyalaya / Gavdevi Mandir", "location_hint": "Nerul", "aliases": ["terna vidyalaya", "gavdevi mandir", "nerul village"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "gaondevi-chowk", "name": "Nerul", "location_hint": "Nerul Sector 10 / 20", "aliases": ["gaondevi chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "nerul-railway-station-west",
+      "name": "Nerul Railway Station (W)",
+      "location_hint": "Nerul Sector 22",
+      "aliases": ["nerul station", "nerul station west"],
+      "lat": 19.032260235955242,
+      "lng": 73.01694184541695,
+      "geo": {
+        "shared": { "lat": 19.032260235955242, "lng": 73.01694184541695 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "terna-hospital", "name": "Terna Hospital", "location_hint": "Nerul Sector 22", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "shri-ganesh-cooperative-housing-society", "name": "Shri Ganesh Cooperative Housing Society", "location_hint": "Nerul Sector 28", "aliases": ["ganesh society"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "nerul-gymkhana", "name": "Nerul Gymkhana", "location_hint": "Nerul Sector 28", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "darade-phatak-sanjay-joshi-chowk", "name": "Darade Phatak / Sanjay Joshi Chowk", "location_hint": "Nerul Sector 26 / 28", "aliases": ["darade fatak", "sanjay joshi chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "seawood-darave-railway-station", "name": "Seawoods", "location_hint": "Seawood Darave Railway Station", "aliases": ["seawood darave railway station", "seawoods station"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "dmart-nerul-sector-42", "name": "Sector 47 Petrol Pump", "location_hint": "Seawoods / Nerul Sector 42", "aliases": ["d mart nerul sector 42", "d mart nerul", "nerul sector 42"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "kendriya-vihar", "name": "Gaimukh Chowk Sector 44 & 48", "location_hint": "Seawoods", "aliases": ["kendriya vihar", "gaimukh chowk sector 44 & 48"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "ganesh-talav", "name": "Karave / Ganesh Talav", "location_hint": "Karave Gaon / Seawoods Sector 36 / 38", "aliases": ["ganesh talav"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "ganesh-maidan", "name": "Ganesh Maidan", "location_hint": "Karave Gaon / Seawoods Sector 36 / 38", "aliases": ["karave gaon smashan bhumi"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sector-42-bus-terminus", "name": "Sec 42 Bus Terminus", "location_hint": "Seawoods Sector 44", "aliases": ["sector 42 terminus"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "gaimukh-chowk", "name": "Gaimukh Chowk", "location_hint": "Seawoods Sector 44 / 48", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "sector-48", "name": "Sector 48", "location_hint": "Seawoods Sector 46 / 48", "aliases": ["sector 47"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "akshar-residency",
+      "name": "Akshar Residency",
+      "location_hint": "Seawoods Sector 46",
+      "aliases": ["nri", "n.r.i."],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 19.011243632370263, "lng": 73.01167483178118 },
+        "to_kharkopar": { "lat": 19.010208979101517, "lng": 73.01199669686297 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "nri", "name": "N.R.I.", "location_hint": "Seawoods Sector 46A / 54", "aliases": ["nri"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "nmmc-head-office-belapur", "name": "NMMC Head Office Belapur", "location_hint": "CBD Belapur", "aliases": ["nmmc head office"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "kille-gaon-nmmc-head-office-belapur", "name": "Kille Gaothan", "location_hint": "CBD Belapur Sector 15", "aliases": ["kille gaon", "kille gaothan", "sagar sangam"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "reti-bunder", "name": "Reti Bandar", "location_hint": "Ulwe", "aliases": ["reti bunder"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "targhar", "name": "Targhar", "location_hint": "Ulwe", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "ulwe-gaon-sonkhar", "name": "Ulwe Gaon / Sonkhar", "location_hint": "Ulwe", "aliases": ["ulwe gaon", "sonkhar"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "morva-phata", "name": "Morva Phata", "location_hint": "Ulwe", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "ulwe-naka",
+      "name": "Vahal",
+      "location_hint": "Ulwe",
+      "aliases": ["ulwe naka", "vahal", "vahal fata sector 11"],
+      "lat": 18.974605886344087,
+      "lng": 73.03576106873481,
+      "geo": {
+        "shared": { "lat": 18.974605886344087, "lng": 73.03576106873481 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "ulwe-node", "name": "Ulwe Node", "location_hint": "Wahal / Ulwe", "aliases": ["ulave node", "ulawe node", "ulwe node"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "shagun-reality-chowk", "name": "Shagun Reality Chowk", "location_hint": "Ulwe Sector 19 / 23", "aliases": ["shagun chowk", "late balsheth patil chowk"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "radiance-gallery",
+      "name": "Vidyarthi Ulwe Node / Sector 23",
+      "location_hint": "Ulwe Sector 20 / 23",
+      "aliases": ["radiance gallery", "vidyarthi", "vidharthi", "vidyarthi ulwe node", "vidyarthi ubley node", "vidyarthi ubley node sector 23"],
+      "lat": 18.976487932967515,
+      "lng": 73.03057904091803,
+      "geo": {
+        "shared": { "lat": 18.976487932967515, "lng": 73.03057904091803 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "vighnaharta-complex", "name": "Vighnaharta Complex", "location_hint": "Ulwe Sector 23", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "tricity", "name": "Tricity", "location_hint": "Ulwe Sector 21", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "integrated-irs-tower-1", "name": "Integrated IRS Tower 1", "location_hint": "Ulwe Sector 21", "aliases": ["irs tower 1"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "marvel-soham", "name": "Marvel Soham", "location_hint": "Ulwe", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "balaji-amrut", "name": "Balaji Amrut", "location_hint": "Ulwe Sector 2", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "ganesh-apartment", "name": "Ganesh Apartment", "location_hint": "Ulwe Sector 2", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "pragati-park",
+      "name": "Pragati",
+      "location_hint": "Ulwe Sector 2",
+      "aliases": ["pragati park", "pragati"],
+      "lat": 18.981540437923805,
+      "lng": 73.02446360436412,
+      "geo": {
+        "shared": { "lat": 18.981540437923805, "lng": 73.02446360436412 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "nm-sez-navi-mumbai-special-economic-zone", "name": "NM SEZ / Navi Mumbai Special Economic Zone", "location_hint": "Ulwe", "aliases": ["nm sez"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "bamandongri-railway-station-west", "name": "Bamandongri Railway Station (W)", "location_hint": "Ulwe Sector 8 / 9", "aliases": ["bamandongri station", "bamandongri station west"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "bhagvati-group", "name": "Bhagawati", "location_hint": "Ulwe Sector 9", "aliases": ["bhagvati group", "bhagwati"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "delta-tower-sector-8", "name": "Delta Tower No. 1", "location_hint": "Ulwe Sector 8 / 9", "aliases": ["delta tower sector 8", "delta tower no 1"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "prabhat-society", "name": "Prabhat", "location_hint": "Ulwe Sector 8 / 9", "aliases": ["prabhat society"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    {
+      "id": "kasturi-heritage",
+      "name": "Kasturi Heritage",
+      "location_hint": "Ulwe Sector 8 / 9",
+      "aliases": [],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 18.96829884621682, "lng": 73.01782916036608 },
+        "to_kharkopar": { "lat": 18.96875289004704, "lng": 73.0175636216736 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    {
+      "id": "om-sai-srushti",
+      "name": "Om Sai Srushti",
+      "location_hint": "Ulwe Sector 17 / 18",
+      "aliases": ["om sai"],
+      "lat": null,
+      "lng": null,
+      "geo": {
+        "to_ghansoli": { "lat": 18.966901195124116, "lng": 73.02016000000006 },
+        "to_kharkopar": { "lat": 18.96728929178444, "lng": 73.01995615211493 }
+      },
+      "cumulative_minutes_from_origin": null
+    },
+    { "id": "adinath", "name": "Adinath", "location_hint": "Ulwe Sector 17", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "tejas-height-society", "name": "Tejas Height Society", "location_hint": "Ulwe Sector 17", "aliases": ["tejas heights"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "late-ja-bhagat-chowk-shalgar", "name": "Late Ja Bhagat Chowk Shalgar", "location_hint": "Ulwe Sector 19A", "aliases": ["bhagat chowk shalgar"], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "shelghar", "name": "Shelghar", "location_hint": "Ulwe Sector 16", "aliases": [], "lat": null, "lng": null, "cumulative_minutes_from_origin": null },
+    { "id": "kharkopar-railway-station", "name": "Kharkopar Railway Station", "location_hint": "Kharkopar", "aliases": ["kharkopar station", "kharkopar stn"], "lat": null, "lng": null, "cumulative_minutes_from_origin": 96 }
+  ]
+}

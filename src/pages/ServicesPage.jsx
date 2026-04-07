@@ -46,9 +46,50 @@ export function ServicesPage({ st, I }) {
         <title>Export Freight Services from India | FCL Ocean Freight, Documentation, Shipment Planning | Sattva</title>
         <meta
           name="description"
-          content="FCL ocean freight from JNPT, Mundra, Chennai, Cochin. Documentation-conscious coordination, route planning and factory-to-port execution for Indian exporters shipping to Gulf, Red Sea and Africa."
+          content="FCL ocean freight from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa. Documentation coordination, route planning and factory-to-port execution for Indian exporters."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/services" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.sattvaglobal.in/services",
+          "name": "Export Freight Services from India — Sattva Global Logistics",
+          "description": "FCL ocean freight, export documentation, shipment planning and factory-to-port coordination from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sattvaglobal.in/"},
+              {"@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.sattvaglobal.in/services"}
+            ]
+          },
+          "mainEntity": [
+            {
+              "@type": "Service",
+              "name": "FCL Ocean Freight from Indian Ports",
+              "description": "Full container load bookings from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations.",
+              "provider": {"@id": "https://www.sattvaglobal.in/#organization"},
+              "areaServed": ["United Arab Emirates", "Saudi Arabia", "Kenya", "Tanzania", "South Africa", "Nigeria"]
+            },
+            {
+              "@type": "Service",
+              "name": "Export Documentation Coordination",
+              "description": "BL instructions, SI submission, certificate coordination and pre-departure document review for Indian export cargo.",
+              "provider": {"@id": "https://www.sattvaglobal.in/#organization"}
+            },
+            {
+              "@type": "Service",
+              "name": "Shipment Planning and Route Guidance",
+              "description": "Route suitability, carrier selection, transit time trade-offs and commercial guidance for Indian exporters.",
+              "provider": {"@id": "https://www.sattvaglobal.in/#organization"}
+            },
+            {
+              "@type": "Service",
+              "name": "Factory to Port Coordination",
+              "description": "Factory stuffing, CFS handover, port cut-off milestone management and vessel departure coordination.",
+              "provider": {"@id": "https://www.sattvaglobal.in/#organization"}
+            }
+          ]
+        })}</script>
       </Helmet>
 
       {/* ── HERO ── */}

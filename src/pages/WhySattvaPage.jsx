@@ -6,12 +6,27 @@ export function WhySattvaPage({ st, I }) {
   return (
     <div style={{ paddingTop: 68 }}>
       <Helmet>
-        <title>Why Choose Sattva Global Logistics | Honest Answer for Indian Exporters</title>
+        <title>Why Choose Sattva Global Logistics | FCL Freight Forwarder India, Gulf, Red Sea & Africa</title>
         <meta
           name="description"
           content="Exporters leave forwarders over poor follow-up and avoidable problems — not just price. See how Sattva is built differently for Indian FCL exporters shipping to Gulf, Red Sea and Africa."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/why-sattva" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.sattvaglobal.in/why-sattva",
+          "name": "Why Choose Sattva Global Logistics",
+          "description": "Why Indian FCL exporters choose Sattva Global Logistics for Gulf, Red Sea and Africa trade lanes — execution discipline, commercial clarity and 20+ years of route expertise.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sattvaglobal.in/"},
+              {"@type": "ListItem", "position": 2, "name": "Why Sattva", "item": "https://www.sattvaglobal.in/why-sattva"}
+            ]
+          },
+          "publisher": {"@id": "https://www.sattvaglobal.in/#organization"}
+        })}</script>
       </Helmet>
 
       {/* ── HERO ── */}
@@ -43,7 +58,7 @@ export function WhySattvaPage({ st, I }) {
             ["The team that quotes is the team that executes", "You are not handed off to a junior coordinator after the booking confirmation. The people who reviewed your route and quoted the shipment are the same people managing the movement."],
             ["Commercial clarity before you commit", "We explain what is included, what assumptions apply and where cost or timing can change — before the cargo moves. Not in a post-problem conversation."],
             ["Execution-first thinking", "Most shipment problems are predictable. We look for them early — in the documentation flow, the inland timing, the cut-off window — not after the cargo misses the vessel."],
-            ["India-origin expertise on routes we know", "We are not a global forwarder trying to cover every lane. Our focus is India to Gulf, Red Sea and Africa — and we know these lanes the way a forwarder who has worked them for 16 years knows them."],
+            ["India-origin expertise on routes we know", "We are not a global forwarder trying to cover every lane. Our focus is India to Gulf, Red Sea and Africa — and we know these lanes the way a forwarder who has worked them for 20+ years knows them."],
           ].map(([t, d]) => (
             <div key={t} style={{ ...st.cd, borderTop: `3px solid ${B.primary}` }}>
               <h3 style={{ ...st.h3, marginBottom: 10 }}>{t}</h3>

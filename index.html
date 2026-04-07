@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+<meta name="google-site-verification" content="LGKrGG7P1XQlBR-rcQhLvvC8juCWGxiWdlfatcK5AKo" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sattva Global Logistics | FCL Freight Forwarding from India to Gulf, Red Sea & Africa</title>
   <meta name="description" content="Freight forwarding for Indian exporters — garments, FMCG, agro, engineering goods. FCL from JNPT, Mundra, Chennai, Cochin to Gulf, Red Sea and Africa. Stronger coordination, cleaner execution." />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#024aab" />
+  <meta name="theme-color" content="#2907cc" />
   <meta name="format-detection" content="telephone=no" />
 
   <meta property="og:type" content="website" />
@@ -33,31 +34,85 @@
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "Organization",
+          "@type": ["Organization", "LocalBusiness"],
           "@id": "https://www.sattvaglobal.in/#organization",
           "name": "Sattva Global Logistics",
           "url": "https://www.sattvaglobal.in/",
-          "logo": "https://www.sattvaglobal.in/sattva-logo.png",
-          "email": "quotes@sattvaglobal.in",
-          "telephone": "+91 9136 121 123",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.sattvaglobal.in/sattva-logo.png",
+            "width": 200,
+            "height": 60
+          },
+          "image": "https://www.sattvaglobal.in/sattva-logo.png",
+          "email": "sujith@sattvaglobal.in",
+          "telephone": "+91-9136-121-123",
+          "foundingDate": "2005",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Navi Mumbai",
             "addressRegion": "Maharashtra",
+            "postalCode": "400614",
             "addressCountry": "IN"
           },
-          "areaServed": ["IN", "AE", "SA", "KE", "TZ", "DJ", "ZA", "NG", "GH"],
-          "knowsAbout": ["FCL freight forwarding", "ocean freight from India", "export logistics", "Gulf trade lanes", "East Africa freight", "JNPT export", "Mundra export"],
-          "serviceType": ["Freight Forwarding", "FCL Ocean Freight", "Export Logistics", "Shipment Coordination"],
-          "description": "Freight forwarding for Indian exporters shipping FCL general cargo — garments, fabrics, FMCG, agro commodities, engineering goods — from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations."
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 18.9894,
+            "longitude": 73.1175
+          },
+          "areaServed": [
+            {"@type": "Country", "name": "India"},
+            {"@type": "Country", "name": "United Arab Emirates"},
+            {"@type": "Country", "name": "Saudi Arabia"},
+            {"@type": "Country", "name": "Kenya"},
+            {"@type": "Country", "name": "Tanzania"},
+            {"@type": "Country", "name": "Djibouti"},
+            {"@type": "Country", "name": "South Africa"},
+            {"@type": "Country", "name": "Nigeria"},
+            {"@type": "Country", "name": "Ghana"}
+          ],
+          "knowsAbout": [
+            "FCL freight forwarding from India",
+            "ocean freight India to Gulf",
+            "ocean freight India to Africa",
+            "JNPT export freight",
+            "Mundra export freight",
+            "India Red Sea shipping",
+            "export logistics garments India",
+            "FCL container booking India"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Export Freight Services",
+            "itemListElement": [
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "FCL Ocean Freight from JNPT"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "FCL Ocean Freight from Mundra"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Export Documentation Coordination"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Shipment Planning India to Gulf"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Factory to Port Coordination"}}
+            ]
+          },
+          "description": "Sattva Global Logistics is a Mumbai-based FCL freight forwarder with 20+ years of experience in ocean freight. We specialise in export logistics for Indian exporters shipping garments, fabrics, FMCG, agro commodities and engineering goods from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations.",
+          "sameAs": [
+            "https://www.linkedin.com/company/sattva-global-logistics"
+          ]
         },
         {
           "@type": "WebSite",
           "@id": "https://www.sattvaglobal.in/#website",
           "url": "https://www.sattvaglobal.in/",
           "name": "Sattva Global Logistics",
+          "description": "FCL freight forwarding from India to Gulf, Red Sea and Africa — live rates, trade advisory and shipment coordination for Indian exporters.",
           "publisher": {
             "@id": "https://www.sattvaglobal.in/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.sattvaglobal.in/quote?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
           }
         }
       ]

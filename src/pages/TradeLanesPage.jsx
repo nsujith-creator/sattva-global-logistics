@@ -48,9 +48,31 @@ export function TradeLanesPage({ st, I }) {
         <title>India Export Trade Lanes | JNPT, Mundra to Gulf, Red Sea & Africa | Sattva Global Logistics</title>
         <meta
           name="description"
-          content="FCL export trade lanes from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa. Route guidance and shipment coordination for Indian exporters."
+          content="FCL export trade lanes from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa. Route guidance and shipment coordination for Indian exporters shipping garments, FMCG, agro and engineering goods."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/trade-lanes" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.sattvaglobal.in/trade-lanes",
+          "name": "India Export Trade Lanes — Gulf, Red Sea & Africa",
+          "description": "FCL export trade lanes from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa destinations.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sattvaglobal.in/"},
+              {"@type": "ListItem", "position": 2, "name": "Trade Lanes", "item": "https://www.sattvaglobal.in/trade-lanes"}
+            ]
+          },
+          "mainEntity": [
+            {"@type": "Service", "name": "FCL Freight JNPT to Jebel Ali", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "United Arab Emirates"},
+            {"@type": "Service", "name": "FCL Freight Mundra to Jebel Ali", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "United Arab Emirates"},
+            {"@type": "Service", "name": "FCL Freight JNPT to Dammam", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "Saudi Arabia"},
+            {"@type": "Service", "name": "FCL Freight JNPT to Mombasa", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "Kenya"},
+            {"@type": "Service", "name": "FCL Freight JNPT to Dar es Salaam", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "Tanzania"},
+            {"@type": "Service", "name": "FCL Freight JNPT to Durban", "provider": {"@id": "https://www.sattvaglobal.in/#organization"}, "areaServed": "South Africa"}
+          ]
+        })}</script>
       </Helmet>
 
       {/* ── HERO ── */}
@@ -62,7 +84,7 @@ export function TradeLanesPage({ st, I }) {
             <span style={{ color: B.primary }}>India to Gulf, Red Sea & Africa</span>
           </h1>
           <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 760 }}>
-            Route familiarity is not a claim — it shows up in how problems are anticipated, how carriers are matched and how the shipment is managed when something changes. This is where 16 years on India-origin export lanes makes a real difference.
+            Route familiarity is not a claim — it shows up in how problems are anticipated, how carriers are matched and how the shipment is managed when something changes. This is where 20+ years on India-origin export lanes makes a real difference.
           </p>
         </div>
       </section>

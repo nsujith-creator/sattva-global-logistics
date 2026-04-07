@@ -1,4 +1,4 @@
-// FAIL-18 FIX: CORS must deny unknown origins, never fall back to a permissive value.
+﻿// FAIL-18 FIX: CORS must deny unknown origins, never fall back to a permissive value.
 // Set ALLOWED_ORIGINS env var in Supabase dashboard to: https://www.sattvaglobal.in,https://sattvaglobal.in
 // Localhost entries only apply in local dev — they are stripped in production via the env var override.
 
@@ -21,12 +21,14 @@ export function getCorsHeaders(req: Request): Record<string, string> {
   };
 }
 
-// HTML-escape utility — used by all functions to sanitise user input before injecting into email templates (FAIL-11)
+// HTML-escape utility — used by all functions to sanitise user input before storing in DB / email templates.
+// NOTE: We intentionally do NOT escape apostrophes (') or quotes (") because:
+//   1. The data is stored in PostgreSQL JSONB columns and rendered as plain text by React JSX.
+//   2. React JSX already escapes < > & for display — double-escaping causes literal &#x27; to appear.
+//   3. Single/double quotes in text content are NOT dangerous; only < > & need escaping at the DB layer.
 export function escapeHtml(raw: unknown): string {
   return String(raw ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;");
+    .replace(/>/g, "&gt;");
 }

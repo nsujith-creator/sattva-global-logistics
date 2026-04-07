@@ -1,0 +1,16 @@
+[
+  {
+    "bill_id": "bill_001",
+    "vendor_id": "vendor_001",
+    "vendor_name": "KOTAK MULTILINK LOGISTIX PRIVATE LIMITED",
+    "bill_number": "KML-001",
+    "bill_date": "2025-04-01",
+    "due_date": "2025-04-15",
+    "currency_code": "INR",
+    "total": 118000,
+    "balance": 118000,
+    "status": "open",
+    "reference_number": "REF001"
+  }
+]
+

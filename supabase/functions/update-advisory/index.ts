@@ -1,5 +1,5 @@
-// update-advisory Edge Function
-// Called by Cowork digest at 9am and 3pm IST every day
+﻿// update-advisory Edge Function
+// Called by Cowork digest at 10am and 4pm IST every day
 // Authenticated via ADVISORY_SECRET header token
 // Rejects test/garbage payloads at the gate
 
@@ -10,9 +10,8 @@ const ADVISORY_SECRET = Deno.env.get("ADVISORY_SECRET") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY") ?? "";
 
-// Test/garbage patterns — reject if situation matches these
-const TEST_PATTERNS = [/^test\b/i, /test check/i, /test only/i, /test ping/i, /verifying db/i];
-const MIN_SITUATION_LENGTH = 80; // Real digest content is always much longer
+const TEST_PATTERNS = [/^test\b/i, /^test check/i, /^test only/i, /^test ping/i];
+const MIN_SITUATION_LENGTH = 50;
 
 Deno.serve(async (req: Request) => {
   const cors = getCorsHeaders(req);
@@ -21,7 +20,6 @@ Deno.serve(async (req: Request) => {
     return new Response("ok", { headers: cors });
   }
 
-  // Auth check
   const secret = req.headers.get("x-advisory-secret") ?? "";
   if (!ADVISORY_SECRET || secret !== ADVISORY_SECRET) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -40,11 +38,11 @@ Deno.serve(async (req: Request) => {
   let body: {
     situation?: string;
     carrier_notes?: { carrier: string; status: string; note: string }[];
-    surcharges?: { name: string; amount: string; currency: string; trade: string; effective: string }[];
+    surcharges?: { carrier: string; date: string; name: string; amount: string; currency: string; trade: string }[];
     india_impact?: string;
     source_tags?: string[];
     updated_by?: string;
-    force?: boolean; // set true to bypass content validation (admin override only)
+    force?: boolean;
   };
 
   try {
@@ -59,7 +57,6 @@ Deno.serve(async (req: Request) => {
   const rawSituation = body.situation ?? "";
   const force = body.force === true;
 
-  // Content validation gate — reject test/garbage payloads
   if (!force) {
     if (rawSituation.length < MIN_SITUATION_LENGTH) {
       return new Response(JSON.stringify({
@@ -83,7 +80,6 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // Sanitise all fields
   const situation = escapeHtml(rawSituation);
   const india_impact = escapeHtml(body.india_impact ?? "");
   const updated_by = escapeHtml(body.updated_by ?? "cowork-digest");
@@ -95,12 +91,14 @@ Deno.serve(async (req: Request) => {
     note: escapeHtml(c.note),
   }));
 
+  // Surcharges: carrier-wise chronological updates
   const surcharges = (body.surcharges ?? []).map((s) => ({
+    carrier: escapeHtml(s.carrier),
+    date: escapeHtml(s.date),
     name: escapeHtml(s.name),
     amount: escapeHtml(s.amount),
     currency: escapeHtml(s.currency),
     trade: escapeHtml(s.trade),
-    effective: escapeHtml(s.effective),
   }));
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NMMT Route 18 MVP</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Single-Route NMMT MVP</p>
+          <h1>Route 18 trip planner for Ghansoli Depot to Kharkopar Railway Station.</h1>
+          <p class="hero-text">
+            Pick a boarding stop and destination, then get direction, estimated wait, modeled ride time,
+            projected arrival, and the downstream stop sequence for Route 18.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-label">Electric AC</span>
+          <strong>Route 18</strong>
+          <span class="badge-meta">Via Palm Beach</span>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-input">
+          <div class="panel-head">
+            <p class="panel-kicker">Trip Input</p>
+            <h2>Plan one Route 18 trip</h2>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="source-input">Boarding stop</label>
+              <input id="source-input" type="text" autocomplete="off" placeholder="Type a Route 18 stop or alias" />
+              <div id="source-suggestions" class="suggestions"></div>
+            </div>
+
+            <div class="field">
+              <label for="destination-input">Destination stop</label>
+              <input id="destination-input" type="text" autocomplete="off" placeholder="Where do you want to get down?" />
+              <div id="destination-suggestions" class="suggestions"></div>
+            </div>
+
+            <div class="field">
+              <label for="walking-input">Walking time to the boarding stop</label>
+              <div class="slider-row">
+                <input id="walking-input" type="range" min="0" max="20" value="5" />
+                <span id="walking-value" class="pill">5 min</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="day-profile">Service profile</label>
+              <select id="day-profile">
+                <option value="auto">Auto-detect today</option>
+                <option value="weekday">Monday to Saturday</option>
+                <option value="holiday">Sunday and holidays</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="use-location" class="ghost-button" type="button">Use my location</button>
+            <button id="swap-stops" class="ghost-button" type="button">Swap stops</button>
+          </div>
+
+          <div id="location-summary" class="location-summary" hidden></div>
+
+          <p id="status-message" class="status-message">
+            Route 18 now supports nearby-stop suggestions where coordinates are available. Manual override stays available.
+          </p>
+        </section>
+
+        <section class="panel panel-output">
+          <div class="panel-head">
+            <p class="panel-kicker">Trip Result</p>
+            <h2>Your Route 18 answer</h2>
+          </div>
+
+          <div id="result-card" class="result-empty">
+            Select a boarding stop and destination to see Route 18 guidance.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

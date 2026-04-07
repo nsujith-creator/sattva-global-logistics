@@ -6,12 +6,31 @@ export function AboutPage({ st, I }) {
   return (
     <div style={{ paddingTop: 68 }}>
       <Helmet>
-        <title>About Sattva Global Logistics | Export Freight Forwarder, Mumbai</title>
+        <title>About Sattva Global Logistics | FCL Freight Forwarder Mumbai, 20+ Years in Ocean Freight</title>
         <meta
           name="description"
-          content="Sattva Global Logistics is a Mumbai-based freight forwarder with 16+ years in ocean freight. FCL exports from India to Gulf, Red Sea and Africa — garments, FMCG, agro, engineering goods."
+          content="Sattva Global Logistics is a Mumbai-based FCL freight forwarder with 20+ years in ocean freight. India to Gulf, Red Sea and Africa — garments, FMCG, agro, engineering goods, machinery."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/about" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "url": "https://www.sattvaglobal.in/about",
+          "name": "About Sattva Global Logistics",
+          "description": "Sattva Global Logistics is a Mumbai-based FCL freight forwarder with 20+ years of hands-on experience in ocean freight, specialising in India exports to Gulf, Red Sea and Africa trade lanes.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sattvaglobal.in/"},
+              {"@type": "ListItem", "position": 2, "name": "About", "item": "https://www.sattvaglobal.in/about"}
+            ]
+          },
+          "publisher": {
+            "@type": "Organization",
+            "@id": "https://www.sattvaglobal.in/#organization",
+            "name": "Sattva Global Logistics"
+          }
+        })}</script>
       </Helmet>
 
       {/* ── HERO ── */}

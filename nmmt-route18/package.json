@@ -1,0 +1,9 @@
+{
+  "name": "nmmt-route18-mvp",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

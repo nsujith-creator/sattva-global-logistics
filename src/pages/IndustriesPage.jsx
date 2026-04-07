@@ -49,12 +49,35 @@ export function IndustriesPage({ st, I }) {
   return (
     <div style={{ paddingTop: 68 }}>
       <Helmet>
-        <title>Freight Forwarding for Indian Export Industries | Garments, FMCG, Agro, Engineering Goods | Sattva</title>
+        <title>Freight Forwarding for Indian Export Industries | Garments, FMCG, Agro, Engineering | Sattva</title>
         <meta
           name="description"
-          content="Freight forwarding support for garments, fabrics, cotton yarn, food products, FMCG, paper, towels, agro commodities, engineering goods and machinery exports from India to Gulf, Red Sea and Africa."
+          content="Industry-specific freight forwarding for garments, fabrics, cotton yarn, food products, FMCG, paper, towels, agro commodities, engineering goods and machinery exports from India to Gulf, Red Sea and Africa."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/industries" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.sattvaglobal.in/industries",
+          "name": "Freight Forwarding for Indian Export Industries — Sattva Global Logistics",
+          "description": "FCL export freight for garments, fabrics, FMCG, agro commodities, engineering goods and machinery from India to Gulf, Red Sea and Africa.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sattvaglobal.in/"},
+              {"@type": "ListItem", "position": 2, "name": "Industries", "item": "https://www.sattvaglobal.in/industries"}
+            ]
+          },
+          "about": [
+            {"@type": "Thing", "name": "Readymade garment export freight from India"},
+            {"@type": "Thing", "name": "Fabric and cotton yarn export logistics"},
+            {"@type": "Thing", "name": "FMCG export freight India to Gulf"},
+            {"@type": "Thing", "name": "Agro commodity export freight India"},
+            {"@type": "Thing", "name": "Engineering goods export logistics India"},
+            {"@type": "Thing", "name": "Machinery export freight from JNPT"}
+          ],
+          "publisher": {"@id": "https://www.sattvaglobal.in/#organization"}
+        })}</script>
       </Helmet>
 
       {/* ── HERO ── */}
