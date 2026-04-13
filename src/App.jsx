@@ -310,149 +310,34 @@ function QuoteDisplay({quote,selectedEq,gateUser,pol,pod,cargo,vol}){
 }
 
 /* ─── Quote page ─── */
-function QuotePage({quotes,quotesErr,setQuotes,setQuotesErr}){const go=useNavigate();
-const[quotesLoading,setQuotesLoading]=useState(true);
-React.useEffect(()=>{setQuotesLoading(true);getQuotes().then(r=>{setQuotes(r);setQuotesErr(false);}).catch(()=>setQuotesErr(true)).finally(()=>setQuotesLoading(false));},[]);
+function QuotePage(){const go=useNavigate();
 const m=useIsMobile();
-const BLANK_F={pol:"",podR:"",pod:"",cargo:"",eq:"",vol:"1",msg:"",dimL:"",dimW:"",dimH:"",packType:"",captchaAns:""};
-const[f,setF]=useState(()=>loadFormState()||BLANK_F);
-const[extraEqs,setExtraEqs]=useState([]);
-const[done,setDone]=useState(false);
+const BLANK={pol:"",pod:"",cargo:"",eq:"",vol:"1",name:"",company:"",email:"",phone:"",msg:""};
+const[f,setF]=useState(BLANK);
 const[errs,setErrs]=useState({});
 const[sending,setSending]=useState(false);
+const[done,setDone]=useState(false);
 const[sendErr,setSendErr]=useState("");
-const[files,setFiles]=useState([]);
-const[fileErr,setFileErr]=useState("");
-const[captcha,setCaptcha]=useState(()=>{const a=Math.ceil(Math.random()*9),b=Math.ceil(Math.random()*9);return{a,b,ans:a+b};});
-const sessionData=loadSession();
-const[gateUser,setGateUser]=useState(()=>sessionData?.user||null);
-const[sessionToken,setSessionToken]=useState(()=>sessionData?.token||null);
-const[lastLoggedRk,setLastLoggedRk]=useState(null);
-const[hist,setHist]=useState(()=>gateUser?getQuoteHistory(gateUser.email):{polHistory:[],podHistory:[],cargoHistory:[]});
-const setVerifiedUser=(user,token)=>{saveSession(user,token);setGateUser(user);setSessionToken(token);setHist(getQuoteHistory(user.email));};
-React.useEffect(()=>{const handler=(e)=>{if(e.key==="sattva_session_v2"){const s=loadSession();setGateUser(s?.user||null);setSessionToken(s?.token||null);if(s?.user)setHist(getQuoteHistory(s.user.email));}};window.addEventListener("storage",handler);return()=>window.removeEventListener("storage",handler);},[]);
-const up=(k,v)=>setF(p=>{const n={...p,[k]:v};saveFormState(n);return n;});
-const changeEq=(v)=>{up("eq",v);setExtraEqs([]);setErrs(p=>({...p,eq:""}));up("dimL","");up("dimW","");up("dimH","");up("packType","");};
-React.useEffect(()=>{if(gateUser?.email&&f.pol&&f.pod&&f.cargo){saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));}},[f.pol,f.pod,f.cargo,gateUser?.email]);
-const routeKey=f.pol&&f.pod?`${f.pol}:${f.pod}`:null;
-const quote=routeKey&&quotes[routeKey]?quotes[routeKey]:null;
-const allEqs=f.eq?[f.eq,...extraEqs]:[];
-const availableEqs=EQ.filter(e=>!allEqs.includes(e));
-const isOTFR=OT_FR_EQ.includes(f.eq);
-const MAX_MB=5;const MAX_FILES=3;
-const refreshCaptcha=()=>{const a=Math.ceil(Math.random()*9),b=Math.ceil(Math.random()*9);setCaptcha({a,b,ans:a+b});up("captchaAns","");};
-const handleFiles=(e)=>{const chosen=Array.from(e.target.files);if(chosen.filter(f=>f.size>MAX_MB*1024*1024).length){setFileErr(`Max file size is ${MAX_MB}MB.`);return;}if(chosen.length>MAX_FILES){setFileErr(`Max ${MAX_FILES} files.`);return;}setFileErr("");setFiles(chosen);};
-useEffect(()=>{
-  if(routeKey&&gateUser&&routeKey!==lastLoggedRk){setLastLoggedRk(routeKey);const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;logSearchAPI({name:gateUser.name,email:gateUser.email,company:gateUser.company||"(not provided)",phone:gateUser.phone,pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,eq:allEqs.join("+"),found:quote?"1":"0",total:"—",note:"Route lookup"});}
-},[routeKey,gateUser]);
-const validate=()=>{const e={};if(!f.pol)e.pol="Required";if(!f.pod)e.pod="Required";if(!f.cargo)e.cargo="Required";if(!f.eq)e.eq="Required";if(isOTFR){if(!f.dimL.trim()||!f.dimW.trim()||!f.dimH.trim())e.dims="All dimensions required";if(!f.packType)e.packType="Required";}setErrs(e);return Object.keys(e).length===0;};
-const handleSubmit=async()=>{
-  if(sending)return;
-  if(!validate())return;
-  // Re-check session freshness before acting — catches expired tokens
-  const freshSession=loadSession();
-  if(!freshSession||!freshSession.user){
-    clearSession();setGateUser(null);setSessionToken(null);
-    setSendErr("Your session has expired. Please verify your identity again.");return;
-  }
-  setSending(true);setSendErr("");
-  const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;
-  saveQuoteHistory(gateUser.email,f.pol,f.pod,f.cargo);setHist(getQuoteHistory(gateUser.email));
-  try{
-    const result=await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:allEqs.map(e=>`${EQ_L[e]||e} (${e})`).join(", "),containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",rateFound:!!quote},freshSession.token);
-    clearFormState();setDone(true);if(result?.emailFail){setSendErr("Your request was saved, but our email system is currently experiencing issues. Please contact quotes@sattvaglobal.in to confirm receipt.");}
-  }catch(err){
-    if(err.status===401){clearSession();setGateUser(null);setSessionToken(null);setSendErr("Session expired. Please verify your identity again.");}
-    else if(err.message?.includes("timed out")){setSendErr("Request timed out — check your connection and try again.");}
-    else{setSendErr("Submission failed. Please use WhatsApp or email quotes@sattvaglobal.in directly.");}
-  }
-  finally{setSending(false);}
-};
-const waMsg=`Hi, freight quote request.\nName: ${gateUser?.name||""}\nPhone: ${gateUser?.phone||""}\nPOL: ${f.pol} → POD: ${f.pod}\nCargo: ${f.cargo} | ${allEqs.join("+")} x${f.vol}${isOTFR?`\nDims: L${f.dimL}xW${f.dimW}xH${f.dimH}m | Packing: ${f.packType}`:""}${f.msg?`\nNotes: ${f.msg}`:""}`;
-const resetForm=()=>{setDone(false);setF(BLANK_F);setExtraEqs([]);clearFormState();setFiles([]);setErrs({});refreshCaptcha();};
-if(done)return(<div style={{paddingTop:68,minHeight:"80vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"68px 24px 40px"}}><div style={{textAlign:"center",maxWidth:480}}><div style={{width:72,height:72,borderRadius:"50%",background:B.gBg,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h2 style={{...st.h2,fontSize:26}}>Quote Request Received!</h2><p style={{...st.bd,marginTop:14}}>Our team will review your route, cargo and equipment details and respond with the next best step. If you want a manual commercial discussion sooner, please call or email us directly as well.</p><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:28}}><button onClick={resetForm} style={st.bp}>Submit Another</button><button onClick={()=>go("/")} style={st.bs}>Back to Home</button></div></div></div>);
-return(
-<div style={{paddingTop:68}}><Helmet><title>Get an Export Freight Quote from India | Sattva Global Logistics</title><meta name="description" content="Check route fit, unlock indicative pricing on supported lanes, and request an export freight quote from India for Gulf, Red Sea and Africa shipments." /><link rel="canonical" href="https://www.sattvaglobal.in/quote" /></Helmet>
-<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(32px,4vw,48px)"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-<div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Get a Quote</div>
-<h1 style={{...st.h1,fontSize:"clamp(30px,4vw,44px)"}}>Check Your Route & Pricing <span style={{color:B.primary}}>Before You Commit to a Forwarder</span></h1>
-<p style={{...st.bd,fontSize:17,marginTop:20,maxWidth:680}}>Avoid pricing surprises and last-minute issues. Validate your route, cargo fit, and next steps before you commit.</p>
-<div style={{marginTop:16,fontSize:13,color:"#475569",lineHeight:1.6}}>
-  <strong>What happens after you submit:</strong><br/>
-  • Supported routes → indicative pricing unlocked after verification<br/>
-  • Other routes → manual review by Sattva team<br/>
-  • Typical response time: within the same working day
-</div>
-</div></section>
+const up=(k,v)=>setF(p=>({...p,[k]:v}));
+const validate=()=>{const e={};if(!f.pol)e.pol="Required";if(!f.pod)e.pod="Required";if(!f.cargo)e.cargo="Required";if(!f.eq)e.eq="Required";if(!f.name.trim())e.name="Required";if(!f.email.trim())e.email="Required";else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email))e.email="Invalid email";setErrs(e);return!Object.keys(e).length;};
+const handleSubmit=async()=>{if(sending||!validate())return;setSending(true);setSendErr("");const polName=POL.find(p=>p.c===f.pol)?.n||f.pol;const podName=ALL_POD.find(p=>p.c===f.pod)?.n||f.pod;try{await submitQuoteAPI({pol:`${polName} (${f.pol})`,pod:`${podName} (${f.pod})`,equipment:`${EQ_L[f.eq]||f.eq} (${f.eq})`,containers:parseInt(f.vol)||1,cargo:f.cargo,notes:f.msg||"",name:f.name,company:f.company||"",email:f.email,phone:f.phone||"",rateFound:false},"anon");setDone(true);}catch(err){setSendErr("Submission failed. Please email quotes@sattvaglobal.in or call +91 9136 121 123 directly.");}finally{setSending(false);}};
+if(done)return(<div style={{paddingTop:68,minHeight:"80vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"68px 24px 40px"}}><div style={{textAlign:"center",maxWidth:480}}><div style={{width:72,height:72,borderRadius:"50%",background:"#f0fdf4",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h2 style={{...st.h2,fontSize:26}}>Quote Request Received</h2><p style={{...st.bd,marginTop:14,lineHeight:1.7}}>Your request is with the Sattva team. We review your route, cargo and equipment and come back within 4 working hours.</p><p style={{fontSize:13,color:B.g5,marginTop:12}}>Urgent? Call <a href="tel:+919136121123" style={{color:B.primary,fontWeight:600}}>+91 9136 121 123</a></p><div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:28}}><button onClick={()=>setDone(false)} style={st.bp}>Submit Another</button><button onClick={()=>go("/")} style={st.bs}>Back to Home</button></div></div></div>);
+return(<div style={{paddingTop:68}}><Helmet><title>Get an Export Freight Quote from India | Sattva Global Logistics</title><meta name="description" content="Request an export freight quote from India for Gulf, Red Sea and Africa shipments." /><link rel="canonical" href="https://www.sattvaglobal.in/quote"/></Helmet>
+<section style={{background:`linear-gradient(160deg,${B.primary}05,${B.w})`,padding:"clamp(80px,10vw,110px) clamp(16px,4vw,24px) 40px"}}><div style={{maxWidth:1200,margin:"0 auto"}}><div style={{fontSize:12,fontWeight:600,color:B.primary,textTransform:"uppercase",letterSpacing:3,marginBottom:14}}>Get a Quote</div><h1 style={{...st.h1,fontSize:"clamp(28px,4vw,42px)"}}>Request Export Freight Quote — <span style={{color:B.primary}}>We Respond Within 4 Hours</span></h1><p style={{...st.bd,fontSize:16,marginTop:16,maxWidth:640}}>Tell us your route, cargo and equipment. We will come back with pricing, route fit, or a direct conversation with the team.</p></div></section>
 <div style={st.sec}><div style={{display:"grid",gridTemplateColumns:m?"1fr":"5fr 3fr",gap:m?24:40,alignItems:"start"}}>
-<div style={{...st.cd,padding:m?20:36}}>
-{quotesLoading&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#eff6ff",border:"1px solid #bfdbfe",fontSize:12,color:"#1e40af",display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:12,height:12,border:"2px solid #bfdbfe",borderTopColor:"#3b82f6",borderRadius:"50%",animation:"spin .6s linear infinite",flexShrink:0}}/>Checking route availability…</div>}
-{!quotesLoading&&quotesErr&&<div style={{marginBottom:20,padding:"10px 14px",borderRadius:8,background:"#fffbeb",border:"1px solid #f59e0b",fontSize:12,color:"#92400e"}}>⚠ Live rate data could not be loaded right now. You can still submit your shipment request and our team will review it manually.</div>}
-<h3 style={{...st.h3,marginBottom:10}}>Route, Cargo & Equipment Details</h3><p style={{fontSize:13,color:B.g5,marginBottom:24,lineHeight:1.7}}>Start with the route, cargo type and equipment. This page is built for mainstream export cargo and repeat FCL lanes from India.</p>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
-<PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={hist.polHistory}/>
-<PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…" history={hist.podHistory}/>
-</div>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"repeat(2,minmax(200px,1fr))",gap:18,marginBottom:18}}>
-<CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} error={errs.cargo} placeholder="Search cargo type or HS code…" history={hist.cargoHistory}/>
-<div>
-  <label style={st.lb}>Equipment *</label>
-  <select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>changeEq(e.target.value)}>
-    <option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}
-  </select>
-  <ErrMsg msg={errs.eq}/>
-  {extraEqs.length>0&&(<div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:8}}>{extraEqs.map(eq=>(<span key={eq} style={{display:"inline-flex",alignItems:"center",gap:4,background:`${B.primary}15`,color:B.primary,padding:"3px 10px",borderRadius:20,fontSize:12,fontWeight:600}}>{EQ_L[eq]||eq}<button onClick={()=>setExtraEqs(p=>p.filter(e=>e!==eq))} style={{background:"none",border:"none",cursor:"pointer",color:B.primary,fontSize:14,lineHeight:1,padding:0,marginLeft:2}}>×</button></span>))}</div>)}
-  {f.eq&&availableEqs.length>0&&(<div style={{marginTop:8}}><label style={st.lb}>Choose another container type</label><select value="" onChange={e=>{if(e.target.value)setExtraEqs(p=>[...p,e.target.value]);}} style={{...st.inp}}><option value="">Select</option>{availableEqs.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select></div>)}
-</div>
-</div>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:18}}>
-<div><label style={st.lb}>Containers</label><input type="number" style={st.inp} value={f.vol} onChange={e=>{const v=Math.max(1,Math.min(99,parseInt(e.target.value)||1));up("vol",String(v));}} min="1" max="99"/></div>
-</div>
-{isOTFR&&(<div style={{marginTop:24,padding:20,borderRadius:12,background:`${B.primary}05`,border:`1.5px solid ${B.primary}22`}}>
-<h4 style={{fontSize:14,fontWeight:700,color:B.primary,marginBottom:16}}>📐 Special Cargo Details — Required for {f.eq}</h4>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr 1fr",gap:14,marginBottom:16}}>
-<div><label style={st.lb}>Length (m) *</label><input type="number" step="0.01" style={{...st.inp,borderColor:errs.dims?B.red:undefined}} value={f.dimL} onChange={e=>{up("dimL",e.target.value);setErrs(p=>({...p,dims:""}));}} placeholder="e.g. 4.5"/></div>
-<div><label style={st.lb}>Width (m) *</label><input type="number" step="0.01" style={{...st.inp,borderColor:errs.dims?B.red:undefined}} value={f.dimW} onChange={e=>{up("dimW",e.target.value);setErrs(p=>({...p,dims:""}));}} placeholder="e.g. 2.1"/></div>
-<div><label style={st.lb}>Height (m) *</label><input type="number" step="0.01" style={{...st.inp,borderColor:errs.dims?B.red:undefined}} value={f.dimH} onChange={e=>{up("dimH",e.target.value);setErrs(p=>({...p,dims:""}));}} placeholder="e.g. 2.4"/></div>
-</div>
-{errs.dims&&<div style={{fontSize:11,color:B.red,marginBottom:10}}>{errs.dims}</div>}
-<div style={{marginBottom:16}}><label style={st.lb}>Packing Type *</label><select style={{...st.inp,borderColor:errs.packType?B.red:undefined}} value={f.packType} onChange={e=>{up("packType",e.target.value);setErrs(p=>({...p,packType:""}));}}><option value="">Select packing type</option>{PACK_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select><ErrMsg msg={errs.packType}/></div>
-<div><div style={{fontSize:12,color:B.g5,marginTop:8,padding:"10px 14px",borderRadius:8,background:B.g1,border:`1px solid ${B.g3}44`}}>📎 Need to attach cargo images, brochures, or datasheets? Email them directly to <a href="mailto:quotes@sattvaglobal.in" style={{color:B.primary,fontWeight:600}}>quotes@sattvaglobal.in</a> with your shipment route in the subject.</div></div>
-</div>)}
-{f.pol&&f.pod&&f.eq&&!gateUser&&(
-<div style={{padding:24,borderRadius:14,background:`linear-gradient(135deg,${B.primary}08,${B.accent}10)`,border:`1.5px solid ${B.primary}22`,marginTop:20}}>
-  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-    <h4 style={{fontSize:15,fontWeight:700,color:B.dark,margin:0}}>Access Rates for Verified Exporters</h4>
-  </div>
-  <p style={{fontSize:12,color:B.g5,marginBottom:18,lineHeight:1.6}}>We restrict pricing access to genuine export enquiries. This keeps rate discussions relevant and allows us to respond more seriously. You'll receive a one-time access code to continue.</p>
-  <RateGate onUnlock={setVerifiedUser} isMobile={m} st={st}/>
-  <p style={{fontSize:11,color:B.g5,marginTop:12}}>🔒 Your details stay private and help us protect live rate access for genuine business enquiries.</p>
-</div>
-)}
-{gateUser&&<div style={{marginTop:16,padding:"10px 16px",borderRadius:8,background:B.gBg,border:`1px solid ${B.green}33`,display:"flex",alignItems:"center",gap:8,fontSize:13}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={B.green} strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span style={{color:B.green,fontWeight:600}}>Verified:</span><span style={{color:B.g7}}>{gateUser.name} {gateUser.company?`· ${gateUser.company}`:""}</span><button onClick={()=>{clearSession();setGateUser(null);}} style={{marginLeft:"auto",background:"none",border:"none",cursor:"pointer",fontSize:11,color:B.g5}}>Change</button></div>}
-{gateUser&&f.pol&&f.pod&&allEqs.length>0&&allEqs.map(eq=>(<QuoteDisplay key={eq} quote={quote||{options:[]}} selectedEq={eq} gateUser={gateUser} pol={f.pol} pod={f.pod} cargo={f.cargo} vol={f.vol}/>))}
-<div style={{marginTop:20}}><label style={st.lb}>Shipment Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Buyer timelines, product details, packing notes, Incoterms, or anything the team should know..."/></div>
-{sendErr&&<div style={{marginTop:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
-<div style={{display:"flex",gap:12,marginTop:24,flexWrap:"wrap"}}>
-<button onClick={handleSubmit} disabled={sending} style={{...st.bp,flex:1,justifyContent:"center",opacity:sending?.7:1}}>{sending?"Sending…":"Check Route & Get Pricing"} {!sending&&<I.Ar/>}</button>
-<button
-  onClick={()=>{
-    if(!validate())return;
-    const freshSession=loadSession();
-    if(!freshSession||!freshSession.user){clearSession();setGateUser(null);setSessionToken(null);setSendErr("Your session has expired. Please verify your identity again.");return;}
-    window.open(waLink(waMsg),"_blank","noopener,noreferrer");
-  }}
-  style={{display:"inline-flex",alignItems:"center",gap:8,padding:"13px 20px",background:"#25D366",color:"#fff",borderRadius:8,fontWeight:600,fontSize:14,border:"none",fontFamily:F,cursor:"pointer",whiteSpace:"nowrap"}}>
-<svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.564l4.682-1.463A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.156 0-4.154-.695-5.785-1.873l-.413-.281-2.776.868.854-2.703-.302-.436A9.713 9.713 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>Discuss This Shipment</button>
-</div>
-<div style={{marginTop:8,fontSize:11,color:"#64748b"}}>Takes 30 seconds • No spam • Only relevant follow-up</div>
-</div>
-<div>
-<div style={{...st.cd,marginBottom:20,borderTop:`3px solid ${B.primary}`}}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Prefer to Speak to the Team Directly?</h4><p style={{...st.bd,fontSize:13,marginBottom:14}}>If you would rather discuss the shipment directly, contact the team instead of waiting on the full form flow.</p><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13,color:B.g7}}><I.Ph/> +91 9136 121 123</div><div style={{display:"flex",alignItems:"center",gap:8,fontSize:13,color:B.g7}}><I.Ma/> quotes@sattvaglobal.in</div>
-<p style={{fontSize:12,color:B.g5,marginTop:10,lineHeight:1.5}}>Best for shipments already in discussion with buyers</p></div>
-<div style={st.cd}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Why Exporters Use This Page</h4>{["Check if the route is commercially workable before committing","Avoid back-and-forth with incomplete shipment details","Get clearer pricing context, not just a number","Start with a forwarder who stays involved after quoting"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}><div style={{flexShrink:0,marginTop:2}}><I.Ck/></div><span style={{fontSize:13,color:B.g7}}>{t}</span></div>)}</div>
-</div>
+<div style={{...st.cd,padding:m?20:36}}><h3 style={{...st.h3,marginBottom:6}}>Shipment Details</h3><p style={{fontSize:13,color:B.g5,marginBottom:24}}>Route, cargo, and equipment.</p>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:16,marginBottom:16}}><PortCombo label="POL *" value={f.pol} onChange={v=>{up("pol",v);setErrs(p=>({...p,pol:""}));}} options={POL} error={errs.pol} placeholder="Search port of loading…" history={[]}/><PortCombo label="POD *" value={f.pod} onChange={v=>{up("pod",v);setErrs(p=>({...p,pod:""}));}} options={ALL_POD} error={errs.pod} placeholder="Search port of discharge…" history={[]}/></div>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:16,marginBottom:16}}><CargoCombo label="Cargo Type *" value={f.cargo} onChange={v=>{up("cargo",v);setErrs(p=>({...p,cargo:""}));}} error={errs.cargo} placeholder="Search cargo or HS code…" history={[]}/><div><label style={st.lb}>Equipment *</label><select style={{...st.inp,borderColor:errs.eq?B.red:undefined}} value={f.eq} onChange={e=>{up("eq",e.target.value);setErrs(p=>({...p,eq:""}));}}><option value="">Select</option>{EQ.map(e=><option key={e} value={e}>{EQ_L[e]} ({e})</option>)}</select><ErrMsg msg={errs.eq}/></div></div>
+<div style={{marginBottom:24}}><label style={st.lb}>Number of Containers</label><input type="number" style={{...st.inp,maxWidth:120}} value={f.vol} min="1" max="99" onChange={e=>up("vol",String(Math.max(1,Math.min(99,parseInt(e.target.value)||1))))}/></div>
+<hr style={{border:"none",borderTop:`1px solid ${B.g2}`,margin:"4px 0 24px"}}/>
+<h3 style={{...st.h3,marginBottom:6}}>Your Details</h3><p style={{fontSize:13,color:B.g5,marginBottom:20}}>So we can send the quote confirmation and follow up.</p>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:16,marginBottom:16}}><div><label style={st.lb}>Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} type="text" value={f.name} onChange={e=>{up("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/><ErrMsg msg={errs.name}/></div><div><label style={st.lb}>Company</label><input style={st.inp} type="text" value={f.company} onChange={e=>up("company",e.target.value)} placeholder="Company name"/></div><div><label style={st.lb}>Email *</label><input style={{...st.inp,borderColor:errs.email?B.red:undefined}} type="email" value={f.email} onChange={e=>{up("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@company.com"/><ErrMsg msg={errs.email}/></div><div><label style={st.lb}>Phone</label><input style={st.inp} type="tel" value={f.phone} onChange={e=>up("phone",e.target.value)} placeholder="+91 …"/></div></div>
+<div style={{marginBottom:24}}><label style={st.lb}>Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Buyer timelines, Incoterms, product details, packing notes…"/></div>
+{sendErr&&<div style={{marginBottom:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
+<button onClick={handleSubmit} disabled={sending} style={{...st.bp,width:"100%",justifyContent:"center",fontSize:15,padding:"14px 24px",opacity:sending?.7:1}}>{sending?"Submitting…":"Submit Quote Request →"}</button>
+<p style={{fontSize:11,color:B.g5,marginTop:10,textAlign:"center"}}>Typically respond within 4 hours. Urgent: +91 9136 121 123.</p></div>
+<div><div style={{...st.cd,marginBottom:20,borderTop:`3px solid ${B.primary}`}}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Prefer to speak directly?</h4><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13}}><I.Ph/><a href="tel:+919136121123" style={{color:B.g7,textDecoration:"none"}}>+91 9136 121 123</a></div><div style={{display:"flex",alignItems:"center",gap:8,fontSize:13}}><I.Ma/><a href="mailto:quotes@sattvaglobal.in" style={{color:B.g7,textDecoration:"none"}}>quotes@sattvaglobal.in</a></div></div>
+<div style={st.cd}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>What happens after you submit</h4>{["We review your route, cargo and equipment","We confirm lane support and pricing","You get an actual reply — not a template","We set up a call if needed"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}><div style={{flexShrink:0,marginTop:3}}><I.Ck/></div><span style={{fontSize:13,color:B.g7,lineHeight:1.6}}>{t}</span></div>)}</div></div>
 </div></div></div>);}
 
 /* ─── Admin Quote Builder ─── */
@@ -757,7 +642,7 @@ return(
 <Route path="/industries" element={<IndustriesPage st={st} I={I}/>}/>
 <Route path="/knowledge" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><KnowledgePage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
 <Route path="/testimonials" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
-<Route path="/quote" element={<QuotePage quotes={quotes} quotesErr={quotesErr} setQuotes={setQuotes} setQuotesErr={setQuotesErr}/>}/>
+<Route path="/quote" element={<QuotePage/>}/>
 <Route path="/trade-advisory" element={<TradeAdvisoryPage st={st} I={I}/>}/>
 <Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p></div>}/>
 </Routes><Footer I={I}/><AdvisoryBanner/></>}/>
