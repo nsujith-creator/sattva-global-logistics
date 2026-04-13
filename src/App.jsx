@@ -17,6 +17,7 @@ class ChunkErrorBoundary extends React.Component{
 }
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import { PhoneField } from "./components/forms/PhoneField";
 import { ErrMsg } from "./components/forms/ErrMsg";
 import RateGate from "./components/forms/RateGate";
 import { PhoneField } from "./components/forms/PhoneField";
@@ -314,6 +315,7 @@ function QuotePage(){const go=useNavigate();
 const m=useIsMobile();
 const BLANK={pol:"",pod:"",cargo:"",eq:"",vol:"1",name:"",company:"",email:"",phone:"",msg:""};
 const[f,setF]=useState(BLANK);
+const[phoneErr,setPhoneErr]=useState("");
 const[errs,setErrs]=useState({});
 const[sending,setSending]=useState(false);
 const[done,setDone]=useState(false);
@@ -331,7 +333,7 @@ return(<div style={{paddingTop:68}}><Helmet><title>Get an Export Freight Quote f
 <div style={{marginBottom:24}}><label style={st.lb}>Number of Containers</label><input type="number" style={{...st.inp,maxWidth:120}} value={f.vol} min="1" max="99" onChange={e=>up("vol",String(Math.max(1,Math.min(99,parseInt(e.target.value)||1))))}/></div>
 <hr style={{border:"none",borderTop:`1px solid ${B.g2}`,margin:"4px 0 24px"}}/>
 <h3 style={{...st.h3,marginBottom:6}}>Your Details</h3><p style={{fontSize:13,color:B.g5,marginBottom:20}}>So we can send the quote confirmation and follow up.</p>
-<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:16,marginBottom:16}}><div><label style={st.lb}>Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} type="text" value={f.name} onChange={e=>{up("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/><ErrMsg msg={errs.name}/></div><div><label style={st.lb}>Company</label><input style={st.inp} type="text" value={f.company} onChange={e=>up("company",e.target.value)} placeholder="Company name"/></div><div><label style={st.lb}>Email *</label><input style={{...st.inp,borderColor:errs.email?B.red:undefined}} type="email" value={f.email} onChange={e=>{up("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@company.com"/><ErrMsg msg={errs.email}/></div><div><label style={st.lb}>Phone</label><input style={st.inp} type="tel" value={f.phone} onChange={e=>up("phone",e.target.value)} placeholder="+91 …"/></div></div>
+<div style={{display:"grid",gridTemplateColumns:m?"1fr":"1fr 1fr",gap:16,marginBottom:16}}><div><label style={st.lb}>Name *</label><input style={{...st.inp,borderColor:errs.name?B.red:undefined}} type="text" value={f.name} onChange={e=>{up("name",e.target.value);setErrs(p=>({...p,name:""}));}} placeholder="Full name"/><ErrMsg msg={errs.name}/></div><div><label style={st.lb}>Company</label><input style={st.inp} type="text" value={f.company} onChange={e=>up("company",e.target.value)} placeholder="Company name"/></div><div><label style={st.lb}>Email *</label><input style={{...st.inp,borderColor:errs.email?B.red:undefined}} type="email" value={f.email} onChange={e=>{up("email",e.target.value);setErrs(p=>({...p,email:""}));}} placeholder="you@company.com"/><ErrMsg msg={errs.email}/></div><div><label style={st.lb}>Phone</label><PhoneField value={f.phone} onChange={v=>up("phone",v)} error={errs.phone||phoneErr} onError={setPhoneErr} st={st}/></div></div>
 <div style={{marginBottom:24}}><label style={st.lb}>Notes</label><textarea style={{...st.inp,minHeight:80,resize:"vertical"}} value={f.msg} onChange={e=>up("msg",e.target.value)} placeholder="Buyer timelines, Incoterms, product details, packing notes…"/></div>
 {sendErr&&<div style={{marginBottom:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
 <button onClick={handleSubmit} disabled={sending} style={{...st.bp,width:"100%",justifyContent:"center",fontSize:15,padding:"14px 24px",opacity:sending?.7:1}}>{sending?"Submitting…":"Submit Quote Request →"}</button>

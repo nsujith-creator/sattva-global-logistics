@@ -7,8 +7,98 @@ import { CARRIERS } from "../data/carriers";
 import { B, FF } from "../theme/tokens";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { POL, ALL_POD } from "../data/ports";
+import { PhoneField } from "../components/forms/PhoneField";
+import { submitQuoteAPI } from "../api/rates";
+import { EQ, EQ_L } from "../data/equipment";
 
-/* ── Mini PortCombo for homepage ── */
+/* ── Full homepage quote card — submits directly, no redirect ── */
+function HomeQuoteCard({ st, I }) {
+  const BLANK = { pol: "", pod: "", cargo: "", eq: "", name: "", phone: "", email: "" };
+  const [f, setF] = useState(BLANK);
+  const [phoneErr, setPhoneErr] = useState("");
+  const [errs, setErrs] = useState({});
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [sendErr, setSendErr] = useState("");
+  const up = (k, v) => setF(p => ({ ...p, [k]: v }));
+
+  const validate = () => {
+    const e = {};
+    if (!f.pol) e.pol = "Required";
+    if (!f.pod) e.pod = "Required";
+    if (!f.eq) e.eq = "Required";
+    if (!f.name.trim()) e.name = "Required";
+    if (!f.email.trim()) e.email = "Required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = "Invalid email";
+    if (phoneErr) e.phone = phoneErr;
+    setErrs(e);
+    return !Object.keys(e).length;
+  };
+
+  const handleSubmit = async () => {
+    if (sending || !validate()) return;
+    setSending(true); setSendErr("");
+    const polName = POL.find(p => p.c === f.pol)?.n || f.pol;
+    const podName = ALL_POD.find(p => p.c === f.pod)?.n || f.pod;
+    try {
+      await submitQuoteAPI({ pol: `${polName} (${f.pol})`, pod: `${podName} (${f.pod})`, equipment: `${EQ_L[f.eq] || f.eq} (${f.eq})`, containers: 1, cargo: f.cargo || "", notes: "", name: f.name, company: "", email: f.email, phone: f.phone || "", rateFound: false }, "anon");
+      setDone(true);
+    } catch {
+      setSendErr("Submission failed — please call +91 9136 121 123 or email quotes@sattvaglobal.in");
+    } finally { setSending(false); }
+  };
+
+  if (done) return (
+    <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid #16a34a`, textAlign: "center" }}>
+      <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+      </div>
+      <h3 style={{ ...st.h3, fontSize: 18, marginBottom: 8 }}>Quote Request Received</h3>
+      <p style={{ fontSize: 13, color: B.g5, lineHeight: 1.7 }}>We'll come back to you within 4 working hours. Urgent? Call <a href="tel:+919136121123" style={{ color: B.primary, fontWeight: 600 }}>+91 9136 121 123</a></p>
+      <button onClick={() => setDone(false)} style={{ ...st.bs, marginTop: 16, fontSize: 12 }}>Submit another</button>
+    </div>
+  );
+
+  return (
+    <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid ${B.primary}` }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Get a Quote</div>
+      <h3 style={{ ...st.h3, fontSize: 19, marginBottom: 20 }}>We confirm within 4 working hours</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <HomePortCombo label="From (POL) *" value={f.pol} onChange={v => { up("pol", v); setErrs(p => ({ ...p, pol: "" })); }} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" error={errs.pol} />
+        <HomePortCombo label="To (POD) *" value={f.pod} onChange={v => { up("pod", v); setErrs(p => ({ ...p, pod: "" })); }} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" error={errs.pod} />
+        <HomeCargoCombo value={f.cargo} onChange={v => up("cargo", v)} />
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Equipment *</div>
+          <select style={{ ...st.inp, borderColor: errs.eq ? B.red : undefined }} value={f.eq} onChange={e => { up("eq", e.target.value); setErrs(p => ({ ...p, eq: "" })); }}>
+            <option value="">Select container type</option>
+            {EQ.map(e => <option key={e} value={e}>{EQ_L[e]} ({e})</option>)}
+          </select>
+          {errs.eq && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.eq}</div>}
+        </div>
+        <div style={{ borderTop: `1px solid ${B.g2}`, paddingTop: 12, marginTop: 4 }} />
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Name *</div>
+          <input style={{ ...st.inp, borderColor: errs.name ? B.red : undefined }} type="text" value={f.name} onChange={e => { up("name", e.target.value); setErrs(p => ({ ...p, name: "" })); }} placeholder="Your full name" />
+          {errs.name && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.name}</div>}
+        </div>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Email *</div>
+          <input style={{ ...st.inp, borderColor: errs.email ? B.red : undefined }} type="email" value={f.email} onChange={e => { up("email", e.target.value); setErrs(p => ({ ...p, email: "" })); }} placeholder="you@company.com" />
+          {errs.email && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.email}</div>}
+        </div>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Phone</div>
+          <PhoneField value={f.phone} onChange={v => up("phone", v)} error={errs.phone || phoneErr} onError={setPhoneErr} st={st} />
+        </div>
+      </div>
+      {sendErr && <div style={{ fontSize: 12, color: B.red, marginTop: 12, padding: "10px 12px", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca" }}>{sendErr}</div>}
+      <button onClick={handleSubmit} disabled={sending} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16, opacity: sending ? 0.7 : 1 }}>
+        {sending ? "Submitting…" : <>Submit Quote Request <I.Ar /></>}
+      </button>
+      <div style={{ fontSize: 11, color: B.g5, textAlign: "center", marginTop: 8 }}>Typical response: within 4 working hours</div>
+    </div>
+  );
+}
 function HomePortCombo({ label, value, onChange, options, placeholder }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
@@ -232,32 +322,7 @@ export function HomePage({ st, I }) {
           </div>
           {!m && (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid ${B.primary}` }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>
-                  Tell Us Your Route
-                </div>
-                <h3 style={{ ...st.h3, fontSize: 20, marginBottom: 20 }}>Get a freight quote — we confirm within 4 working hours</h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  <HomePortCombo label="From (POL)" value={hqPol} onChange={setHqPol} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" />
-                  <HomePortCombo label="To (POD)" value={hqPod} onChange={setHqPod} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" />
-                  <HomeCargoCombo value={hqCargo} onChange={setHqCargo} />
-                </div>
-                <button
-                  onClick={() => {
-                    const params = new URLSearchParams();
-                    if (hqPol) params.set("pol", hqPol);
-                    if (hqPod) params.set("pod", hqPod);
-                    if (hqCargo) params.set("cargo", hqCargo);
-                    go(`/quote?${params.toString()}`);
-                  }}
-                  style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16 }}
-                >
-                  Request Freight Quote <I.Ar />
-                </button>
-                <div style={{ fontSize: 12, color: B.g5, textAlign: "center", marginTop: 10 }}>
-                  Typical response: within 4 working hours
-                </div>
-              </div>
+              <HomeQuoteCard st={st} I={I} />
             </div>
           )}
         </div>
