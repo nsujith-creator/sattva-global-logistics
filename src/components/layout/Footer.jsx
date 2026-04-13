@@ -99,9 +99,16 @@ export function Footer({ I }) {
       </div>
 
       {/* ── FOOTER BOTTOM ── */}
-      <div style={{ maxWidth: 1200, margin: "40px auto 0", paddingTop: 20, borderTop: "1px solid #334155", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, fontSize: 12, color: B.g5 }}>
+      <div style={{ maxWidth: 1200, margin: "20px auto 0", paddingTop: 16, borderTop: "1px solid #334155", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, fontSize: 12, color: B.g5 }}>
         <span>© {new Date().getFullYear()} Sattva Global Logistics Pvt Ltd · Navi Mumbai, India</span>
         <span>FCL Export Freight · India to Gulf, Red Sea & Africa</span>
+      </div>
+      <div style={{ maxWidth: 1200, margin: "10px auto 0", paddingBottom: 8, display: "flex", flexWrap: "wrap", gap: 16, fontSize: 11, color: "#475569" }}>
+        <span>GSTIN: 27AEFPN9399L1ZI</span>
+        <span>·</span>
+        <span>Member – DFA Network</span>
+        <span>·</span>
+        <span>Mumbai · Navi Mumbai</span>
       </div>
     </footer>
   );

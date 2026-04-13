@@ -110,11 +110,11 @@ export function HomePage({ st, I }) {
               FCL Export Freight from India · 20+ Years in Ocean Freight
             </div>
             <h1 style={st.h1}>
-              Freight Forwarding for Indian Exporters Shipping to the{" "}
-              <span style={{ color: B.primary }}>Gulf, Red Sea & Africa</span>
+              Export Freight from India to West Asia & Africa —{" "}
+              <span style={{ color: B.primary }}>Done Properly</span>
             </h1>
             <p style={{ ...st.bd, fontSize: m ? 15 : 17, marginTop: 20, maxWidth: 640 }}>
-              Garments, fabrics, FMCG, agro, engineering goods — moved from JNPT, Mundra, Chennai and Cochin with route clarity, carrier relationships and consistent pre-departure execution.
+              20+ years handling real shipments out of JNPT, Mundra, Chennai and Cochin. We focus on repeat FCL export cargo — garments, FMCG, agro, engineering goods — where execution actually matters.
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
               <button onClick={() => go("/quote")} style={{ ...st.bp, fontSize: m ? 13 : 14 }}>
@@ -142,11 +142,15 @@ export function HomePage({ st, I }) {
                 </span>
               ))}
             </div>
+            <div style={{ marginTop: 16, fontSize: 12, color: B.g5, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontWeight: 700, color: B.g7 }}>Part of DFA Network</span>
+              <span>— Global freight forwarder network across 190+ countries</span>
+            </div>
             <div style={{ display: "flex", gap: m ? 24 : 36, marginTop: 36, flexWrap: "wrap" }}>
               {[
                 ["20+", "Years in ocean freight & export logistics"],
-                ["FCL", "General cargo focus — garments to machinery"],
-                ["3 regions", "Gulf · Red Sea · Africa trade lanes"],
+                ["JNPT", "Focused India-origin export handling"],
+                ["West Asia", "Gulf · Red Sea · Africa trade lanes"],
               ].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: B.primary, fontFamily: FF }}>{n}</div>
@@ -159,23 +163,25 @@ export function HomePage({ st, I }) {
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid ${B.primary}` }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>
-                  Best Fit — Is Sattva Right for You?
+                  Tell Us Your Route
                 </div>
-                <h3 style={{ ...st.h3, fontSize: 22, marginBottom: 14 }}>Built for exporters who need execution, not just a rate</h3>
+                <h3 style={{ ...st.h3, fontSize: 20, marginBottom: 20 }}>Get a freight quote — we confirm within 4 working hours</h3>
                 {[
-                  "Strong fit for repeat FCL export cargo — not one-off speculative enquiries.",
-                  "Useful when buyer timelines, documentation accuracy and commercial clarity are non-negotiable.",
-                  "Designed around garments, fabrics, cotton yarn, FMCG, paper, towels, agro, engineering goods and machinery.",
-                  "The right choice when you want a forwarder who stays engaged after the booking confirmation.",
-                ].map((t) => (
-                  <div key={t} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 14 }}>
-                    <div style={{ flexShrink: 0, marginTop: 2 }}><I.Ck /></div>
-                    <span style={{ fontSize: 13, color: B.g7, lineHeight: 1.7 }}>{t}</span>
+                  ["From", "JNPT / Mundra / Chennai / Cochin"],
+                  ["To", "Jebel Ali / Dammam / Mombasa / Durban…"],
+                  ["Cargo", "Garments, FMCG, Agro, Engineering…"],
+                ].map(([label, placeholder]) => (
+                  <div key={label} style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{label}</div>
+                    <div style={{ padding: "9px 12px", border: `1.5px solid ${B.g3}`, borderRadius: 8, fontSize: 13, color: B.g5, background: B.g1 }}>{placeholder}</div>
                   </div>
                 ))}
-                <button onClick={() => go("/quote")} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 8 }}>
-                  Check Your Route <I.Ar />
+                <button onClick={() => go("/quote")} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 12 }}>
+                  Request Freight Quote <I.Ar />
                 </button>
+                <div style={{ fontSize: 12, color: B.g5, textAlign: "center", marginTop: 10 }}>
+                  Typical response: within 4 working hours
+                </div>
               </div>
             </div>
           )}
@@ -214,7 +220,7 @@ export function HomePage({ st, I }) {
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Why It Matters</div>
             <h2 style={st.h2}>Most forwarder problems happen after the quote is sent</h2>
-            <p style={st.sub}>Exporters do not usually switch forwarders because of price. They switch because of poor follow-up, unclear communication and problems that could have been caught before the cargo left the factory.</p>
+            <p style={st.sub}>Exporters do not usually switch forwarders because of price. They switch because follow-up stops, communication gets vague, and problems surface after the cargo has left the factory — too late to fix cleanly.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(3,1fr)", gap: 20 }}>
             {[

@@ -92,6 +92,9 @@ export function Nav({ st }) {
                 </li>
               ))}
             </ul>
+            <a href="tel:+919136121123" style={{ fontSize: 13, fontWeight: 700, color: B.dark, textDecoration: "none", marginLeft: 4, whiteSpace: "nowrap" }}>
+              +91 9136 121 123
+            </a>
             <button onClick={() => go("/quote")} style={{ ...st.bp, padding: "9px 20px", fontSize: 12, marginLeft: 12 }}>
               Get Quote
             </button>
@@ -122,6 +125,9 @@ export function Nav({ st }) {
           <button onClick={() => { go("/quote"); setOpen(false); }} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16 }}>
             Get Quote
           </button>
+          <a href="tel:+919136121123" style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 14, fontWeight: 700, color: B.primary, textDecoration: "none" }}>
+            +91 9136 121 123
+          </a>
         </div>
       )}
     </nav>
