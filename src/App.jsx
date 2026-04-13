@@ -19,8 +19,6 @@ import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-do
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { PhoneField } from "./components/forms/PhoneField";
 import { ErrMsg } from "./components/forms/ErrMsg";
-import RateGate from "./components/forms/RateGate";
-import { PhoneField } from "./components/forms/PhoneField";
 import { CTA } from "./components/layout/CTA";
 import { Footer } from "./components/layout/Footer";
 import { Nav } from "./components/layout/Nav";
