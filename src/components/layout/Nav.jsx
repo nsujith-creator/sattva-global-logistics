@@ -92,10 +92,27 @@ export function Nav({ st }) {
                 </li>
               ))}
             </ul>
-            <a href="tel:+919136121123" style={{ fontSize: 13, fontWeight: 700, color: B.dark, textDecoration: "none", marginLeft: 4, whiteSpace: "nowrap" }}>
+            <a
+              href="tel:+919136121123"
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: B.g7,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                marginLeft: 8,
+                padding: "7px 14px",
+                borderRadius: 8,
+                border: `1.5px solid ${B.g3}`,
+                letterSpacing: 0.2,
+                transition: "all .2s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = B.primary; e.currentTarget.style.color = B.primary; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = B.g3; e.currentTarget.style.color = B.g7; }}
+            >
               +91 9136 121 123
             </a>
-            <button onClick={() => go("/quote")} style={{ ...st.bp, padding: "9px 20px", fontSize: 12, marginLeft: 12 }}>
+            <button onClick={() => go("/quote")} style={{ ...st.bp, padding: "9px 20px", fontSize: 12, marginLeft: 8 }}>
               Get Quote
             </button>
           </div>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
@@ -5,10 +6,80 @@ import { CarrierBadge } from "../components/shared/CarrierBadge";
 import { CARRIERS } from "../data/carriers";
 import { B, FF } from "../theme/tokens";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { POL, ALL_POD } from "../data/ports";
+
+/* ── Mini PortCombo for homepage ── */
+function HomePortCombo({ label, value, onChange, options, placeholder }) {
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const ref = useState(() => ({ current: null }))[0];
+  const selected = options.find(o => o.c === value);
+  const display = focused ? q : (selected ? `${selected.n} (${selected.c})` : "");
+  const items = q.length > 0
+    ? options.filter(o => o.n.toLowerCase().includes(q.toLowerCase()) || o.c.toLowerCase().includes(q.toLowerCase())).slice(0, 10)
+    : [];
+  const pick = (code) => { onChange(code); setQ(""); setOpen(false); setFocused(false); };
+  const inp = { width: "100%", padding: "10px 12px", border: "1.5px solid #d1d5db", borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#fff" };
+  return (
+    <div ref={el => ref.current = el} style={{ position: "relative" }} onBlur={e => { if (!ref.current?.contains(e.relatedTarget)) { setOpen(false); setFocused(false); setQ(""); } }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{label}</div>
+      <input type="text" value={display} style={inp} placeholder={placeholder} autoComplete="off"
+        onChange={e => { setQ(e.target.value); if (!e.target.value) onChange(""); setOpen(true); }}
+        onFocus={() => { setFocused(true); setQ(selected ? `${selected.n} (${selected.c})` : ""); setOpen(true); }} />
+      {open && items.length > 0 && (
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999, background: "#fff", border: "1.5px solid #d1d5db", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,.12)", maxHeight: 200, overflowY: "auto", marginTop: 2 }}>
+          {items.map(o => (
+            <div key={o.c} onMouseDown={() => pick(o.c)} style={{ padding: "8px 12px", cursor: "pointer", fontSize: 13, display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f3f4f6" }}
+              onMouseEnter={e => e.currentTarget.style.background = "#e8f0ff"}
+              onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
+              <span>{o.n}</span><span style={{ color: "#6b7280", fontSize: 11, fontWeight: 600 }}>{o.c}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Mini CargoCombo for homepage ── */
+function HomeCargoCombo({ value, onChange }) {
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const [results, setResults] = useState([]);
+  const inp = { width: "100%", padding: "10px 12px", border: "1.5px solid #d1d5db", borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#fff" };
+  const handleChange = (e) => {
+    const v = e.target.value; setQ(v); onChange(v); setOpen(true);
+    if (v.length >= 2) { import("../utils/cargoSearch").then(m => setResults(m.searchCargo(v, 8))).catch(() => setResults([])); }
+    else setResults([]);
+  };
+  return (
+    <div style={{ position: "relative" }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Cargo Type</div>
+      <input type="text" value={value} style={inp} placeholder="Garments, FMCG, Agro, Engineering…" autoComplete="off"
+        onChange={handleChange} onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)} />
+      {open && results.length > 0 && (
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999, background: "#fff", border: "1.5px solid #d1d5db", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,.12)", maxHeight: 200, overflowY: "auto", marginTop: 2 }}>
+          {results.map((o, i) => (
+            <div key={i} onMouseDown={() => { onChange(o.name); setQ(o.name); setOpen(false); }}
+              style={{ padding: "8px 12px", cursor: "pointer", fontSize: 13, display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f3f4f6" }}
+              onMouseEnter={e => e.currentTarget.style.background = "#e8f0ff"}
+              onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
+              <span>{o.name}</span>{o.code && <span style={{ color: "#6b7280", fontSize: 10, fontWeight: 600 }}>HS {o.code}</span>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function HomePage({ st, I }) {
   const go = useNavigate();
   const m = useIsMobile();
+  const [hqPol, setHqPol] = useState("");
+  const [hqPod, setHqPod] = useState("");
+  const [hqCargo, setHqCargo] = useState("");
 
   const cargoFocus = [
     "Readymade garments",
@@ -166,17 +237,21 @@ export function HomePage({ st, I }) {
                   Tell Us Your Route
                 </div>
                 <h3 style={{ ...st.h3, fontSize: 20, marginBottom: 20 }}>Get a freight quote — we confirm within 4 working hours</h3>
-                {[
-                  ["From", "JNPT / Mundra / Chennai / Cochin"],
-                  ["To", "Jebel Ali / Dammam / Mombasa / Durban…"],
-                  ["Cargo", "Garments, FMCG, Agro, Engineering…"],
-                ].map(([label, placeholder]) => (
-                  <div key={label} style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{label}</div>
-                    <div style={{ padding: "9px 12px", border: `1.5px solid ${B.g3}`, borderRadius: 8, fontSize: 13, color: B.g5, background: B.g1 }}>{placeholder}</div>
-                  </div>
-                ))}
-                <button onClick={() => go("/quote")} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <HomePortCombo label="From (POL)" value={hqPol} onChange={setHqPol} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" />
+                  <HomePortCombo label="To (POD)" value={hqPod} onChange={setHqPod} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" />
+                  <HomeCargoCombo value={hqCargo} onChange={setHqCargo} />
+                </div>
+                <button
+                  onClick={() => {
+                    const params = new URLSearchParams();
+                    if (hqPol) params.set("pol", hqPol);
+                    if (hqPod) params.set("pod", hqPod);
+                    if (hqCargo) params.set("cargo", hqCargo);
+                    go(`/quote?${params.toString()}`);
+                  }}
+                  style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16 }}
+                >
                   Request Freight Quote <I.Ar />
                 </button>
                 <div style={{ fontSize: 12, color: B.g5, textAlign: "center", marginTop: 10 }}>
