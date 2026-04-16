@@ -28,6 +28,7 @@ export function Nav({ st }) {
     ["services", "Services"],
     ["trade-lanes", "Trade Lanes"],
     ["trade-advisory", "⚠ Middle East Crisis"],
+    ["linkedin", "🔗 Work With Sujith"],
     ["industries", "Industries"],
     ["knowledge", "Knowledge"],
     ["testimonials", "Proof"],

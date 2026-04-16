@@ -59,6 +59,7 @@ export function Footer({ I }) {
             ["knowledge", "Knowledge Centre"],
             ["testimonials", "Exporter Stories"],
             ["about", "About Sattva"],
+            ["linkedin", "Work With Sujith"],
             ["quote", "Get a Quote"],
           ].map(([id, label]) => (
             <div key={id} onClick={() => go(id === "home" ? "/" : `/${id}`)} style={{ fontSize: 13, color: B.g5, marginBottom: 9, cursor: "pointer", transition: "color .2s" }}
