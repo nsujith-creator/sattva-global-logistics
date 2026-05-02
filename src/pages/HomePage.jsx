@@ -225,10 +225,10 @@ export function HomePage({ st, I }) {
   return (
     <>
       <Helmet>
-        <title>FCL Freight Forwarding for Indian Exporters | Gulf, Red Sea & Africa | Sattva Global Logistics</title>
+        <title>FCL Freight Forwarding India to Gulf, Red Sea & Africa | Sattva Global</title>
         <meta
           name="description"
-          content="FCL freight forwarding from JNPT, Mundra, Chennai and Cochin to Gulf, Red Sea and Africa. Garments, fabrics, FMCG, agro, engineering goods. Stronger coordination, cleaner execution."
+          content="FCL freight rates from JNPT &amp; Mundra to Jebel Ali, Dammam, Jeddah and Mombasa. India export specialists with 20+ years experience. Request a quote today."
         />
         <link rel="canonical" href="https://www.sattvaglobal.in/" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
