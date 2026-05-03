@@ -24,7 +24,7 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
   const up = (k, v) => setF(p => ({ ...p, [k]: v }));
 
   const dk = mode === "dark";
-  const cardBg  = dk ? { background:"rgba(5,10,48,0.08)", backdropFilter:"blur(2px)", WebkitBackdropFilter:"blur(2px)", border:"1px solid rgba(255,255,255,0.13)", borderTop:"3px solid #F5A623", borderRadius:14 } : { borderTop:`4px solid ${B.primary}` };
+  const cardBg  = dk ? { background:"rgba(5,10,48,0.08)", border:"1px solid rgba(255,255,255,0.13)", borderTop:"3px solid #F5A623", borderRadius:14 } : { borderTop:`4px solid ${B.primary}` };
   const lblC    = dk ? "rgba(255,255,255,0.85)" : B.g5;
   const headC   = dk ? "#ffffff" : undefined;
   const eyeC    = dk ? "#F5A623" : B.primary;
@@ -316,7 +316,7 @@ export function HomePage({ st, I }) {
               {[
                 ["20+", "Years in ocean freight & export logistics"],
                 ["JNPT", "Focused India-origin export handling"],
-                ["West Asia", "Gulf · Red Sea · Africa trade lanes"],
+                ["West Asia", "Gulf · Red Sea trade lanes"],
               ].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF }}>{n}</div>
