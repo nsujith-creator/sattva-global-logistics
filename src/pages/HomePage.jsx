@@ -13,7 +13,7 @@ import { EQ, EQ_L } from "../data/equipment";
 import { HeroMap } from "../components/shared/HeroMap";
 
 /* ── Full homepage quote card — submits directly, no redirect ── */
-function HomeQuoteCard({ st, I }) {
+function HomeQuoteCard({ st, I, mode = "light" }) {
   const BLANK = { pol: "", pod: "", cargo: "", eq: "", name: "", phone: "", email: "" };
   const [f, setF] = useState(BLANK);
   const [phoneErr, setPhoneErr] = useState("");
@@ -22,6 +22,14 @@ function HomeQuoteCard({ st, I }) {
   const [done, setDone] = useState(false);
   const [sendErr, setSendErr] = useState("");
   const up = (k, v) => setF(p => ({ ...p, [k]: v }));
+
+  const dk = mode === "dark";
+  const cardBg  = dk ? { background:"rgba(5,10,48,0.72)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", border:"1px solid rgba(255,255,255,0.1)", borderTop:"3px solid #F5A623" } : { borderTop:`4px solid ${B.primary}` };
+  const lblC    = dk ? "rgba(255,255,255,0.55)" : B.g5;
+  const headC   = dk ? "#ffffff" : undefined;
+  const eyeC    = dk ? "#F5A623" : B.primary;
+  const metaC   = dk ? "rgba(255,255,255,0.38)" : B.g5;
+  const divC    = dk ? "rgba(255,255,255,0.1)" : B.g2;
 
   const validate = () => {
     const e = {};
@@ -50,7 +58,7 @@ function HomeQuoteCard({ st, I }) {
   };
 
   if (done) return (
-    <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid #16a34a`, textAlign: "center" }}>
+    <div style={{ ...st.cd, ...cardBg, maxWidth: 470, width: "100%", padding: 32, textAlign: "center" }}>
       <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
       </div>
@@ -61,34 +69,34 @@ function HomeQuoteCard({ st, I }) {
   );
 
   return (
-    <div style={{ ...st.cd, maxWidth: 470, width: "100%", padding: 32, borderTop: `4px solid ${B.primary}` }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Get a Quote</div>
-      <h3 style={{ ...st.h3, fontSize: 19, marginBottom: 20 }}>We confirm within 4 working hours</h3>
+    <div style={{ ...st.cd, ...cardBg, maxWidth: 470, width: "100%", padding: 32 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: eyeC, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Get a Quote</div>
+      <h3 style={{ ...st.h3, fontSize: 19, marginBottom: 20, color: headC }}>We confirm within 4 working hours</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         <HomePortCombo label="From (POL) *" value={f.pol} onChange={v => { up("pol", v); setErrs(p => ({ ...p, pol: "" })); }} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" error={errs.pol} />
         <HomePortCombo label="To (POD) *" value={f.pod} onChange={v => { up("pod", v); setErrs(p => ({ ...p, pod: "" })); }} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" error={errs.pod} />
         <HomeCargoCombo value={f.cargo} onChange={v => up("cargo", v)} />
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Equipment *</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Equipment *</div>
           <select style={{ ...st.inp, borderColor: errs.eq ? B.red : undefined }} value={f.eq} onChange={e => { up("eq", e.target.value); setErrs(p => ({ ...p, eq: "" })); }}>
             <option value="">Select container type</option>
             {EQ.map(e => <option key={e} value={e}>{EQ_L[e]} ({e})</option>)}
           </select>
           {errs.eq && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.eq}</div>}
         </div>
-        <div style={{ borderTop: `1px solid ${B.g2}`, paddingTop: 12, marginTop: 4 }} />
+        <div style={{ borderTop: `1px solid ${divC}`, paddingTop: 12, marginTop: 4 }} />
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Name *</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Name *</div>
           <input style={{ ...st.inp, borderColor: errs.name ? B.red : undefined }} type="text" value={f.name} onChange={e => { up("name", e.target.value); setErrs(p => ({ ...p, name: "" })); }} placeholder="Your full name" />
           {errs.name && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.name}</div>}
         </div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Email *</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Email *</div>
           <input style={{ ...st.inp, borderColor: errs.email ? B.red : undefined }} type="email" value={f.email} onChange={e => { up("email", e.target.value); setErrs(p => ({ ...p, email: "" })); }} placeholder="you@company.com" />
           {errs.email && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.email}</div>}
         </div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Phone</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Phone</div>
           <PhoneField value={f.phone} onChange={v => up("phone", v)} error={errs.phone || phoneErr} onError={setPhoneErr} st={st} />
         </div>
       </div>
@@ -96,7 +104,7 @@ function HomeQuoteCard({ st, I }) {
       <button onClick={handleSubmit} disabled={sending} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16, opacity: sending ? 0.7 : 1 }}>
         {sending ? "Submitting…" : <>Submit Quote Request <I.Ar /></>}
       </button>
-      <div style={{ fontSize: 11, color: B.g5, textAlign: "center", marginTop: 8 }}>Typical response: within 4 working hours</div>
+      <div style={{ fontSize: 11, color: metaC, textAlign: "center", marginTop: 8 }}>Typical response: within 4 working hours</div>
     </div>
   );
 }
@@ -317,7 +325,7 @@ export function HomePage({ st, I }) {
           </div>
           {!m && (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <HomeQuoteCard st={st} I={I} />
+              <HomeQuoteCard st={st} I={I} mode="dark" />
             </div>
           )}
         </div>
