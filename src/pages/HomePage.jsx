@@ -243,23 +243,16 @@ export function HomePage({ st, I }) {
           alignItems: "center",
           position: "relative",
           overflow: "hidden",
-          background: `linear-gradient(160deg,${B.lightBlue}55 0%,${B.w} 50%,${B.g1} 100%)`,
+          background: "#050A30",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: -200,
-            right: -200,
-            width: 600,
-            height: 600,
-            borderRadius: "50%",
-            background: `radial-gradient(circle,${B.primary}08,transparent 70%)`,
-          }}
-        />
+        <HeroMap bg />
+        <div style={{ position:"absolute", inset:0, zIndex:1,
+          background:"linear-gradient(to right,rgba(5,10,48,0.78) 0%,rgba(5,10,48,0.4) 55%,rgba(5,10,48,0.08) 100%)" }} />
         <div
           style={{
             ...st.sec,
+            position: "relative", zIndex: 2,
             display: "grid",
             gridTemplateColumns: m ? "1fr" : "1.08fr .92fr",
             gap: m ? 32 : 56,
@@ -268,14 +261,14 @@ export function HomePage({ st, I }) {
           }}
         >
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 2.4, marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 2.4, marginBottom: 16 }}>
               FCL Export Freight from India · 20+ Years in Ocean Freight
             </div>
-            <h1 style={st.h1}>
+            <h1 style={{ ...st.h1, color: "#ffffff" }}>
               Export Freight from India to West Asia & Africa —{" "}
-              <span style={{ color: B.primary }}>Done Properly</span>
+              <span style={{ color: "#F5A623" }}>Done Properly</span>
             </h1>
-            <p style={{ ...st.bd, fontSize: m ? 15 : 17, marginTop: 20, maxWidth: 640 }}>
+            <p style={{ ...st.bd, fontSize: m ? 15 : 17, marginTop: 20, maxWidth: 640, color: "rgba(255,255,255,0.82)" }}>
               20+ years handling real shipments out of JNPT, Mundra, Chennai and Cochin. We focus on repeat FCL export cargo — garments, FMCG, agro, engineering goods — where execution actually matters.
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
@@ -293,8 +286,9 @@ export function HomePage({ st, I }) {
                   style={{
                     fontSize: 11,
                     fontWeight: 700,
-                    color: B.primary,
-                    background: `${B.primary}10`,
+                    color: "#fff",
+                    background: "rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(255,255,255,0.2)",
                     borderRadius: 999,
                     padding: "6px 10px",
                     letterSpacing: 0.3,
@@ -304,8 +298,8 @@ export function HomePage({ st, I }) {
                 </span>
               ))}
             </div>
-            <div style={{ marginTop: 16, fontSize: 12, color: B.g5, display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ fontWeight: 700, color: B.g7 }}>Part of DFA Network</span>
+            <div style={{ marginTop: 16, fontSize: 12, color: "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.75)" }}>Part of DFA Network</span>
               <span>— Global freight forwarder network across 190+ countries</span>
             </div>
             <div style={{ display: "flex", gap: m ? 24 : 36, marginTop: 36, flexWrap: "wrap" }}>
@@ -315,8 +309,8 @@ export function HomePage({ st, I }) {
                 ["West Asia", "Gulf · Red Sea · Africa trade lanes"],
               ].map(([n, l]) => (
                 <div key={l}>
-                  <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: B.primary, fontFamily: FF }}>{n}</div>
-                  <div style={{ fontSize: 12, color: B.g5, maxWidth: 150, lineHeight: 1.6 }}>{l}</div>
+                  <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF }}>{n}</div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", maxWidth: 150, lineHeight: 1.6 }}>{l}</div>
                 </div>
               ))}
             </div>
@@ -328,9 +322,6 @@ export function HomePage({ st, I }) {
           )}
         </div>
       </section>
-
-      {/* ── TRADE NETWORK MAP ──────────────────────────────────────────── */}
-      <HeroMap />
 
       {/* ── CARGO FOCUS ─────────────────────────────────────────────────── */}
       <section>

@@ -48,7 +48,7 @@ const ROUTES = [
   {c:"#5CB6F9",delay:3360,pts:[[0.11,49.49],[-0.38,39.47],[-9.14,38.72]]},
 ];
 
-export function HeroMap() {
+export function HeroMap({ bg = false }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
 
@@ -223,11 +223,14 @@ export function HeroMap() {
     };
   }, []);
 
-  return (
+  return bg ? (
+    <div ref={containerRef} style={{ position:"absolute", inset:0, zIndex:0, overflow:"hidden" }}>
+      <svg ref={svgRef} style={{ display:"block", width:"100%", height:"100%" }} />
+    </div>
+  ) : (
     <section style={{ background:"#050A30", position:"relative", overflow:"hidden" }}>
       <div style={{ position:"absolute", top:14, left:0, right:0, textAlign:"center", zIndex:10, pointerEvents:"none" }}>
-        <span style={{ fontSize:9, fontWeight:700, letterSpacing:"3.5px", textTransform:"uppercase",
-          color:"#F5A623", fontFamily:"Lato, sans-serif" }}>
+        <span style={{ fontSize:9, fontWeight:700, letterSpacing:"3.5px", textTransform:"uppercase", color:"#F5A623", fontFamily:"Lato, sans-serif" }}>
           Our Trade Network
         </span>
       </div>
