@@ -24,8 +24,8 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
   const up = (k, v) => setF(p => ({ ...p, [k]: v }));
 
   const dk = mode === "dark";
-  const cardBg  = dk ? { background:"rgba(5,10,48,0.72)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", border:"1px solid rgba(255,255,255,0.1)", borderTop:"3px solid #F5A623" } : { borderTop:`4px solid ${B.primary}` };
-  const lblC    = dk ? "rgba(255,255,255,0.55)" : B.g5;
+  const cardBg  = dk ? { background:"rgba(5,10,48,0.08)", backdropFilter:"blur(2px)", WebkitBackdropFilter:"blur(2px)", border:"1px solid rgba(255,255,255,0.13)", borderTop:"3px solid #F5A623", borderRadius:14 } : { borderTop:`4px solid ${B.primary}` };
+  const lblC    = dk ? "rgba(255,255,255,0.85)" : B.g5;
   const headC   = dk ? "#ffffff" : undefined;
   const eyeC    = dk ? "#F5A623" : B.primary;
   const metaC   = dk ? "rgba(255,255,255,0.38)" : B.g5;
@@ -290,7 +290,7 @@ export function HomePage({ st, I }) {
               </button>
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
-              {["JNPT", "Mundra", "Chennai", "Cochin", "FCL", "General Cargo", "Gulf · Red Sea · Africa"].map((chip) => (
+              {["JNPT", "Mundra", "Chennai", "Cochin", "FCL", "General Cargo", "Gulf · Red Sea", "East & South Africa"].map((chip) => (
                 <span
                   key={chip}
                   style={{
