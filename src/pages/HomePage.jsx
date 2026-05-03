@@ -10,6 +10,7 @@ import { POL, ALL_POD } from "../data/ports";
 import { PhoneField } from "../components/forms/PhoneField";
 import { submitQuoteAPI } from "../api/rates";
 import { EQ, EQ_L } from "../data/equipment";
+import { HeroMap } from "../components/shared/HeroMap";
 
 /* ── Full homepage quote card — submits directly, no redirect ── */
 function HomeQuoteCard({ st, I }) {
@@ -327,6 +328,9 @@ export function HomePage({ st, I }) {
           )}
         </div>
       </section>
+
+      {/* ── TRADE NETWORK MAP ──────────────────────────────────────────── */}
+      <HeroMap />
 
       {/* ── CARGO FOCUS ─────────────────────────────────────────────────── */}
       <section>
