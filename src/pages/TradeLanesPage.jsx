@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { CTA } from "../components/layout/CTA";
 import { B, F } from "../theme/tokens";
+import { PageHero } from "../components/layout/PageHero";
 
 export function TradeLanesPage({ st, I }) {
   const go = useNavigate();
@@ -76,18 +77,16 @@ export function TradeLanesPage({ st, I }) {
       </Helmet>
 
       {/* ── HERO ── */}
-      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(32px,4vw,48px)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Trade Lanes</div>
-          <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)" }}>
-            Routes we have worked for years —{" "}
-            <span style={{ color: B.primary }}>India to Gulf, Red Sea & Africa</span>
-          </h1>
-          <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 760 }}>
-            Route familiarity is not a claim — it shows up in how problems are anticipated, how carriers are matched and how the shipment is managed when something changes. This is where 20+ years on India-origin export lanes makes a real difference.
-          </p>
-        </div>
-      </section>
+      <PageHero>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Trade Lanes</div>
+        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", color: "#fff" }}>
+          Routes we have worked for years —{" "}
+          <span style={{ color: "#5CB6F9" }}>India to Gulf, Red Sea & Africa</span>
+        </h1>
+        <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 760, color: "rgba(255,255,255,0.82)" }}>
+          Route familiarity is not a claim — it shows up in how problems are anticipated, how carriers are matched and how the shipment is managed when something changes. This is where 20+ years on India-origin export lanes makes a real difference.
+        </p>
+      </PageHero>
 
       <div style={st.sec}>
         {/* ── ADVISORY CALLOUT ── */}

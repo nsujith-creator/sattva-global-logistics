@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
 import { B } from "../theme/tokens";
+import { PageHero } from "../components/layout/PageHero";
 
 export function ServicesPage({ st, I }) {
   const services = [
@@ -93,17 +94,15 @@ export function ServicesPage({ st, I }) {
       </Helmet>
 
       {/* ── HERO ── */}
-      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(32px,4vw,48px)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Export Logistics Services</div>
-          <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)" }}>
-            Freight services built around <span style={{ color: B.primary }}>how Indian exports actually move</span>
-          </h1>
-          <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 720 }}>
-            FCL bookings, documentation coordination, route planning and factory-to-port execution — from major Indian ports to Gulf, Red Sea and Africa lanes.
-          </p>
-        </div>
-      </section>
+      <PageHero>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Export Logistics Services</div>
+        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", color: "#fff" }}>
+          Freight services built around <span style={{ color: "#5CB6F9" }}>how Indian exports actually move</span>
+        </h1>
+        <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 720, color: "rgba(255,255,255,0.82)" }}>
+          FCL bookings, documentation coordination, route planning and factory-to-port execution — from major Indian ports to Gulf, Red Sea and Africa lanes.
+        </p>
+      </PageHero>
 
       <div style={st.sec}>
         {/* ── INTRO ── */}

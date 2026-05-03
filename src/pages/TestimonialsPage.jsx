@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
 import { B, FF } from "../theme/tokens";
+import { PageHero } from "../components/layout/PageHero";
 
 export function TestimonialsPage({ st, I }) {
   const quotes = [
@@ -44,7 +45,7 @@ export function TestimonialsPage({ st, I }) {
 
   const cases = [
     {
-      tag: "Readymade Garments · Mumbai",
+      tag: "Readymade Garments ï¿½ Mumbai",
       headline: "Cleaner buyer-facing execution for repeat garment exports into the Gulf",
       challenge: "A garment exporter was not struggling to get quotes. The real issue was inconsistent follow-up, avoidable BL corrections and buyer-side stress whenever dispatch windows tightened.",
       solution: "Sattva introduced a more disciplined pre-shipment coordination flow, cleaner document handling and clearer communication around cargo readiness and shipment movement.",
@@ -53,7 +54,7 @@ export function TestimonialsPage({ st, I }) {
       attr: "Export Manager, Garments Exporter",
     },
     {
-      tag: "Food Products & FMCG · Gujarat",
+      tag: "Food Products & FMCG ï¿½ Gujarat",
       headline: "A steadier export rhythm for food and FMCG shipments heading into East Africa",
       challenge: "The exporter needed a forwarder that could help keep communication, shipment planning and documentation aligned across repeat cargo movements instead of forcing the team into last-minute firefighting.",
       solution: "Sattva supported the lane with stronger pre-departure coordination, cleaner cargo handover and a more reliable commercial-to-operational flow.",
@@ -62,7 +63,7 @@ export function TestimonialsPage({ st, I }) {
       attr: "Director, Food Products Exporter",
     },
     {
-      tag: "Engineering Goods · Maharashtra",
+      tag: "Engineering Goods ï¿½ Maharashtra",
       headline: "More useful follow-through for engineering cargo moving on Gulf routes",
       challenge: "The exporter had no shortage of freight options, but needed better shipment ownership after the quote stage because commercial discussions kept getting disconnected from the actual movement.",
       solution: "Sattva helped tighten route communication, execution follow-through and the general handoff between commercial expectations and shipment action.",
@@ -83,14 +84,14 @@ export function TestimonialsPage({ st, I }) {
         <link rel="canonical" href="https://www.sattvaglobal.in/testimonials" />
       </Helmet>
 
-      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(56px,8vw,88px) 20px 48px", textAlign: "center" }}>
-        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", maxWidth: 720, margin: "0 auto" }}>
-          Proof from exporters who value <span style={{ color: B.primary }}>follow-through</span>
+      <PageHero>
+        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", color: "#fff" }}>
+          Proof from exporters who value <span style={{ color: "#5CB6F9" }}>follow-through</span>
         </h1>
-        <p style={{ ...st.bd, fontSize: 17, maxWidth: 640, margin: "18px auto 0" }}>
+        <p style={{ ...st.bd, fontSize: 17, maxWidth: 640, marginTop: 18, color: "rgba(255,255,255,0.82)" }}>
           Practical trust signals for exporters shipping garments, fabrics, yarn, FMCG cargo, paper products, towels, engineering goods and machinery.
         </p>
-      </section>
+      </PageHero>
 
       <div style={st.sec}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 20 }}>

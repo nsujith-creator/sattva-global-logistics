@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { B, F, FF } from "../theme/tokens";
 import { CTA } from "../components/layout/CTA";
+import { PageHero } from "../components/layout/PageHero";
 
 export function IndiaCoordinationPage({ st, I }) {
   const problems = [
@@ -57,48 +58,25 @@ export function IndiaCoordinationPage({ st, I }) {
       </Helmet>
 
       {/* ── HERO ── */}
-      <section
-        style={{
-          background: `linear-gradient(160deg,${B.primary}06,${B.w})`,
-          padding: "clamp(80px,10vw,110px) clamp(16px,4vw,24px) clamp(36px,5vw,60px)",
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>
-            For Overseas Buyers
-          </div>
-          <h1 style={{ ...st.h1, fontSize: "clamp(28px,4vw,44px)", marginBottom: 20 }}>
-            One Reliable Contact on the India Side.{" "}
-            <span style={{ color: B.primary }}>From Supplier to Shipment.</span>
-          </h1>
-          <p style={{ ...st.bd, fontSize: 16, maxWidth: 720, marginBottom: 32, lineHeight: 1.8 }}>
-            If you're sourcing from India — or already working with Indian suppliers — the hardest part
-            is rarely the product itself. It's the follow-through: communication gaps, documentation
-            errors, a forwarder who goes quiet, and no one on the ground you can actually hold accountable.
-            That's the gap Sattva fills.
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a
-              href="mailto:quotes@sattvaglobal.in"
-              style={{
-                ...st.bp,
-                textDecoration: "none",
-              }}
-            >
-              Contact the Team
-            </a>
-            <a
-              href="/quote"
-              style={{
-                ...st.bs,
-                textDecoration: "none",
-              }}
-            >
-              Get a Freight Quote
-            </a>
-          </div>
+      <PageHero>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>
+          For Overseas Buyers
         </div>
-      </section>
+        <h1 style={{ ...st.h1, fontSize: "clamp(28px,4vw,44px)", marginBottom: 20, color: "#fff" }}>
+          One Reliable Contact on the India Side.{" "}
+          <span style={{ color: "#5CB6F9" }}>From Supplier to Shipment.</span>
+        </h1>
+        <p style={{ ...st.bd, fontSize: 16, maxWidth: 720, marginBottom: 32, lineHeight: 1.8, color: "rgba(255,255,255,0.82)" }}>
+          If you're sourcing from India — or already working with Indian suppliers — the hardest part
+          is rarely the product itself. It's the follow-through: communication gaps, documentation
+          errors, a forwarder who goes quiet, and no one on the ground you can actually hold accountable.
+          That's the gap Sattva fills.
+        </p>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <a href="mailto:quotes@sattvaglobal.in" style={{ ...st.bp, textDecoration: "none" }}>Contact the Team</a>
+          <a href="/quote" style={{ ...st.bs, textDecoration: "none", color: "#fff", borderColor: "rgba(255,255,255,0.3)" }}>Get a Freight Quote</a>
+        </div>
+      </PageHero>
 
       <div style={st.sec}>
 

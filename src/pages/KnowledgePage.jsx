@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
+import { PageHero } from "../components/layout/PageHero";
 import { B, F } from "../theme/tokens";
 
 export function KnowledgePage({ st, I }) {
@@ -75,17 +76,15 @@ export function KnowledgePage({ st, I }) {
         <link rel="canonical" href="https://www.sattvaglobal.in/knowledge" />
       </Helmet>
 
-      <section style={{ background: `linear-gradient(160deg,${B.primary}05,${B.w})`, padding: "clamp(56px,8vw,88px) 20px 48px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Knowledge Center</div>
-          <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)" }}>
-            Export <span style={{ color: B.primary }}>Knowledge</span> Hub
-          </h1>
-          <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 720 }}>
-            Practical guidance for Indian exporters moving garments, fabrics, yarn, food products, FMCG cargo, paper, towels, agro cargo, engineering goods and machinery.
-          </p>
-        </div>
-      </section>
+      <PageHero>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 3, marginBottom: 14 }}>Knowledge Center</div>
+        <h1 style={{ ...st.h1, fontSize: "clamp(30px,4vw,44px)", color: "#fff" }}>
+          Export <span style={{ color: "#5CB6F9" }}>Knowledge</span> Hub
+        </h1>
+        <p style={{ ...st.bd, fontSize: 17, marginTop: 20, maxWidth: 720, color: "rgba(255,255,255,0.82)" }}>
+          Practical guidance for Indian exporters moving garments, fabrics, yarn, food products, FMCG cargo, paper, towels, agro cargo, engineering goods and machinery.
+        </p>
+      </PageHero>
 
       <div style={st.sec}>
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 32 }}>
