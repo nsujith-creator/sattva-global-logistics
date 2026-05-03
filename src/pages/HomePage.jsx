@@ -317,6 +317,7 @@ export function HomePage({ st, I }) {
                 ["20+", "Years in ocean freight & export logistics"],
                 ["JNPT", "Focused India-origin export handling"],
                 ["West Asia", "Gulf · Red Sea trade lanes"],
+                ["Africa", "East · South · West Africa trade lanes"],
               ].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF }}>{n}</div>
