@@ -343,6 +343,10 @@ export function HomePage({ st, I }) {
             </div>
           )}
         </div>
+        {/* bottom fade — bridges dark hero into white sections */}
+        <div style={{ position:"absolute", bottom:0, left:0, right:0, height:120, zIndex:3,
+          background:"linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.88) 100%)",
+          pointerEvents:"none" }} />
       </section>
 
       {/* ── CARGO FOCUS ─────────────────────────────────────────────────── */}
