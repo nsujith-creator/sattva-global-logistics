@@ -1,4 +1,9 @@
 {
+  "redirects": [
+    { "source": "/services-store", "destination": "/services", "permanent": true },
+    { "source": "/services-store/(.*)", "destination": "/services", "permanent": true },
+    { "source": "/about", "destination": "/", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/googleb46c26284a31cefe.html", "destination": "/googleb46c26284a31cefe.html" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
