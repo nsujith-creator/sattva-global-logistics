@@ -85,11 +85,11 @@ export function HeroMap({ bg = false }) {
 
       svg.append("rect").attr("width",W).attr("height",H).attr("fill","url(#hm-og)");
       svg.append("path").datum(d3.geoGraticule()()).attr("d",gp)
-        .attr("fill","none").attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",.5)
+        .attr("fill","none").attr("stroke","rgba(255,255,255,0.09)").attr("stroke-width",.6)
         .attr("clip-path","url(#hm-clip)");
       svg.append("g").attr("clip-path","url(#hm-clip)").selectAll("path")
         .data(topojson.feature(world,world.objects.countries).features)
-        .join("path").attr("d",gp).attr("fill","#0d1e4e").attr("stroke","#1b3272").attr("stroke-width",.3);
+        .join("path").attr("d",gp).attr("fill","#1a2f6b").attr("stroke","#2d4fa8").attr("stroke-width",.5);
 
       const rG = svg.append("g").attr("clip-path","url(#hm-clip)");
       const cG = svg.append("g").attr("clip-path","url(#hm-clip)");
@@ -133,9 +133,9 @@ export function HeroMap({ bg = false }) {
       ROUTES.forEach(rd => {
         const feat = {type:"LineString", coordinates:rd.pts};
         const glow = rG.append("path").datum(feat).attr("d",gp)
-          .attr("fill","none").attr("stroke",rd.c).attr("stroke-width",5).attr("opacity",0).attr("stroke-linecap","round");
+          .attr("fill","none").attr("stroke",rd.c).attr("stroke-width",8).attr("opacity",0).attr("stroke-linecap","round");
         const line = rG.append("path").datum(feat).attr("d",gp)
-          .attr("fill","none").attr("stroke",rd.c).attr("stroke-width",1.5).attr("opacity",.9).attr("stroke-linecap","round");
+          .attr("fill","none").attr("stroke",rd.c).attr("stroke-width",2.5).attr("opacity",1).attr("stroke-linecap","round");
         const len = line.node().getTotalLength();
         line.attr("stroke-dasharray",`${len} ${len}`).attr("stroke-dashoffset",len);
         glow.attr("stroke-dasharray",`${len} ${len}`).attr("stroke-dashoffset",len);
@@ -147,7 +147,7 @@ export function HeroMap({ bg = false }) {
             addParticles(this, rd.c, rd.ship?2:3, 22000+Math.random()*10000);
           });
         glow.transition().delay(rd.delay).duration(950).ease(d3.easeLinear)
-          .attr("stroke-dashoffset",0).attr("opacity",.1)
+          .attr("stroke-dashoffset",0).attr("opacity",.28)
           .on("end",function(){ d3.select(this).attr("stroke-dasharray","5 4").attr("stroke-dashoffset","0"); });
       });
 
@@ -159,7 +159,7 @@ export function HeroMap({ bg = false }) {
         const rw = co.label.length*7.5+16, rh = 20;
         const g = cG.append("g").attr("transform",`translate(${x},${y})`).attr("opacity",0);
         g.append("rect").attr("x",-rw/2).attr("y",-rh/2).attr("width",rw).attr("height",rh).attr("rx",3)
-          .attr("fill",co.c).attr("fill-opacity",.12).attr("stroke",co.c).attr("stroke-width",.8).attr("stroke-opacity",.5);
+          .attr("fill",co.c).attr("fill-opacity",.22).attr("stroke",co.c).attr("stroke-width",1).attr("stroke-opacity",.8);
         g.append("text").attr("text-anchor","middle").attr("dy","0.35em")
           .style("font-family","'Oswald',sans-serif").style("font-size","9px")
           .style("font-weight","600").style("fill",co.c).style("letter-spacing","1.5px").text(co.label);

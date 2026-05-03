@@ -256,7 +256,7 @@ export function HomePage({ st, I }) {
       >
         <HeroMap bg />
         <div style={{ position:"absolute", inset:0, zIndex:1,
-          background:"linear-gradient(to right,rgba(5,10,48,0.78) 0%,rgba(5,10,48,0.4) 55%,rgba(5,10,48,0.08) 100%)" }} />
+          background:"linear-gradient(to right,rgba(5,10,48,0.55) 0%,rgba(5,10,48,0.22) 50%,rgba(5,10,48,0.05) 100%)" }} />
         <div
           style={{
             ...st.sec,
