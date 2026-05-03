@@ -132,7 +132,7 @@ export function Nav({ st }) {
                 padding: "13px 0",
                 fontSize: 15,
                 fontWeight: page === id ? 700 : 500,
-                color: page === id ? B.primary : B.dark,
+                color: id === "trade-advisory" ? B.red : page === id ? B.primary : B.dark,
                 cursor: "pointer",
                 borderBottom: `1px solid ${B.g1}`,
               }}

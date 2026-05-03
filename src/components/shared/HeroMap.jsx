@@ -51,6 +51,7 @@ const ROUTES = [
 export function HeroMap({ bg = false }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   useEffect(() => {
     let destroyed = false;
@@ -151,8 +152,8 @@ export function HeroMap({ bg = false }) {
           .on("end",function(){ d3.select(this).attr("stroke-dasharray","5 4").attr("stroke-dashoffset","0"); });
       });
 
-      /* callout pills */
-      CALLOUTS.forEach(co => {
+      /* callout pills — desktop only */
+      if (!isMobile) CALLOUTS.forEach(co => {
         const pr = proj([co.lon,co.lat]); if (!pr) return;
         const [x,y] = pr;
         if (x<-30||x>W+30||y<-30||y>H+30) return;
@@ -165,7 +166,7 @@ export function HeroMap({ bg = false }) {
           .style("font-weight","600").style("fill",co.c).style("letter-spacing","1.5px").text(co.label);
         g.transition().delay(co.delay).duration(500).attr("opacity",1)
           .on("end",function(){ d3.select(this).transition().delay(5000).duration(800).attr("opacity",.4); });
-      });
+      }); // end isMobile gate
 
       /* destination dots */
       DEST_PORTS.forEach(p => {

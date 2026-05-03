@@ -256,7 +256,9 @@ export function HomePage({ st, I }) {
       >
         <HeroMap bg />
         <div style={{ position:"absolute", inset:0, zIndex:1,
-          background:"linear-gradient(to right,rgba(5,10,48,0.55) 0%,rgba(5,10,48,0.22) 50%,rgba(5,10,48,0.05) 100%)" }} />
+          background: m
+            ? "rgba(5,10,48,0.52)"
+            : "linear-gradient(to right,rgba(5,10,48,0.55) 0%,rgba(5,10,48,0.22) 50%,rgba(5,10,48,0.05) 100%)" }} />
         <div
           style={{
             ...st.sec,
@@ -323,7 +325,18 @@ export function HomePage({ st, I }) {
               ))}
             </div>
           </div>
-          {!m && (
+          {m ? (
+            <div style={{ background:"rgba(5,10,48,0.7)", backdropFilter:"blur(12px)", border:"1px solid rgba(255,255,255,0.12)", borderTop:"3px solid #F5A623", borderRadius:12, padding:"20px 18px", marginTop:8 }}>
+              <div style={{ fontSize:10, fontWeight:700, color:"#F5A623", letterSpacing:2, textTransform:"uppercase", marginBottom:6 }}>Get a Quote</div>
+              <div style={{ fontSize:15, fontWeight:700, color:"#fff", marginBottom:14 }}>We confirm within 4 working hours</div>
+              <button onClick={() => go("/quote")} style={{ ...st.bp, width:"100%", justifyContent:"center", fontSize:14 }}>
+                Request FCL Quote →
+              </button>
+              <a href="tel:+919136121123" style={{ display:"block", textAlign:"center", marginTop:10, fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.6)", textDecoration:"none" }}>
+                Or call +91 9136 121 123
+              </a>
+            </div>
+          ) : (
             <div style={{ display: "flex", justifyContent: "center" }}>
               <HomeQuoteCard st={st} I={I} mode="dark" />
             </div>
