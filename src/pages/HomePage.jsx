@@ -231,6 +231,44 @@ export function HomePage({ st, I }) {
     ],
   };
 
+  const operatorNotes = [
+    {
+      sector: "Heavy Engineering & Industrial Equipment",
+      route: "JNPT → Jebel Ali",
+      notes: "Industrial equipment — bag filters, rotary dryers, industrial fans — requires cargo dimensioning and CFS loading coordination before booking. The wrong container type causes rollover or port detention. We confirm equipment dimensions upfront, check carrier weight limits, and pre-clear the BL before the container leaves the CFS.",
+      quote: "The difference was having someone who asked the right questions before the cargo reached the port — not after.",
+      attribution: "Export Director, Industrial Equipment Manufacturer",
+    },
+    {
+      sector: "Specialty & Aroma Chemicals",
+      route: "JNPT → Europe",
+      notes: "Specialty chemical exports require DG classification, MSDS verification and carrier hazmat approval before the container is accepted. Most delays on this lane come from documentation gaps at origin — not from the carrier or port. We validate the DG checklist and confirm carrier acceptance before cargo moves.",
+      quote: "We had tried three forwarders before. The issues were always the same — DG rejection at the last minute, panic calls, missed vessel. That stopped when documentation started being checked properly at the front end.",
+      attribution: "Logistics Head, Specialty Chemicals Exporter",
+    },
+    {
+      sector: "Readymade Garments & Denim",
+      route: "JNPT → Jebel Ali / Dammam",
+      notes: "Garment exporters on Gulf lanes work under tight seasonal deadlines. A late vessel means the cargo misses the buyer's import window. Cut-off management, early booking and factory-dispatch alignment matter far more than the freight rate. We manage vessel schedules proactively and flag cut-off risk the moment it surfaces.",
+      quote: "We stopped chasing our forwarder for updates. Now they tell us before we have to ask.",
+      attribution: "Operations Manager, Garment Export House",
+    },
+    {
+      sector: "Printed Fabrics & African Market Textiles",
+      route: "JNPT → Lagos / Tema",
+      notes: "India-origin fabric cargo bound for West Africa moves through ports with variable transit reliability. Routing choice — direct versus transhipment — affects both transit time and delay risk. We advise on carrier selection based on current port conditions and coordinate arrival window expectations with buyers before the vessel is fixed.",
+      quote: "West Africa routing is not straightforward. We needed someone who understood that — not someone who gave us a number and disappeared.",
+      attribution: "Director, Fabric & Textile Export Company",
+    },
+    {
+      sector: "Food Products & FMCG",
+      route: "JNPT → Dammam / Jeddah",
+      notes: "Food cargo into Saudi Arabia requires phytosanitary certificates, halal certification where applicable, accurate HS classification and SABER compliance. A single mismatch between the BL description and the certificate wording can hold cargo at destination. We validate the full document chain at origin before the container departs the CFS.",
+      quote: "Our previous forwarder cost us a 12-day hold at Jeddah because the BL description did not match the phytosanitary certificate. That kind of problem should be caught before the ship sails.",
+      attribution: "Export Manager, Food & FMCG Exporter",
+    },
+  ];
+
   return (
     <>
       <Helmet>
@@ -504,8 +542,34 @@ export function HomePage({ st, I }) {
         </div>
       </section>
 
-      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      {/* ── OPERATIONAL PROOF ───────────────────────────────────────────── */}
       <section style={{ background: B.g1 }}>
+        <div style={st.sec}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>From the Field</div>
+            <h2 style={st.h2}>What these lanes actually look like in practice</h2>
+            <p style={st.sub}>Every export category has its own rhythm — documentation requirements, cut-off pressures, routing constraints. Here is how that plays out across the shipments we handle.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
+            {operatorNotes.map((note) => (
+              <div key={note.sector} style={{ ...st.cd, borderTop: `3px solid ${B.primary}`, padding: "28px 28px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 1.5 }}>{note.sector}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", borderRadius: 6, padding: "3px 10px", whiteSpace: "nowrap" }}>{note.route}</span>
+                </div>
+                <p style={{ ...st.bd, fontSize: 14, marginBottom: 18, lineHeight: 1.75 }}>{note.notes}</p>
+                <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                  <p style={{ fontSize: 13, fontStyle: "italic", color: "#374151", lineHeight: 1.65, marginBottom: 8 }}>"{note.quote}"</p>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: 1 }}>{note.attribution}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section style={{ background: "#ffffff" }}>
         <div style={st.sec}>
           <div style={{ textAlign: "center", marginBottom: 36 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Common Questions</div>
