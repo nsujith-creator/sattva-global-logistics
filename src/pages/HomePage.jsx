@@ -392,32 +392,6 @@ export function HomePage({ st, I }) {
           pointerEvents:"none" }} />
       </section>
 
-      {/* ── CARGO FOCUS ─────────────────────────────────────────────────── */}
-      <section>
-        <div style={st.sec}>
-          <div style={{ textAlign: "center", marginBottom: 38 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Cargo We Handle</div>
-            <h2 style={st.h2}>General export cargo from India — this is our core</h2>
-            <p style={st.sub}>We are not a niche or project cargo forwarder. Our entire operation is built around the mainstream general cargo that Indian exporters ship every week.</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr 1fr" : "repeat(3,1fr)", gap: 16 }}>
-            {cargoFocus.map((cargo) => (
-              <div key={cargo} style={{ ...st.cd, padding: "20px 22px", display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 10, background: `${B.primary}08`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <I.Ck />
-                </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: B.dark }}>{cargo}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ textAlign: "center", marginTop: 24 }}>
-            <button onClick={() => go("/industries")} style={{ ...st.bs }}>
-              See industries we support <I.Ar />
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* ── WHY SATTVA TEASER ────────────────────────────────────────────── */}
       <section style={{ background: B.g1 }}>
         <div style={st.sec}>
@@ -478,6 +452,46 @@ export function HomePage({ st, I }) {
         </div>
       </section>
 
+      {/* ── OPERATIONAL PROOF ───────────────────────────────────────────── */}
+      <section style={{ background: B.g1 }}>
+        <div style={st.sec}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>From the Field</div>
+            <h2 style={st.h2}>What these lanes actually look like in practice</h2>
+            <p style={st.sub}>Every export category has its own rhythm — documentation requirements, cut-off pressures, routing constraints. Here is how that plays out across the shipments we handle.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
+            {operatorNotes.map((note) => (
+              <div key={note.sector} style={{ ...st.cd, borderTop: `3px solid ${B.primary}`, padding: "28px 28px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 1.5 }}>{note.sector}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", borderRadius: 6, padding: "3px 10px", whiteSpace: "nowrap" }}>{note.route}</span>
+                </div>
+                <p style={{ ...st.bd, fontSize: 14, marginBottom: 18, lineHeight: 1.75 }}>{note.notes}</p>
+                <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                  <p style={{ fontSize: 13, fontStyle: "italic", color: "#374151", lineHeight: 1.65, marginBottom: 8 }}>"{note.quote}"</p>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: 1 }}>{note.attribution}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CARRIER NETWORK ──────────────────────────────────────────────── */}
+      <section>
+        <div style={st.sec}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Carrier Relationships</div>
+            <h2 style={st.h2}>Working relationships with the carriers your buyers expect</h2>
+            <p style={st.sub}>Carrier access is the baseline. The real value is using that access inside a more organised export workflow — so your container is not just booked, it actually moves on time.</p>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
+            {Object.entries(CARRIERS).map(([name]) => <CarrierBadge key={name} name={name} size="md" />)}
+          </div>
+        </div>
+      </section>
+
       {/* ── SERVICES OVERVIEW ────────────────────────────────────────────── */}
       <section>
         <div style={st.sec}>
@@ -508,91 +522,9 @@ export function HomePage({ st, I }) {
         </div>
       </section>
 
-      {/* ── HOW WE WORK ──────────────────────────────────────────────────── */}
+      {/* ── CTA ──────────────────────────────────────────────────────────────── */}
       <section style={{ background: B.g1 }}>
         <div style={st.sec}>
-          <div style={{ textAlign: "center", marginBottom: 38 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>How We Work</div>
-            <h2 style={st.h2}>From first enquiry to shipment departure — here is what to expect</h2>
-            <p style={st.sub}>A straightforward process designed to reduce back-and-forth and get your export moving without last-minute confusion.</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(4,1fr)", gap: 18 }}>
-            {[
-              ["01", "Share your route & cargo", "Tell us your port, destination, cargo type, equipment need and any shipment-specific context."],
-              ["02", "We check route fit", "We confirm whether the lane is supported and what the right next step looks like commercially."],
-              ["03", "Get pricing or manual review", "Supported lanes may show indicative pricing. Others go into direct commercial review with the team."],
-              ["04", "Execute the shipment together", "We stay with the movement — booking, documentation, inland coordination and pre-departure milestones."],
-            ].map(([n, t, d]) => (
-              <div key={n} style={{ ...st.cd, borderTop: `3px solid ${B.primary}` }}>
-                <div style={{ fontSize: 26, fontWeight: 800, color: B.primary, fontFamily: FF, marginBottom: 10 }}>{n}</div>
-                <h3 style={{ ...st.h3, marginBottom: 8 }}>{t}</h3>
-                <p style={{ ...st.bd, fontSize: 13 }}>{d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CARRIER NETWORK ──────────────────────────────────────────────── */}
-      <section>
-        <div style={st.sec}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Carrier Relationships</div>
-            <h2 style={st.h2}>Working relationships with the carriers your buyers expect</h2>
-            <p style={st.sub}>Carrier access is the baseline. The real value is using that access inside a more organised export workflow — so your container is not just booked, it actually moves on time.</p>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
-            {Object.entries(CARRIERS).map(([name]) => <CarrierBadge key={name} name={name} size="md" />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ── OPERATIONAL PROOF ───────────────────────────────────────────── */}
-      <section style={{ background: B.g1 }}>
-        <div style={st.sec}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>From the Field</div>
-            <h2 style={st.h2}>What these lanes actually look like in practice</h2>
-            <p style={st.sub}>Every export category has its own rhythm — documentation requirements, cut-off pressures, routing constraints. Here is how that plays out across the shipments we handle.</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
-            {operatorNotes.map((note) => (
-              <div key={note.sector} style={{ ...st.cd, borderTop: `3px solid ${B.primary}`, padding: "28px 28px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 1.5 }}>{note.sector}</span>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", background: "#f3f4f6", borderRadius: 6, padding: "3px 10px", whiteSpace: "nowrap" }}>{note.route}</span>
-                </div>
-                <p style={{ ...st.bd, fontSize: 14, marginBottom: 18, lineHeight: 1.75 }}>{note.notes}</p>
-                <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
-                  <p style={{ fontSize: 13, fontStyle: "italic", color: "#374151", lineHeight: 1.65, marginBottom: 8 }}>"{note.quote}"</p>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: 1 }}>{note.attribution}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section style={{ background: "#ffffff" }}>
-        <div style={st.sec}>
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Common Questions</div>
-            <h2 style={st.h2}>What exporters ask before they enquire</h2>
-          </div>
-          <div style={{ display: "grid", gap: 16 }}>
-            {[
-              ["Do you handle general cargo or only specialised shipments?", "General cargo is exactly our focus — garments, fabrics, yarn, food products, FMCG, kitchenware, paper, towels, agro commodities, engineering goods and machinery. We are not a project cargo or reefer forwarder."],
-              ["Can I submit an enquiry if my route is not in the system?", "Yes. Supported lanes may show indicative pricing after verification. For other lanes, you can submit details and we will come back to you with a manual review."],
-              ["Is this only useful for large exporters?", "No. The site and team are built for any exporter who moves FCL cargo regularly and wants stronger coordination — not just a rate PDF and silence."],
-              ["What makes Sattva different from the larger freight forwarders?", "We are India-side focused and personally involved. You are not routed through a call centre. The team that quotes the shipment is the same team that executes it."],
-            ].map(([q, a]) => (
-              <div key={q} style={{ ...st.cd }}>
-                <h3 style={{ ...st.h3, fontSize: 17, marginBottom: 8 }}>{q}</h3>
-                <p style={{ ...st.bd, fontSize: 14 }}>{a}</p>
-              </div>
-            ))}
-          </div>
           <CTA
             eyebrow="Ready to Move?"
             headline="Tell us your route and cargo — we'll take it from there"
@@ -606,6 +538,7 @@ export function HomePage({ st, I }) {
           />
         </div>
       </section>
+
     </>
   );
 }
