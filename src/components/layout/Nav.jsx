@@ -23,15 +23,10 @@ export function Nav({ st }) {
   }, [m]);
 
   const lk = [
-    ["home", "Home"],
     ["why-sattva", "Why Sattva"],
     ["services", "Services"],
     ["trade-lanes", "Trade Lanes"],
-    ["trade-advisory", "⚠ Middle East Crisis"],
-    ["india-coordination", "Overseas Buyers"],
-    ["industries", "Industries"],
     ["knowledge", "Knowledge"],
-    ["testimonials", "Proof"],
   ];
 
   return (

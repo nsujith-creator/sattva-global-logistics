@@ -145,6 +145,29 @@ export function ServicesPage({ st, I }) {
           </div>
         </div>
 
+        {/* ── HOW WE WORK ── */}
+        <div style={{ marginTop: 56 }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 3, marginBottom: 10 }}>How We Work</div>
+            <h2 style={{ ...st.h2, marginBottom: 8 }}>From first enquiry to shipment departure</h2>
+            <p style={st.sub}>A straightforward process designed to reduce back-and-forth and get your export moving without last-minute confusion.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 18 }}>
+            {[
+              ["01", "Share your route & cargo", "Tell us your port, destination, cargo type, equipment need and any shipment-specific context."],
+              ["02", "We check route fit", "We confirm whether the lane is supported and what the right next step looks like commercially."],
+              ["03", "Get pricing or manual review", "Supported lanes may show indicative pricing. Others go into direct commercial review with the team."],
+              ["04", "Execute the shipment together", "We stay with the movement — booking, documentation, inland coordination and pre-departure milestones."],
+            ].map(([n, t, d]) => (
+              <div key={n} style={{ ...st.cd, borderTop: `3px solid ${B.primary}` }}>
+                <div style={{ fontSize: 26, fontWeight: 800, color: B.primary, fontFamily: "inherit", marginBottom: 10 }}>{n}</div>
+                <h3 style={{ ...st.h3, marginBottom: 8 }}>{t}</h3>
+                <p style={{ ...st.bd, fontSize: 13 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <CTA
           eyebrow="Next Step"
           headline="Ready for a forwarder who stays involved after the quote?"
