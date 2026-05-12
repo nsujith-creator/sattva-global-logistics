@@ -310,25 +310,30 @@ export function HomePage({ st, I }) {
         >
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#F5A623", textTransform: "uppercase", letterSpacing: 2.4, marginBottom: 16 }}>
-              FCL Export Freight from India · 20+ Years in Ocean Freight
+              FCL Freight Specialist · India to Gulf, Red Sea & East Africa
             </div>
             <h1 style={{ ...st.h1, color: "#ffffff" }}>
-              Export Freight from India to West Asia & Africa —{" "}
-              <span style={{ color: "#F5A623" }}>Done Properly</span>
+              Operator-Led FCL Freight from India —{" "}
+              <span style={{ color: "#F5A623" }}>Direct Attention, Not a Platform</span>
             </h1>
             <p style={{ ...st.bd, fontSize: m ? 15 : 17, marginTop: 20, maxWidth: 640, color: "rgba(255,255,255,0.82)" }}>
-              20+ years handling real shipments out of JNPT, Mundra, Chennai and Cochin. We focus on repeat FCL export cargo — garments, FMCG, agro, engineering goods — where execution actually matters.
+              FCL exports from JNPT, Mundra, Chennai and Cochin — handled by an experienced operator, not routed through a call centre. Routing decisions, documentation and shipment follow-up stay with the same person from quote through departure.
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
               <button onClick={() => go("/quote")} style={{ ...st.bp, fontSize: m ? 13 : 14 }}>
-                Get a Freight Quote <I.Ar />
+                Get FCL Freight Quote <I.Ar />
               </button>
-              <button onClick={() => go("/why-sattva")} style={{ ...st.bs, fontSize: m ? 13 : 14 }}>
-                Why Exporters Choose Sattva
-              </button>
+              <a
+                href="https://wa.me/919136121123"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ ...st.bs, fontSize: m ? 13 : 14, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}
+              >
+                WhatsApp Shipment Details
+              </a>
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
-              {["JNPT", "Mundra", "Chennai", "Cochin", "FCL", "General Cargo", "Gulf · Red Sea", "East & South Africa"].map((chip) => (
+              {["JNPT", "Mundra", "Chennai", "Cochin", "20GP · 40GP · 40HC", "Gulf · Red Sea", "East & South Africa", "Maersk · CMA CGM · Hapag"].map((chip) => (
                 <span
                   key={chip}
                   style={{
@@ -352,10 +357,10 @@ export function HomePage({ st, I }) {
             </div>
             <div style={{ display: "flex", gap: m ? 24 : 36, marginTop: 36, flexWrap: "wrap" }}>
               {[
-                ["20+", "Years in ocean freight & export logistics"],
-                ["JNPT", "Focused India-origin export handling"],
-                ["West Asia", "Gulf · Red Sea trade lanes"],
-                ["Africa", "East · South · West Africa trade lanes"],
+                ["20+", "Years on India-Gulf, Red Sea & Africa lanes"],
+                ["1,000+", "FCL shipments — garments, chemicals, food, engineering"],
+                ["Direct", "Operator contact from quote through departure"],
+                ["4 hrs", "Typical response on quote requests"],
               ].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF }}>{n}</div>
