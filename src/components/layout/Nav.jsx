@@ -40,6 +40,7 @@ export function Nav({ st }) {
         background: sc || open ? "rgba(255,255,255,.97)" : "rgba(255,255,255,.9)",
         backdropFilter: "blur(12px)",
         boxShadow: sc ? "0 1px 10px rgba(0,0,0,.07)" : "none",
+        borderBottom: "1px solid rgba(10,30,60,0.06)",
         transition: "all .3s",
       }}
     >
@@ -95,20 +96,20 @@ export function Nav({ st }) {
             <a
               href="tel:+919136121123"
               style={{
-                fontSize: 13,
-                fontWeight: 600,
-                color: B.g7,
+                fontSize: 12,
+                fontWeight: 500,
+                color: "#94a3b8",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
                 marginLeft: 8,
-                padding: "7px 14px",
+                padding: "6px 10px",
                 borderRadius: 8,
-                border: `1.5px solid ${B.g3}`,
+                border: "1px solid rgba(10,30,60,0.1)",
                 letterSpacing: 0.2,
                 transition: "all .2s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = B.primary; e.currentTarget.style.color = B.primary; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = B.g3; e.currentTarget.style.color = B.g7; }}
+              onMouseEnter={e => { e.currentTarget.style.color = B.primary; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#94a3b8"; }}
             >
               +91 9136 121 123
             </a>
