@@ -539,6 +539,24 @@ export function HomePage({ st, I }) {
         </div>
       </section>
 
+      {/* ── REASSURANCE ─────────────────────────────────────────────────────── */}
+      <section style={{ background: "#ffffff" }}>
+        <div style={{ ...st.sec, paddingTop: 8, paddingBottom: 48 }}>
+          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(3,1fr)", gap: 14 }}>
+            {[
+              ["How fast do you respond?", "Within 4 working hours on quote requests. Urgent shipments can be discussed directly by phone or WhatsApp."],
+              ["Do you support first-time exporters?", "Yes. We handle documentation and coordination — so first-time exporters are not left to figure it out alone."],
+              ["Which ports do you handle?", "JNPT (Nhava Sheva), Mundra, Chennai and Cochin — FCL exports to Gulf, Red Sea and Africa destinations."],
+            ].map(([q, a]) => (
+              <div key={q} style={{ padding: "18px 20px", background: "#f8fafc", borderRadius: 10, borderLeft: `3px solid ${B.primary}` }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: B.dark, marginBottom: 6 }}>{q}</div>
+                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.65 }}>{a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </>
   );
 }
