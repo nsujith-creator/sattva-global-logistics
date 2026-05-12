@@ -67,26 +67,30 @@ export function Nav({ st }) {
             <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "all .25s", transform: open ? "rotate(-45deg) translate(5px,-5px)" : "none" }} />
           </button>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <ul style={{ display: "flex", gap: 22, listStyle: "none", margin: 0, padding: 0 }}>
-              {lk.map(([id, lb]) => (
-                <li key={id}>
-                  <span
-                    onClick={() => go(id === "home" ? "/" : `/${id}`)}
-                    style={{
-                      color: id === "trade-advisory"
-                        ? B.red
-                        : activePage === id || (!activePage && id === "home") ? B.primary : B.g7,
-                      fontWeight: activePage === id || (!activePage && id === "home") ? 700 : 500,
-                      fontSize: 13,
-                      cursor: "pointer",
-                      fontFamily: F,
-                    }}
-                  >
-                    {lb}
-                  </span>
-                </li>
-              ))}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <ul style={{ display: "flex", gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
+              {lk.map(([id, lb]) => {
+                const isActive = activePage === id || (!activePage && id === "home");
+                return (
+                  <li key={id}>
+                    <span
+                      onClick={() => go(id === "home" ? "/" : `/${id}`)}
+                      style={{
+                        color: id === "trade-advisory" ? B.red : isActive ? B.primary : B.g7,
+                        fontWeight: isActive ? 700 : 600,
+                        fontSize: 13,
+                        cursor: "pointer",
+                        fontFamily: F,
+                        paddingBottom: 4,
+                        borderBottom: isActive ? `2px solid ${B.primary}` : "2px solid transparent",
+                        transition: "color .2s, border-color .2s",
+                      }}
+                    >
+                      {lb}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
             <a
               href="tel:+919136121123"

@@ -10,11 +10,12 @@ export function TradeLanesPage({ st, I }) {
     {
       title: "Middle East & Upper Gulf",
       routes: [
-        "JNPT → Jebel Ali (Dubai)",
-        "Mundra → Jebel Ali (Dubai)",
-        "JNPT → Dammam (Saudi Arabia)",
-        "JNPT → Jeddah (Saudi Arabia)",
-        "Mundra → Sohar (Oman)",
+        { label: "JNPT → Jebel Ali (UAE)", link: "/lane/jnpt-to-jebel-ali" },
+        { label: "Mundra → Jebel Ali (UAE)", link: null },
+        { label: "JNPT → Jeddah (Saudi Arabia)", link: "/lane/jnpt-to-jeddah" },
+        { label: "JNPT → Dammam (Saudi Arabia)", link: null },
+        { label: "JNPT → Shuwaikh (Kuwait)", link: "/lane/jnpt-to-shuwaikh" },
+        { label: "Mundra → Sohar (Oman)", link: null },
       ],
       cargo: "Garments, fabrics, cotton yarn, kitchenware, paper products, engineering goods",
       copy: "The Gulf remains the highest-volume destination for Indian general cargo exports. Strong carrier frequency, good transit times and established buyer relationships make this the most active lane we support.",
@@ -22,10 +23,10 @@ export function TradeLanesPage({ st, I }) {
     {
       title: "Red Sea & East Africa",
       routes: [
-        "JNPT → Mombasa (Kenya)",
-        "Mundra → Mombasa (Kenya)",
-        "JNPT → Dar es Salaam (Tanzania)",
-        "JNPT → Djibouti",
+        { label: "JNPT → Mombasa (Kenya)", link: "/lane/jnpt-to-mombasa" },
+        { label: "Mundra → Mombasa (Kenya)", link: null },
+        { label: "JNPT → Dar es Salaam (Tanzania)", link: null },
+        { label: "JNPT → Djibouti", link: null },
       ],
       cargo: "FMCG cargo, food products, towels, agro commodities, general engineering cargo",
       copy: "East Africa is a growing lane for Indian exporters — particularly for FMCG, food products and consumer goods. We understand the transit dynamics and destination clearance sensitivities on this lane.",
@@ -33,10 +34,10 @@ export function TradeLanesPage({ st, I }) {
     {
       title: "Select Africa Markets",
       routes: [
-        "JNPT → Durban (South Africa)",
-        "JNPT → Maputo (Mozambique)",
-        "Mundra → Lagos (Nigeria)",
-        "JNPT → Tema (Ghana)",
+        { label: "JNPT → Durban (South Africa)", link: "/lane/jnpt-to-durban" },
+        { label: "JNPT → Maputo (Mozambique)", link: null },
+        { label: "Mundra → Lagos (Nigeria)", link: null },
+        { label: "JNPT → Tema (Ghana)", link: null },
       ],
       cargo: "Engineering goods, machinery, agro commodities, general consumer cargo",
       copy: "Africa beyond East Africa requires more specific route planning, carrier matching and transit awareness. We support select markets where our route familiarity and carrier relationships translate into reliable execution.",
@@ -127,8 +128,17 @@ export function TradeLanesPage({ st, I }) {
               <p style={{ ...st.bd, fontSize: 14, marginBottom: 16 }}>{lane.copy}</p>
               <div style={{ marginBottom: 14 }}>
                 {lane.routes.map((r) => (
-                  <div key={r} style={{ padding: "9px 0", borderBottom: `1px solid ${B.g1}`, fontSize: 13, color: B.g7, display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: B.primary, fontWeight: 700 }}>→</span> {r}
+                  <div key={r.label} style={{ padding: "9px 0", borderBottom: `1px solid ${B.g1}`, fontSize: 13, color: B.g7, display: "flex", alignItems: "center", gap: 8 }}>
+                    {r.link ? (
+                      <button
+                        onClick={() => go(r.link)}
+                        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 13, color: B.primary, fontWeight: 700, fontFamily: "inherit", textDecoration: "underline", textAlign: "left" }}
+                      >
+                        → {r.label}
+                      </button>
+                    ) : (
+                      <><span style={{ color: B.primary, fontWeight: 700 }}>→</span> {r.label}</>
+                    )}
                   </div>
                 ))}
               </div>

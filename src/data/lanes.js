@@ -1,0 +1,142 @@
+export const LANES = [
+  {
+    slug: "jnpt-to-jebel-ali",
+    pol: "JNPT (Nhava Sheva)",
+    pod: "Jebel Ali, UAE",
+    region: "Gulf / UAE",
+    transitTypical: "4–7 days",
+    transitNote: "Typical transit depending on routing and carrier rotation. Build buffer for time-sensitive cargo.",
+    routingType: "Mostly transhipment via Khor Fakkan or Fujairah; some direct services depending on carrier and blank sailing position",
+    carriers: ["Maersk", "CMA CGM", "MSC", "Hapag-Lloyd", "NVOCCs"],
+    metaTitle: "JNPT to Jebel Ali FCL Freight | India to UAE Container Shipping | Sattva Global",
+    metaDesc: "FCL freight from JNPT (Nhava Sheva) to Jebel Ali — carrier options, transit times, routing notes and documentation guidance for India-UAE FCL exports.",
+    canonicalSlug: "jnpt-to-jebel-ali",
+    intelligence: [
+      {
+        heading: "Gulf routing remains unsettled",
+        body: "Following March–April 2025 Hormuz and Red Sea disruptions, several carriers are selectively discharging at Khor Fakkan or Fujairah rather than Jebel Ali during congestion spikes. Onward feeder transit can add 1–3 days. Urgent cargo needs a buffer built into the shipment plan — not assumed at destination.",
+      },
+      {
+        heading: "NVOCCs offer rate flexibility on this lane",
+        body: "NVOCC options are a legitimate and often cost-effective choice on the JNPT–Jebel Ali lane — particularly when direct carrier space is constrained or priced high. The value is in knowing which NVOCCs operate reliably on Gulf rotations. We advise on NVOCC selection based on current schedule performance and cut-off discipline, not just the published rate.",
+      },
+      {
+        heading: "SI and VGM cut-offs are aggressive",
+        body: "Cut-offs at JNPT for Gulf-bound vessels can close earlier than expected — particularly during port congestion or peak season. Late SI submission risks BL amendment fees or cargo rollover to the next sailing. Pre-departure documentation coordination is not optional on this lane.",
+      },
+    ],
+    docNote: "Standard FCL documentation: commercial invoice, packing list, bill of lading, certificate of origin. DG cargo requires MSDS and carrier hazmat pre-approval before container acceptance. No SABER requirement for UAE.",
+  },
+  {
+    slug: "jnpt-to-mombasa",
+    pol: "JNPT (Nhava Sheva)",
+    pod: "Mombasa, Kenya",
+    region: "East Africa",
+    transitTypical: "9–14 days",
+    transitNote: "Typical transit depending on carrier rotation. East Africa port conditions are currently stable; departure-side delays at JNPT are the primary variable.",
+    routingType: "Mostly direct services; limited transhipment options available via Colombo or Port Said on select carriers",
+    carriers: ["CMA CGM", "Maersk", "OOCL", "MSC", "COSCO", "ONE"],
+    metaTitle: "JNPT to Mombasa FCL Freight | India to Kenya Container Shipping | Sattva Global",
+    metaDesc: "FCL freight from JNPT to Mombasa — carrier options, transit times, East Africa routing notes and documentation guidance for India-Kenya FCL exports.",
+    canonicalSlug: "jnpt-to-mombasa",
+    intelligence: [
+      {
+        heading: "JNPT departure delays are the primary risk",
+        body: "East Africa vessel schedules are currently stable at the destination side. The main variability is on the India side — inward vessel delays at JNPT are causing departure unreliability, which compresses the actual transit window. Exporters should plan against the scheduled ETD, not the carrier's advertised transit time.",
+      },
+      {
+        heading: "Vessel frequency and booking lead time",
+        body: "Mombasa sailing frequency from JNPT is moderate. Peak season or sudden blank sailings can create 7–10 day gaps between available vessels. Booking 2–3 weeks ahead is advisable for time-sensitive cargo or buyer-driven delivery windows.",
+      },
+      {
+        heading: "Documentation for Kenya — what goes wrong",
+        body: "Common documentation errors on the Mombasa lane include incorrect HS code classification and mismatched cargo descriptions between the BL and packing list. Kenya Revenue Authority scrutiny on import documentation has increased. Pre-shipment certificate of conformity (CoC/PVoC) is required for regulated cargo categories.",
+      },
+    ],
+    docNote: "Required: commercial invoice, packing list, bill of lading, certificate of origin (Form A for GSP where applicable). Regulated cargo requires Pre-shipment Verification of Conformity (PVoC). Agro and food cargo requires phytosanitary certificate. Packing declaration for wood packaging material.",
+  },
+  {
+    slug: "jnpt-to-jeddah",
+    pol: "JNPT (Nhava Sheva)",
+    pod: "Jeddah Islamic Port, Saudi Arabia",
+    region: "Red Sea / Saudi Arabia",
+    transitTypical: "7–11 days",
+    transitNote: "Typical transit via Suez routing. Cape rerouting, where still in use, extends transit significantly. Confirm current routing with carrier at time of booking.",
+    routingType: "Mostly direct; some carriers continue selective Cape rerouting depending on Red Sea security assessment",
+    carriers: ["CMA CGM", "Maersk", "MSC", "Hapag-Lloyd", "NVOCCs"],
+    metaTitle: "JNPT to Jeddah FCL Freight | India to Saudi Arabia Container Shipping | Sattva Global",
+    metaDesc: "FCL freight from JNPT to Jeddah — carrier options, Red Sea routing status, SABER compliance notes and documentation guidance for India-Saudi FCL exports.",
+    canonicalSlug: "jnpt-to-jeddah",
+    intelligence: [
+      {
+        heading: "Red Sea routing is still operationally sensitive",
+        body: "Some carriers have resumed Suez Canal routing while others continue Cape of Good Hope rerouting based on their own security assessments. This creates significant transit time variance — Suez-routed sailings arrive in 7–11 days while Cape-routed cargo can take 20+ days. Confirm current routing with the carrier at time of booking, not after.",
+      },
+      {
+        heading: "SABER compliance and documentation finalization timeline",
+        body: "Saudi Arabia's SABER system requires product registration and shipment certification for regulated product categories. DG cargo and SABER-linked shipments now require earlier documentation finalization than pre-2024 timelines — factor in 5–7 additional working days for document preparation and certification before the cargo moves.",
+      },
+      {
+        heading: "HS classification accuracy is critical",
+        body: "Saudi Customs applies strict HS code scrutiny at Jeddah. A mismatch between the declared HS code and the physical cargo description can trigger customs hold, inspection and storage charges. Classification must be confirmed before the BL is issued — not corrected after arrival.",
+      },
+    ],
+    docNote: "Required: commercial invoice, packing list, bill of lading, certificate of origin (SABER-linked). SABER shipment certificate required for regulated product categories — initiate early. Halal certification where applicable. Phytosanitary certificate for food and agro cargo. DG cargo: MSDS, DG declaration, carrier hazmat pre-approval.",
+  },
+  {
+    slug: "jnpt-to-shuwaikh",
+    pol: "JNPT (Nhava Sheva)",
+    pod: "Shuwaikh Port, Kuwait",
+    region: "Gulf / Kuwait",
+    transitTypical: "10–16 days",
+    transitNote: "Typical transit including feeder leg. Transit varies by transhipment hub and feeder frequency.",
+    routingType: "Transhipment via Khor Fakkan, Fujairah, Khalifa Port or Sharjah depending on carrier and vessel rotation",
+    carriers: ["CMA CGM", "Maersk", "MSC", "Hapag-Lloyd", "OOCL"],
+    metaTitle: "JNPT to Shuwaikh FCL Freight | India to Kuwait Container Shipping | Sattva Global",
+    metaDesc: "FCL freight from JNPT to Shuwaikh, Kuwait — carrier options, transhipment routing, Kuwait Customs documentation requirements and transit guidance.",
+    canonicalSlug: "jnpt-to-shuwaikh",
+    intelligence: [
+      {
+        heading: "Feeder dependency has increased",
+        body: "Several carriers reduced direct Gulf port coverage after 2024 regional disruptions. Kuwait cargo now relies more heavily on feeder services from Khor Fakkan, Fujairah or Khalifa Port. Feeder frequency and connection windows determine the effective transit time — this is where schedule slippage typically occurs, not the main leg.",
+      },
+      {
+        heading: "Kuwait Customs documentation mismatches are expensive",
+        body: "Kuwait Customs is among the stricter Gulf import authorities. Any mismatch between the bill of lading description, commercial invoice and packing list — even minor wording differences — can trigger a customs hold with accumulating storage and demurrage charges. Document accuracy must be confirmed before the container is sealed, not after arrival.",
+      },
+      {
+        heading: "Transhipment hub choice affects transit and reliability",
+        body: "The choice of transhipment hub (Khor Fakkan vs Fujairah vs Khalifa) affects both transit time and cargo rollover risk. We advise on hub selection based on current feeder frequency and connection stability — not just the lowest published freight rate.",
+      },
+    ],
+    docNote: "Required: commercial invoice, packing list, bill of lading, certificate of origin. BL cargo description must exactly match invoice and packing list — any deviation creates Customs risk at Shuwaikh. Legalization of documents may be required for certain cargo categories. Confirm specific requirements for your commodity before shipment.",
+  },
+  {
+    slug: "jnpt-to-durban",
+    pol: "JNPT (Nhava Sheva)",
+    pod: "Durban, South Africa",
+    region: "South Africa",
+    transitTypical: "16–24 days",
+    transitNote: "Typical transit on direct services. Actual arrival window varies with Durban port congestion and weather conditions — ETA buffer is essential.",
+    routingType: "Mostly direct services; some routing via Colombo or Port Louis on select carriers",
+    carriers: ["Maersk", "CMA CGM", "MSC", "Hapag-Lloyd", "ONE"],
+    metaTitle: "JNPT to Durban FCL Freight | India to South Africa Container Shipping | Sattva Global",
+    metaDesc: "FCL freight from JNPT to Durban — carrier options, transit guidance, Durban port congestion notes and documentation requirements for India-South Africa FCL exports.",
+    canonicalSlug: "jnpt-to-durban",
+    intelligence: [
+      {
+        heading: "Durban port congestion is a recurring reality",
+        body: "Durban remains one of the more congestion-prone ports in the region. Vessel queuing, berth availability issues and periodic labour disruptions affect actual discharge timing. The 16–24 day transit range reflects vessel sailing time — port-side delays can add further time to cargo availability at destination. South Africa shipments require larger ETA buffers than Gulf or East Africa lanes.",
+      },
+      {
+        heading: "Weather disruption adds seasonal variability",
+        body: "Durban is exposed to seasonal weather events — particularly between November and March — that can delay vessel arrivals and port operations. Time-sensitive South Africa shipments should account for seasonal variability in the shipment planning stage.",
+      },
+      {
+        heading: "South Africa import process timeline",
+        body: "South African Customs (SARS) import processing can add several days between vessel arrival and cargo release, particularly for first-time importers or shipments flagged for inspection. Buyers should plan inbound stock schedules with SARS processing time factored in — not just the vessel ETA.",
+      },
+    ],
+    docNote: "Required: commercial invoice, packing list, bill of lading, certificate of origin. Certain cargo categories require import permits — confirm with your South African buyer before shipment. Agro and food cargo requires phytosanitary certificate. Wood packaging material requires ISPM 15 compliance declaration.",
+  },
+];
