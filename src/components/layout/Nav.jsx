@@ -56,7 +56,7 @@ export function Nav({ st }) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => { go("/"); setOpen(false); }}>
-          <img src="/sattva-logo.png" alt="Sattva Global Logistics" style={{ height: 56, width: "auto", display: "block" }} />
+          <img src="/sattva-global-logistics-logo-vector-SWIRL-VERIFIED.svg" alt="Sattva Global Logistics" style={{ height: 44, width: "auto", display: "block" }} />
         </div>
         {m ? (
           <button
