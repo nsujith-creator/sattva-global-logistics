@@ -7,3 +7,9 @@ migrate_to_router.py
 fix_jsx.py
 set_secret.bat
 .claude/
+
+# Unrelated scraping project files
+enrich-contacts.js
+exporters.csv
+scrape.js
+docs/advisories/*.pdf
