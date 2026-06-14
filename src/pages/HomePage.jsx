@@ -11,6 +11,8 @@ import { PhoneField } from "../components/forms/PhoneField";
 import { submitQuoteAPI } from "../api/rates";
 import { EQ, EQ_L } from "../data/equipment";
 import { HeroMap } from "../components/shared/HeroMap";
+import { pageWhatsAppLink } from "../utils/links";
+import { trackWhatsAppClick, trackQuoteSubmit } from "../utils/analytics";
 
 /* ── Full homepage quote card — submits directly, no redirect ── */
 function HomeQuoteCard({ st, I, mode = "light" }) {
@@ -51,6 +53,7 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
     const podName = ALL_POD.find(p => p.c === f.pod)?.n || f.pod;
     try {
       await submitQuoteAPI({ pol: `${polName} (${f.pol})`, pod: `${podName} (${f.pod})`, equipment: `${EQ_L[f.eq] || f.eq} (${f.eq})`, containers: 1, cargo: f.cargo || "", notes: "", name: f.name, company: "", email: f.email, phone: f.phone || "", rateFound: false }, "anon");
+      trackQuoteSubmit({ origin: polName, destination: podName, containerType: f.eq });
       setDone(true);
     } catch {
       setSendErr("Submission failed — please call +91 9136 121 123 or email quotes@sattvaglobal.in");
@@ -231,7 +234,7 @@ export function HomePage({ st, I }) {
     ],
   };
 
-  const operatorNotes = [
+  const fieldNotes = [
     {
       sector: "Heavy Engineering & Industrial Equipment",
       route: "JNPT → Jebel Ali",
@@ -313,20 +316,21 @@ export function HomePage({ st, I }) {
               FCL Freight Specialist · India to Gulf, Red Sea & East Africa
             </div>
             <h1 style={{ ...st.h1, color: "#ffffff" }}>
-              Operator-Led FCL Freight from India —{" "}
+              Experience-Led FCL Freight from India —{" "}
               <span style={{ color: "#F5A623" }}>Direct Attention, Not a Platform</span>
             </h1>
             <p style={{ ...st.bd, fontSize: m ? 15 : 17, marginTop: 20, maxWidth: 640, color: "rgba(255,255,255,0.82)" }}>
-              FCL exports from JNPT, Mundra, Chennai and Cochin — handled by an experienced operator, not routed through a call centre. Routing decisions, documentation and shipment follow-up stay with the same person from quote through departure.
+              FCL exports from JNPT, Mundra, Chennai and Cochin — handled by an experienced freight team, not routed through a call centre. Routing decisions, documentation and shipment follow-up stay with the same desk from quote through departure.
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
               <button onClick={() => go("/quote")} style={{ ...st.bp, fontSize: m ? 13 : 14 }}>
                 Get FCL Freight Quote <I.Ar />
               </button>
               <a
-                href="https://wa.me/919136121123"
+                href={pageWhatsAppLink("/")}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick(\'hero\')}
                 style={{ ...st.bs, fontSize: m ? 13 : 14, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}
               >
                 WhatsApp Shipment Details
@@ -359,7 +363,7 @@ export function HomePage({ st, I }) {
               {[
                 ["20+", "Years on India-Gulf, Red Sea & Africa lanes"],
                 ["1,000+", "FCL shipments — garments, chemicals, food, engineering"],
-                ["Direct", "Operator contact from quote through departure"],
+                ["Direct", "Freight desk contact from quote through departure"],
                 ["4 hrs", "Typical response on quote requests"],
               ].map(([n, l]) => (
                 <div key={l}>
@@ -390,6 +394,41 @@ export function HomePage({ st, I }) {
         <div style={{ position:"absolute", bottom:0, left:0, right:0, height:120, zIndex:3,
           background:"linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.88) 100%)",
           pointerEvents:"none" }} />
+      </section>
+
+      <section style={{ background: B.g1, padding: m ? "22px 16px 0" : "28px 24px 0" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: m ? "1fr" : "1fr auto",
+              alignItems: "center",
+              gap: 16,
+              padding: m ? "18px 18px" : "20px 24px",
+              background: "rgba(255,255,255,0.86)",
+              border: `1px solid ${B.primary}18`,
+              borderLeft: `4px solid ${B.primary}`,
+              borderRadius: 12,
+              boxShadow: "0 10px 30px rgba(5,10,48,0.05)",
+            }}
+          >
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: B.primary, textTransform: "uppercase", letterSpacing: 2.2, marginBottom: 6 }}>
+                New: Sattva Freight Intelligence Desk
+              </div>
+              <p style={{ ...st.bd, margin: 0, color: B.g7, fontSize: 14 }}>
+                India-lane freight signals for exporters, importers, and logistics teams.
+              </p>
+            </div>
+            <a
+              href="/freight-intelligence-desk"
+              onClick={(e) => { e.preventDefault(); go("/freight-intelligence-desk"); }}
+              style={{ ...st.bs, padding: "10px 16px", fontSize: 13, justifyContent: "center", textDecoration: "none" }}
+            >
+              View Freight Intelligence Desk <I.Ar />
+            </a>
+          </div>
+        </div>
       </section>
 
       {/* ── WHY SATTVA TEASER ────────────────────────────────────────────── */}
@@ -461,7 +500,7 @@ export function HomePage({ st, I }) {
             <p style={st.sub}>Every export category has its own rhythm — documentation requirements, cut-off pressures, routing constraints. Here is how that plays out across the shipments we handle.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
-            {operatorNotes.map((note) => (
+            {fieldNotes.map((note) => (
               <div key={note.sector} style={{ ...st.cd, borderTop: `3px solid ${B.primary}`, padding: "28px 28px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: B.primary, textTransform: "uppercase", letterSpacing: 1.5 }}>{note.sector}</span>

@@ -13,6 +13,18 @@ export function CTA({
   I,
 }) {
   const go = useNavigate();
+  const isExternal = (to) => /^https?:\/\//.test(to) || to.startsWith("tel:") || to.startsWith("mailto:");
+  const renderAction = (label, to, style, children) =>
+    isExternal(to) ? (
+      <a href={to} target={to.startsWith("http") ? "_blank" : undefined} rel={to.startsWith("http") ? "noopener noreferrer" : undefined} style={{ ...style, textDecoration: "none" }}>
+        {children || label}
+      </a>
+    ) : (
+      <button onClick={() => go(to)} style={style}>
+        {children || label}
+      </button>
+    );
+
   return (
     <div
       style={{
@@ -55,12 +67,8 @@ export function CTA({
         </p>
       )}
       <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={() => go(primaryTo)} style={st.bp}>
-          {primaryLabel} <I.Ar />
-        </button>
-        <button onClick={() => go(secondaryTo)} style={st.bs}>
-          {secondaryLabel}
-        </button>
+        {renderAction(primaryLabel, primaryTo, st.bp, <>{primaryLabel} <I.Ar /></>)}
+        {renderAction(secondaryLabel, secondaryTo, st.bs)}
       </div>
     </div>
   );

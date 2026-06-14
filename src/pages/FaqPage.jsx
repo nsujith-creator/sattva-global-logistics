@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
 import { B, FF } from "../theme/tokens";
 import { PageHero } from "../components/layout/PageHero";
+import { pageWhatsAppLink } from "../utils/links";
 
 const faqs = [
   {
@@ -120,7 +121,7 @@ export function FaqPage({ st, I }) {
           primaryLabel="Get a Freight Quote"
           primaryTo="/quote"
           secondaryLabel="WhatsApp Us"
-          secondaryTo="https://wa.me/919136121123"
+          secondaryTo={pageWhatsAppLink()}
           st={st}
           I={I}
         />

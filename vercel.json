@@ -1,6 +1,10 @@
 {
   "redirects": [
-    { "source": "/home", "destination": "/", "permanent": true }
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/contact", "destination": "/", "permanent": true },
+    { "source": "/appointments", "destination": "/", "permanent": true },
+    { "source": "/services-store", "destination": "/services", "permanent": true },
+    { "source": "/services-store/:path*", "destination": "/services", "permanent": true }
   ],
   "rewrites": [
     { "source": "/googleb46c26284a31cefe.html", "destination": "/googleb46c26284a31cefe.html" },

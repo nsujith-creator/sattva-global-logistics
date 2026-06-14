@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { B, F, FF } from "../theme/tokens";
+import { trackWhatsAppClick } from "../utils/analytics";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { supabase } from "../config/supabase";
 
@@ -406,6 +407,7 @@ export function TradeAdvisoryPage({ st, I }) {
             href={`https://wa.me/919136121123?text=${encodeURIComponent("Hi, I'm planning a shipment to Gulf/Red Sea and would like to understand how the current disruption affects my cargo.")}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('trade-advisory')}
             style={{ ...st.bp, background: "#25D366", marginTop: 28, display: "inline-flex", textDecoration: "none", boxShadow: "0 4px 16px rgba(37,211,102,.4)" }}
           >
             WhatsApp Us

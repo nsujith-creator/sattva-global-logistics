@@ -15,7 +15,7 @@ class ChunkErrorBoundary extends React.Component{
     return this.props.children;
   }
 }
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { PhoneField } from "./components/forms/PhoneField";
 import { ErrMsg } from "./components/forms/ErrMsg";
@@ -34,6 +34,7 @@ import { IndustriesPage } from "./pages/IndustriesPage";
 import { ServicesPage } from "./pages/ServicesPage";
 import { TradeLanesPage } from "./pages/TradeLanesPage";
 import { TradeAdvisoryPage } from "./pages/TradeAdvisoryPage";
+import { FreightIntelligenceDeskPage } from "./pages/FreightIntelligenceDeskPage";
 import { WhySattvaPage } from "./pages/WhySattvaPage";
 import { IndiaCoordinationPage } from "./pages/IndiaCoordinationPage";
 import { FaqPage } from "./pages/FaqPage";
@@ -46,7 +47,7 @@ import { POL, POD_R, ALL_POD } from "./data/ports";
 import { B, F, FF } from "./theme/tokens";
 import { supabase } from "./config/supabase";
 import { st } from "./styles/sharedStyles";
-import { waLink } from "./utils/links";
+import { pageWhatsAppLink, waLink } from "./utils/links";
 import { pn } from "./utils/ports";
 import { saveSession, loadSession, clearSession } from "./utils/session";
 import { searchCargo } from "./utils/cargoSearch";
@@ -625,11 +626,21 @@ return(<div>
 
 </div></div>);}
 
+function FloatingWhatsApp(){
+const loc=useLocation();
+const WA_FLOAT=pageWhatsAppLink(loc.pathname);
+return(
+<a href={WA_FLOAT} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp"
+  style={{position:"fixed",bottom:28,right:28,zIndex:999,width:56,height:56,borderRadius:"50%",background:"#25D366",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(37,211,102,.5)",textDecoration:"none",transition:"transform .2s"}}
+  onMouseEnter={e=>e.currentTarget.style.transform="scale(1.12)"}
+  onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.564l4.682-1.463A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.156 0-4.154-.695-5.785-1.873l-.413-.281-2.776.868.854-2.703-.302-.436A9.713 9.713 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+</a>);}
+
 /* ─── App ─── */
 export default function App(){
 const[quotes,setQuotes]=useState({});
 const[quotesErr,setQuotesErr]=useState(false);
-const WA_FLOAT=`https://wa.me/919136121123?text=${encodeURIComponent("Hi, I'm planning an export shipment from India and would like to discuss route fit, pricing, and next steps with Sattva Global Logistics.")}`;
 return(
 <HelmetProvider>
 <BrowserRouter>
@@ -647,6 +658,7 @@ return(
 <Route path="/testimonials" element={<ChunkErrorBoundary><Suspense fallback={<div style={{paddingTop:100,textAlign:"center",color:B.g5}}>Loading…</div>}><TestimonialsPage st={st} I={I}/></Suspense></ChunkErrorBoundary>}/>
 <Route path="/quote" element={<QuotePage/>}/>
 <Route path="/trade-advisory" element={<TradeAdvisoryPage st={st} I={I}/>}/>
+<Route path="/freight-intelligence-desk" element={<FreightIntelligenceDeskPage st={st} I={I}/>}/>
 <Route path="/india-coordination" element={<IndiaCoordinationPage st={st} I={I}/>}/>
 <Route path="/faq" element={<FaqPage st={st} I={I}/>}/>
 <Route path="/lane/:slug" element={<LanePage st={st} I={I}/>}/>
@@ -655,13 +667,7 @@ return(
 
 <Route path="/admin" element={<AdminPage quotes={quotes} setQuotes={setQuotes}/>}/>
 </Routes>
-<Routes><Route path="/*" element={
-<a href={WA_FLOAT} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp"
-  style={{position:"fixed",bottom:28,right:28,zIndex:999,width:56,height:56,borderRadius:"50%",background:"#25D366",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(37,211,102,.5)",textDecoration:"none",transition:"transform .2s"}}
-  onMouseEnter={e=>e.currentTarget.style.transform="scale(1.12)"}
-  onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.564l4.682-1.463A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.156 0-4.154-.695-5.785-1.873l-.413-.281-2.776.868.854-2.703-.302-.436A9.713 9.713 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
-</a>}/></Routes>
+<Routes><Route path="/*" element={<FloatingWhatsApp/>}/></Routes>
 </div>
 </BrowserRouter>
 </HelmetProvider>);}

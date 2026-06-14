@@ -22,10 +22,15 @@ export function Nav({ st }) {
     if (!m) setOpen(false);
   }, [m]);
 
+  const glassBg = sc || open
+    ? "linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.9))"
+    : "linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.68))";
+
   const lk = [
     ["why-sattva", "Why Sattva"],
     ["services", "Services"],
     ["trade-lanes", "Trade Lanes"],
+    ["freight-intelligence-desk", "Intelligence Desk"],
     ["knowledge", "Knowledge"],
   ];
 
@@ -37,10 +42,11 @@ export function Nav({ st }) {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: sc || open ? "rgba(255,255,255,.97)" : "rgba(255,255,255,.9)",
-        backdropFilter: "blur(12px)",
-        boxShadow: sc ? "0 1px 10px rgba(0,0,0,.07)" : "none",
-        borderBottom: "1px solid rgba(10,30,60,0.06)",
+        background: glassBg,
+        backdropFilter: "blur(18px) saturate(150%)",
+        WebkitBackdropFilter: "blur(18px) saturate(150%)",
+        boxShadow: sc ? "0 10px 30px rgba(5,10,48,.08)" : "0 1px 0 rgba(255,255,255,.3)",
+        borderBottom: "1px solid rgba(5,10,48,0.08)",
         transition: "all .3s",
       }}
     >
@@ -69,7 +75,7 @@ export function Nav({ st }) {
           </button>
         ) : (
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <ul style={{ display: "flex", gap: 16, listStyle: "none", margin: 0, padding: 0 }}>
+            <ul style={{ display: "flex", gap: 14, listStyle: "none", margin: 0, padding: 0 }}>
               {lk.map(([id, lb]) => {
                 const isActive = activePage === id || (!activePage && id === "home");
                 return (
@@ -97,19 +103,27 @@ export function Nav({ st }) {
               href="tel:+919136121123"
               style={{
                 fontSize: 12,
-                fontWeight: 500,
-                color: "#94a3b8",
+                fontWeight: 700,
+                color: B.primary,
                 textDecoration: "none",
                 whiteSpace: "nowrap",
                 marginLeft: 8,
-                padding: "6px 10px",
+                padding: "8px 11px",
                 borderRadius: 8,
-                border: "1px solid rgba(10,30,60,0.1)",
+                border: `1px solid ${B.primary}26`,
+                background: "rgba(2,74,171,0.07)",
                 letterSpacing: 0.2,
                 transition: "all .2s",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,.7)",
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = B.primary; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "#94a3b8"; }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = "rgba(2,74,171,0.11)";
+                e.currentTarget.style.borderColor = `${B.primary}44`;
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = "rgba(2,74,171,0.07)";
+                e.currentTarget.style.borderColor = `${B.primary}26`;
+              }}
             >
               +91 9136 121 123
             </a>

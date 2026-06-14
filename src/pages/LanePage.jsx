@@ -6,6 +6,7 @@ import { CARRIERS } from "../data/carriers";
 import { LANES } from "../data/lanes";
 import { B, FF } from "../theme/tokens";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { pageWhatsAppLink } from "../utils/links";
 
 export function LanePage({ st, I }) {
   const { slug } = useParams();
@@ -57,7 +58,7 @@ export function LanePage({ st, I }) {
             {lane.pol} to {lane.pod} — FCL Freight Forwarding
           </h1>
           <p style={{ ...st.bd, fontSize: m ? 15 : 17, color: "rgba(255,255,255,0.78)", maxWidth: 640, marginBottom: 32 }}>
-            Operator-managed FCL exports on this lane — routing decisions, documentation coordination and pre-departure follow-up handled directly.
+            Freight-desk managed FCL exports on this lane — routing decisions, documentation coordination and pre-departure follow-up handled directly.
           </p>
 
           {/* Route stats strip */}
@@ -79,7 +80,7 @@ export function LanePage({ st, I }) {
               Get FCL Freight Quote <I.Ar />
             </button>
             <a
-              href="https://wa.me/919136121123"
+              href={pageWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
               style={{ ...st.bs, fontSize: 14, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, background: "transparent", color: "#ffffff", border: "1px solid rgba(255,255,255,0.35)" }}
