@@ -330,7 +330,7 @@ export function HomePage({ st, I }) {
                 href={pageWhatsAppLink("/")}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackWhatsAppClick(\'hero\')}
+                onClick={() => trackWhatsAppClick('hero')}
                 style={{ ...st.bs, fontSize: m ? 13 : 14, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}
               >
                 WhatsApp Shipment Details
