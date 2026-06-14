@@ -38,6 +38,7 @@ import { FreightIntelligenceDeskPage } from "./pages/FreightIntelligenceDeskPage
 import { WhySattvaPage } from "./pages/WhySattvaPage";
 import { IndiaCoordinationPage } from "./pages/IndiaCoordinationPage";
 import { FaqPage } from "./pages/FaqPage";
+import { ContactPage } from "./pages/ContactPage";
 import { LanePage } from "./pages/LanePage";
 const KnowledgePage   = lazy(()=>import("./pages/KnowledgePage").then(m=>({default:m.KnowledgePage})));
 const TestimonialsPage = lazy(()=>import("./pages/TestimonialsPage").then(m=>({default:m.TestimonialsPage})));
@@ -661,6 +662,7 @@ return(
 <Route path="/freight-intelligence-desk" element={<FreightIntelligenceDeskPage st={st} I={I}/>}/>
 <Route path="/india-coordination" element={<IndiaCoordinationPage st={st} I={I}/>}/>
 <Route path="/faq" element={<FaqPage st={st} I={I}/>}/>
+<Route path="/contact" element={<ContactPage st={st} I={I}/>}/>
 <Route path="/lane/:slug" element={<LanePage st={st} I={I}/>}/>
 <Route path="*" element={<div style={{paddingTop:100,minHeight:"60vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}><h2 style={{...st.h2,color:B.dark}}>404 — Page Not Found</h2><p style={{...st.bd,color:B.g5}}>The page you're looking for doesn't exist.</p></div>}/>
 </Routes><Footer I={I}/><AdvisoryBanner/></>}/>

@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "scrape": "node scrape.js",
     "enrich:contacts": "node enrich-contacts.js",
-    "postbuild": "echo build complete"
+    "postbuild": "node prerender.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.100.0",

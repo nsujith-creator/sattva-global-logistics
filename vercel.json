@@ -1,7 +1,6 @@
 {
   "redirects": [
     { "source": "/home", "destination": "/", "permanent": true },
-    { "source": "/contact", "destination": "/", "permanent": true },
     { "source": "/appointments", "destination": "/", "permanent": true },
     { "source": "/services-store", "destination": "/services", "permanent": true },
     { "source": "/services-store/:path*", "destination": "/services", "permanent": true }
@@ -11,6 +10,8 @@
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/llms.txt", "destination": "/llms.txt" },
+    { "source": "/trade-advisory", "destination": "/trade-advisory/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
