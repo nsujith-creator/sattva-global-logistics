@@ -12,6 +12,14 @@
     { "source": "/llms.txt", "destination": "/llms.txt" },
     { "source": "/trade-advisory", "destination": "/trade-advisory/index.html" },
     { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/freight-intelligence-desk", "destination": "/freight-intelligence-desk/index.html" },
+    { "source": "/lane/jnpt-to-jebel-ali", "destination": "/lane/jnpt-to-jebel-ali/index.html" },
+    { "source": "/lane/jnpt-to-mombasa", "destination": "/lane/jnpt-to-mombasa/index.html" },
+    { "source": "/lane/jnpt-to-jeddah", "destination": "/lane/jnpt-to-jeddah/index.html" },
+    { "source": "/lane/mundra-to-jebel-ali", "destination": "/lane/mundra-to-jebel-ali/index.html" },
+    { "source": "/lane/mundra-to-dammam", "destination": "/lane/mundra-to-dammam/index.html" },
+    { "source": "/lane/chennai-to-mombasa", "destination": "/lane/chennai-to-mombasa/index.html" },
+    { "source": "/lane/cochin-to-djibouti", "destination": "/lane/cochin-to-djibouti/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [

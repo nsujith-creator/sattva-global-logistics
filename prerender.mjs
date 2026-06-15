@@ -31,6 +31,64 @@ const routes = [
     canonical: 'https://www.sattvaglobal.in/contact',
     ogUrl: 'https://www.sattvaglobal.in/contact',
   },
+  {
+    path: '/freight-intelligence-desk',
+    title: 'Sattva Freight Intelligence Desk | India-lane Freight Market Intelligence',
+    description: 'India-lane freight intelligence for exporters, importers and logistics teams. Market signals translated into booking, routing, quote-validity and customer-communication actions.',
+    canonical: 'https://www.sattvaglobal.in/freight-intelligence-desk',
+    ogUrl: 'https://www.sattvaglobal.in/freight-intelligence-desk',
+  },
+  // Lane pages — data-backed (LANES entries exist in src/data/lanes.js)
+  {
+    path: '/lane/jnpt-to-jebel-ali',
+    title: 'JNPT to Jebel Ali FCL Freight | India to UAE Container Shipping | Sattva Global',
+    description: 'FCL freight from JNPT (Nhava Sheva) to Jebel Ali — carrier options, transit times, routing notes and documentation guidance for India-UAE FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/jnpt-to-jebel-ali',
+    ogUrl: 'https://www.sattvaglobal.in/lane/jnpt-to-jebel-ali',
+  },
+  {
+    path: '/lane/jnpt-to-mombasa',
+    title: 'JNPT to Mombasa FCL Freight | India to Kenya Container Shipping | Sattva Global',
+    description: 'FCL freight from JNPT to Mombasa — carrier options, transit times, East Africa routing notes and documentation guidance for India-Kenya FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/jnpt-to-mombasa',
+    ogUrl: 'https://www.sattvaglobal.in/lane/jnpt-to-mombasa',
+  },
+  {
+    path: '/lane/jnpt-to-jeddah',
+    title: 'JNPT to Jeddah FCL Freight | India to Saudi Arabia Container Shipping | Sattva Global',
+    description: 'FCL freight from JNPT to Jeddah — carrier options, Red Sea routing status, SABER compliance notes and documentation guidance for India-Saudi FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/jnpt-to-jeddah',
+    ogUrl: 'https://www.sattvaglobal.in/lane/jnpt-to-jeddah',
+  },
+  // Lane pages — sitemap-listed, no LANES entry yet (show "Lane not found" in app until lanes.js is extended)
+  {
+    path: '/lane/mundra-to-jebel-ali',
+    title: 'Mundra to Jebel Ali FCL Freight | India to UAE Container Shipping | Sattva Global',
+    description: 'FCL freight from Mundra to Jebel Ali — carrier options, transit times, routing notes and documentation guidance for India-UAE FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/mundra-to-jebel-ali',
+    ogUrl: 'https://www.sattvaglobal.in/lane/mundra-to-jebel-ali',
+  },
+  {
+    path: '/lane/mundra-to-dammam',
+    title: 'Mundra to Dammam FCL Freight | India to Saudi Arabia Container Shipping | Sattva Global',
+    description: 'FCL freight from Mundra to Dammam — carrier options, transit times, Gulf routing notes and documentation guidance for India-Saudi Arabia FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/mundra-to-dammam',
+    ogUrl: 'https://www.sattvaglobal.in/lane/mundra-to-dammam',
+  },
+  {
+    path: '/lane/chennai-to-mombasa',
+    title: 'Chennai to Mombasa FCL Freight | India to Kenya Container Shipping | Sattva Global',
+    description: 'FCL freight from Chennai to Mombasa — carrier options, transit times, East Africa routing notes and documentation guidance for India-Kenya FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/chennai-to-mombasa',
+    ogUrl: 'https://www.sattvaglobal.in/lane/chennai-to-mombasa',
+  },
+  {
+    path: '/lane/cochin-to-djibouti',
+    title: 'Cochin to Djibouti FCL Freight | India to East Africa Container Shipping | Sattva Global',
+    description: 'FCL freight from Cochin to Djibouti — carrier options, transit times, East Africa routing notes and documentation guidance for India-Djibouti FCL exports.',
+    canonical: 'https://www.sattvaglobal.in/lane/cochin-to-djibouti',
+    ogUrl: 'https://www.sattvaglobal.in/lane/cochin-to-djibouti',
+  },
 ];
 
 function patch(html, { title, description, canonical, ogUrl }) {
