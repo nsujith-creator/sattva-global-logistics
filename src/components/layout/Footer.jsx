@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { B } from "../../theme/tokens";
+import { trackEmailClick } from "../../utils/analytics";
 
 export function Footer({ I }) {
   const go = useNavigate();
@@ -87,7 +88,7 @@ export function Footer({ I }) {
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, fontSize: 13, color: B.g5 }}><I.Pi /><span>Navi Mumbai, India</span></div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, fontSize: 13 }}>
             <I.Ma />
-            <a href="mailto:quotes@sattvaglobal.in" style={{ color: B.g5, textDecoration: "none" }}>quotes@sattvaglobal.in</a>
+            <a href="mailto:quotes@sattvaglobal.in" onClick={() => trackEmailClick('footer')} style={{ color: B.g5, textDecoration: "none" }}>quotes@sattvaglobal.in</a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, fontSize: 13 }}>
             <I.Ph />

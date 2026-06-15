@@ -54,6 +54,7 @@ import { saveSession, loadSession, clearSession } from "./utils/session";
 import { searchCargo } from "./utils/cargoSearch";
 import { saveQuoteHistory, getQuoteHistory } from "./utils/quoteHistory";
 import { saveFormState, loadFormState, clearFormState } from "./utils/formState";
+import { trackEmailClick } from "./utils/analytics";
 
 const BASIS_OPTIONS = ["Per 20'","Per 40'","Per 40HC","Per 45'","Per Cntr","Per BL","Per Shipment","Per KG","Per CBM"];
 const CURRENCY_OPTIONS = ["USD","INR","ZAR","EUR","GBP","AED","SAR","SGD"];
@@ -302,7 +303,7 @@ function QuoteDisplay({quote,selectedEq,gateUser,pol,pod,cargo,vol}){
               Choose This Option
             </button>
             <button
-              onClick={()=>window.open(buildEmail(opt),"_blank","noopener,noreferrer")}
+              onClick={()=>{trackEmailClick('quote-display');window.open(buildEmail(opt),"_blank","noopener,noreferrer");}}
               style={{display:"inline-flex",alignItems:"center",gap:6,padding:"10px 14px",background:"none",border:`1.5px solid ${B.primary}`,color:B.primary,borderRadius:8,fontWeight:600,fontSize:12,fontFamily:F,cursor:"pointer",whiteSpace:"nowrap"}}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={B.primary} strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
               Email
@@ -341,7 +342,7 @@ return(<div style={{paddingTop:68}}><Helmet><title>Get an Export Freight Quote f
 {sendErr&&<div style={{marginBottom:16,padding:"12px 16px",borderRadius:8,background:"#fef2f2",border:"1px solid #fecaca",color:B.red,fontSize:13}}>{sendErr}</div>}
 <button onClick={handleSubmit} disabled={sending} style={{...st.bp,width:"100%",justifyContent:"center",fontSize:15,padding:"14px 24px",opacity:sending?.7:1}}>{sending?"Submitting…":"Submit Quote Request →"}</button>
 <p style={{fontSize:11,color:B.g5,marginTop:10,textAlign:"center"}}>Typically respond within 4 hours. Urgent: +91 9136 121 123.</p></div>
-<div><div style={{...st.cd,marginBottom:20,borderTop:`3px solid ${B.primary}`}}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Prefer to speak directly?</h4><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13}}><I.Ph/><a href="tel:+919136121123" style={{color:B.g7,textDecoration:"none"}}>+91 9136 121 123</a></div><div style={{display:"flex",alignItems:"center",gap:8,fontSize:13}}><I.Ma/><a href="mailto:quotes@sattvaglobal.in" style={{color:B.g7,textDecoration:"none"}}>quotes@sattvaglobal.in</a></div></div>
+<div><div style={{...st.cd,marginBottom:20,borderTop:`3px solid ${B.primary}`}}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>Prefer to speak directly?</h4><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:13}}><I.Ph/><a href="tel:+919136121123" style={{color:B.g7,textDecoration:"none"}}>+91 9136 121 123</a></div><div style={{display:"flex",alignItems:"center",gap:8,fontSize:13}}><I.Ma/><a href="mailto:quotes@sattvaglobal.in" onClick={()=>trackEmailClick('quote-sidebar')} style={{color:B.g7,textDecoration:"none"}}>quotes@sattvaglobal.in</a></div></div>
 <div style={st.cd}><h4 style={{fontSize:15,fontWeight:700,color:B.dark,marginBottom:14}}>What happens after you submit</h4>{["We review your route, cargo and equipment","We confirm lane support and pricing","You get an actual reply — not a template","We set up a call if needed"].map((t,i)=><div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}><div style={{flexShrink:0,marginTop:3}}><I.Ck/></div><span style={{fontSize:13,color:B.g7,lineHeight:1.6}}>{t}</span></div>)}</div></div>
 </div></div></div>);}
 

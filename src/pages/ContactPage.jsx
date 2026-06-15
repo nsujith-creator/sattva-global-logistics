@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { CTA } from "../components/layout/CTA";
 import { B, FF } from "../theme/tokens";
 import { PageHero } from "../components/layout/PageHero";
+import { trackEmailClick } from "../utils/analytics";
 
 export function ContactPage({ st, I }) {
   return (
@@ -83,6 +84,7 @@ export function ContactPage({ st, I }) {
                   </div>
                   <a
                     href="mailto:info@sattvaglobal.in"
+                    onClick={() => trackEmailClick('contact-page')}
                     style={{ fontSize: 17, fontWeight: 600, color: B.dark, textDecoration: "none" }}
                   >
                     info@sattvaglobal.in
