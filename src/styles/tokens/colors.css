@@ -1,0 +1,41 @@
+/* Sattva Global Logistics — Color tokens */
+:root {
+  --sg-primary: #024aab;
+  --sg-blue-bright: #233dff;
+  --sg-blue-deep: #12229d;
+  --sg-accent: #5cb6f9;
+  --sg-light-blue: #cae8ff;
+  --sg-dark: #050a30;
+  --sg-navy: #002147;
+  --sg-ink: #0d1a4a;
+  --sg-gold: #f5a623;
+  --sg-gold-muted: #c8a84b;
+  --sg-slate-7: #334155;
+  --sg-slate-5: #64748b;
+  --sg-slate-3: #b8cde8;
+  --sg-slate-2: #e2e8f0;
+  --sg-slate-1: #f4f6fc;
+  --sg-white: #ffffff;
+  --sg-green: #059669;    --sg-green-bg: #ecfdf5;
+  --sg-amber: #d97706;    --sg-amber-bg: #fffbeb;
+  --sg-red: #dc2626;      --sg-red-bg: #fef2f2;
+
+  --text-strong: var(--sg-dark);
+  --text-body: var(--sg-slate-5);
+  --text-emphasis: var(--sg-slate-7);
+  --text-link: var(--sg-primary);
+  --text-on-dark: rgba(255,255,255,0.82);
+  --text-muted-on-dark: rgba(255,255,255,0.55);
+  --surface-page: var(--sg-slate-1);
+  --surface-card: var(--sg-white);
+  --surface-dark: var(--sg-dark);
+  --surface-tint: rgba(2,74,171,0.06);
+  --border-default: var(--sg-slate-3);
+  --border-hairline: var(--sg-slate-2);
+  --border-on-dark: rgba(255,255,255,0.12);
+  --accent-eyebrow: var(--sg-primary);
+  --accent-eyebrow-dark: var(--sg-gold);
+  --accent-gold: var(--sg-gold);
+  --accent-gold-muted: var(--sg-gold-muted);
+  --focus-ring: rgba(2,74,171,0.35);
+}
