@@ -28,8 +28,8 @@ function loadEnv(filePath) {
   }
 }
 const ENV = loadEnv('.env.local');
-const SUPABASE_URL     = ENV.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = ENV.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL      = process.env.VITE_SUPABASE_URL      || ENV.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || ENV.VITE_SUPABASE_ANON_KEY;
 
 // ── HTML-safe escape ──────────────────────────────────────────────────────────
 function esc(val) {
