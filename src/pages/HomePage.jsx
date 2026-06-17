@@ -315,6 +315,7 @@ export function HomePage({ st, I }) {
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section
+        className="sg-on-dark"
         style={{
           minHeight: "100vh",
           display: "flex",
@@ -330,14 +331,12 @@ export function HomePage({ st, I }) {
             ? "rgba(5,10,48,0.52)"
             : "linear-gradient(to right,rgba(5,10,48,0.55) 0%,rgba(5,10,48,0.22) 50%,rgba(5,10,48,0.05) 100%)" }} />
         <div
+          className="sg-container sg-hero-grid"
           style={{
-            ...st.sec,
             position: "relative", zIndex: 2,
-            display: "grid",
-            gridTemplateColumns: m ? "1fr" : "1.08fr .92fr",
-            gap: m ? 32 : 56,
-            alignItems: "center",
-            paddingTop: m ? 100 : 110,
+            paddingTop: 110,
+            paddingBottom: 40,
+            boxSizing: "border-box",
           }}
         >
           <div style={{ minWidth: 0 }}>
@@ -468,7 +467,7 @@ export function HomePage({ st, I }) {
             <h2 style={st.h2}>Most forwarder problems happen after the quote is sent</h2>
             <p style={st.sub}>Exporters do not usually switch forwarders because of price. They switch because follow-up stops, communication gets vague, and problems surface after the cargo has left the factory — too late to fix cleanly.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(3,1fr)", gap: 20 }}>
+          <div className="sg-grid-3">
             {[
               ["Commercial clarity before you commit", "Know what is included, what assumptions apply and where cost or timing can shift — before the cargo moves, not after."],
               ["A forwarder who stays in the loop", "From booking through cut-off and vessel departure, the team stays close to the shipment and keeps you informed without you having to chase."],
@@ -489,14 +488,14 @@ export function HomePage({ st, I }) {
       </section>
 
       {/* ── TRADE LANES DARK SECTION ─────────────────────────────────────── */}
-      <section style={{ background: B.dark, padding: m ? "40px 16px" : "64px 24px" }}>
+      <section className="sg-on-dark" style={{ background: B.dark, padding: "clamp(40px,6vw,72px) clamp(16px,4vw,24px)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: B.accent, textTransform: "uppercase", letterSpacing: 3, marginBottom: 12 }}>Trade Lanes</div>
             <h2 style={{ ...st.h2, color: "#fff", margin: 0 }}>Routes we know well — India to Gulf, Red Sea & Africa</h2>
             <p style={{ ...st.sub, color: "rgba(255,255,255,.72)", marginTop: 16 }}>FCL cargo from major Indian ports into the markets that matter for Indian exporters.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(3,1fr)", gap: 16 }}>
+          <div className="sg-grid-3">
             {[
               { region: "Middle East & Upper Gulf", color: B.accent, lanes: ["JNPT → Jebel Ali", "Mundra → Jebel Ali", "JNPT → Dammam", "JNPT → Jeddah"] },
               { region: "Red Sea & East Africa", color: "#10b981", lanes: ["JNPT → Mombasa", "Mundra → Mombasa", "JNPT → Dar es Salaam", "JNPT → Djibouti"] },
@@ -528,7 +527,7 @@ export function HomePage({ st, I }) {
             <h2 style={st.h2}>What these lanes actually look like in practice</h2>
             <p style={st.sub}>Every export category has its own rhythm — documentation requirements, cut-off pressures, routing constraints. Here is how that plays out across the shipments we handle.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
+          <div className="sg-grid-2">
             {fieldNotes.map((note) => (
               <div key={note.sector} style={{ ...st.cd, borderTop: `3px solid ${B.primary}`, padding: "28px 28px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
@@ -613,7 +612,7 @@ export function HomePage({ st, I }) {
       {/* ── REASSURANCE ─────────────────────────────────────────────────────── */}
       <section style={{ background: "#ffffff" }}>
         <div style={{ ...st.sec, paddingTop: 8, paddingBottom: 48 }}>
-          <div style={{ display: "grid", gridTemplateColumns: m ? "1fr" : "repeat(3,1fr)", gap: 14 }}>
+          <div className="sg-grid-3">
             {[
               ["How fast do you respond?", "Within 4 working hours on quote requests. Urgent shipments can be discussed directly by phone or WhatsApp."],
               ["Do you support first-time exporters?", "Yes. We handle documentation and coordination — so first-time exporters are not left to figure it out alone."],
