@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "Can I submit an enquiry if my route is not in the rate system?",
-    a: "Yes. Supported lanes may show indicative pricing after OTP verification. For other routes, submit your shipment details and the team will come back with a manual review. No route is automatically excluded.",
+    a: "Yes. Supported lanes help us respond faster; complex routes are reviewed directly. Submit your shipment details and the team will come back with a manual review. No route is automatically excluded.",
   },
   {
     q: "Do you support first-time exporters?",
@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: "How does the process work from enquiry to shipment?",
-    a: "Share your route, cargo type, container requirement and shipment window. We confirm route fit and pricing. For supported lanes, indicative rates are available online. For others, we do a manual commercial review. Once confirmed, we handle booking, documentation coordination, factory-to-port milestones and pre-departure follow-up.",
+    a: "Share your route, cargo type, container requirement and shipment window. We confirm route fit and pricing. Supported lanes help us respond faster; complex routes are reviewed directly. Once confirmed, we handle booking, documentation coordination, factory-to-port milestones and pre-departure follow-up.",
   },
 ];
 

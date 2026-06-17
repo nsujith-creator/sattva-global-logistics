@@ -156,7 +156,7 @@ export function ServicesPage({ st, I }) {
             {[
               ["01", "Share your route & cargo", "Tell us your port, destination, cargo type, equipment need and any shipment-specific context."],
               ["02", "We check route fit", "We confirm whether the lane is supported and what the right next step looks like commercially."],
-              ["03", "Get pricing or manual review", "Supported lanes may show indicative pricing. Others go into direct commercial review with the team."],
+              ["03", "Get pricing or manual review", "Supported lanes help us respond faster; complex routes are reviewed directly with the team."],
               ["04", "Execute the shipment together", "We stay with the movement — booking, documentation, inland coordination and pre-departure milestones."],
             ].map(([n, t, d]) => (
               <div key={n} style={{ ...st.cd, borderTop: `3px solid ${B.primary}` }}>
