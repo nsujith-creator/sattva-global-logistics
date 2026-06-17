@@ -129,7 +129,7 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
 
         {sendErr && <div role="alert" style={{ fontSize: 12, color: B.red, marginTop: 12, padding: "10px 12px", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca" }}>{sendErr}</div>}
         <button type="submit" disabled={sending} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16, opacity: sending ? 0.7 : 1 }}>
-          {sending ? "Submitting…" : <>Submit Quote Request <I.Ar /></>}
+          {sending ? "Submitting…" : <>Start Quote Request <I.Ar /></>}
         </button>
         <div style={{ fontSize: 11, color: metaC, textAlign: "center", marginTop: 8 }}>We respond within 4 working hours · Urgent: <a href="tel:+919136121123" style={{ color: metaC }}>+91 9136 121 123</a></div>
       </form>
