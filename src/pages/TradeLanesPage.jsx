@@ -166,7 +166,7 @@ export function TradeLanesPage({ st, I }) {
         <CTA
           eyebrow="Route Enquiry"
           headline="Is your lane on this list? Start your quote now."
-          copy="Enter your origin port, destination and cargo details. For supported lanes you may see indicative pricing. For others, we will review manually and come back to you."
+          copy="Enter your origin port, destination and cargo details. Supported lanes help us respond faster; complex routes are reviewed directly."
           primaryLabel="Check Route & Get Quote"
           primaryTo="/quote"
           secondaryLabel="Why Sattva"

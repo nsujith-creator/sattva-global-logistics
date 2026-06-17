@@ -1,0 +1,81 @@
+/* Sattva Global Logistics — Layout, responsive grid & focus */
+
+.sg-container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--section-pad-x);
+  box-sizing: border-box;
+}
+
+.sg-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.sg-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.sg-hero-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 56px;
+  align-items: center;
+}
+.sg-split {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .sg-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .sg-hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .sg-split { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 768px) {
+  .sg-grid-3 { grid-template-columns: 1fr; }
+  .sg-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Nav mobile menu */
+@media (min-width: 861px) {
+  .sg-nav-links { display: flex !important; }
+  .sg-nav-hamburger { display: none !important; }
+  .sg-nav-drawer { display: none !important; }
+}
+@media (max-width: 860px) {
+  .sg-nav-links { display: none !important; }
+  .sg-nav-hamburger { display: flex !important; }
+}
+
+/* Sticky WhatsApp — CSS only: only visible on mobile */
+.sg-wa-sticky {
+  display: none;
+}
+@media (max-width: 860px) {
+  .sg-wa-sticky {
+    display: flex;
+  }
+}
+
+/* Focus-visible states */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--sg-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.sg-on-dark a:focus-visible,
+.sg-on-dark button:focus-visible {
+  outline-color: var(--sg-accent);
+}
