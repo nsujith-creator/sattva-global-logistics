@@ -1,2 +1,0 @@
-"""Read-side connectors package."""
-
