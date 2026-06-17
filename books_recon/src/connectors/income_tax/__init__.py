@@ -1,2 +1,0 @@
-"""Income-tax connector stubs."""
-

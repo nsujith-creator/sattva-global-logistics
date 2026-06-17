@@ -1,2 +1,0 @@
-"""Zoho read adapters."""
-
