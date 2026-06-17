@@ -23,30 +23,30 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [sendErr, setSendErr] = useState("");
+  const [showDetails, setShowDetails] = useState(false);
   const up = (k, v) => setF(p => ({ ...p, [k]: v }));
 
   const dk = mode === "dark";
-  const cardBg  = dk ? { background:"rgba(5,10,48,0.08)", border:"1px solid rgba(255,255,255,0.13)", borderTop:"3px solid #F5A623", borderRadius:14 } : { borderTop:`4px solid ${B.primary}` };
-  const lblC    = dk ? "rgba(255,255,255,0.85)" : B.g5;
-  const headC   = dk ? "#ffffff" : undefined;
-  const eyeC    = dk ? "#F5A623" : B.primary;
-  const metaC   = dk ? "rgba(255,255,255,0.38)" : B.g5;
-  const divC    = dk ? "rgba(255,255,255,0.1)" : B.g2;
+  const cardBg = dk ? { background:"rgba(5,10,48,0.08)", border:"1px solid rgba(255,255,255,0.13)", borderTop:"3px solid #F5A623", borderRadius:14 } : { borderTop:`4px solid ${B.primary}` };
+  const lblC   = dk ? "rgba(255,255,255,0.85)" : B.g5;
+  const headC  = dk ? "#ffffff" : undefined;
+  const eyeC   = dk ? "#F5A623" : B.primary;
+  const metaC  = dk ? "rgba(255,255,255,0.38)" : B.g5;
 
   const validate = () => {
     const e = {};
-    if (!f.pol) e.pol = "Required";
-    if (!f.pod) e.pod = "Required";
-    if (!f.eq) e.eq = "Required";
-    if (!f.name.trim()) e.name = "Required";
+    if (!f.pol)          e.pol   = "Required";
+    if (!f.pod)          e.pod   = "Required";
+    if (!f.eq)           e.eq    = "Required";
     if (!f.email.trim()) e.email = "Required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = "Invalid email";
-    if (phoneErr) e.phone = phoneErr;
+    if (showDetails && phoneErr) e.phone = phoneErr;
     setErrs(e);
     return !Object.keys(e).length;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
     if (sending || !validate()) return;
     setSending(true); setSendErr("");
     const polName = POL.find(p => p.c === f.pol)?.n || f.pol;
@@ -60,58 +60,83 @@ function HomeQuoteCard({ st, I, mode = "light" }) {
     } finally { setSending(false); }
   };
 
+  const errEl = (id, msg) => msg
+    ? <div id={id} role="alert" style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{msg}</div>
+    : null;
+
   if (done) return (
     <div style={{ ...st.cd, ...cardBg, maxWidth: 470, width: "100%", padding: 32, textAlign: "center" }}>
       <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
       </div>
       <h3 style={{ ...st.h3, fontSize: 18, marginBottom: 8 }}>Quote Request Received</h3>
-      <p style={{ fontSize: 13, color: B.g5, lineHeight: 1.7 }}>We'll come back to you within 4 working hours. Urgent? Call <a href="tel:+919136121123" style={{ color: B.primary, fontWeight: 600 }}>+91 9136 121 123</a></p>
+      <p style={{ fontSize: 13, color: B.g5, lineHeight: 1.7 }}>We'll come back within 4 working hours. Urgent? Call <a href="tel:+919136121123" style={{ color: B.primary, fontWeight: 600 }}>+91 9136 121 123</a></p>
       <button onClick={() => setDone(false)} style={{ ...st.bs, marginTop: 16, fontSize: 12 }}>Submit another</button>
     </div>
   );
 
   return (
-    <div style={{ ...st.cd, ...cardBg, maxWidth: 470, width: "100%", padding: 32 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: eyeC, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Get a Quote</div>
-      <h3 style={{ ...st.h3, fontSize: 19, marginBottom: 20, color: headC }}>We confirm within 4 working hours</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <HomePortCombo label="From (POL) *" value={f.pol} onChange={v => { up("pol", v); setErrs(p => ({ ...p, pol: "" })); }} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" error={errs.pol} />
-        <HomePortCombo label="To (POD) *" value={f.pod} onChange={v => { up("pod", v); setErrs(p => ({ ...p, pod: "" })); }} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" error={errs.pod} />
-        <HomeCargoCombo value={f.cargo} onChange={v => up("cargo", v)} />
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Equipment *</div>
-          <select style={{ ...st.inp, borderColor: errs.eq ? B.red : undefined }} value={f.eq} onChange={e => { up("eq", e.target.value); setErrs(p => ({ ...p, eq: "" })); }}>
-            <option value="">Select container type</option>
-            {EQ.map(e => <option key={e} value={e}>{EQ_L[e]} ({e})</option>)}
-          </select>
-          {errs.eq && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.eq}</div>}
-        </div>
-        <div style={{ borderTop: `1px solid ${divC}`, paddingTop: 12, marginTop: 4 }} />
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Name *</div>
-          <input style={{ ...st.inp, borderColor: errs.name ? B.red : undefined }} type="text" value={f.name} onChange={e => { up("name", e.target.value); setErrs(p => ({ ...p, name: "" })); }} placeholder="Your full name" />
-          {errs.name && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.name}</div>}
-        </div>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Email *</div>
-          <input style={{ ...st.inp, borderColor: errs.email ? B.red : undefined }} type="email" value={f.email} onChange={e => { up("email", e.target.value); setErrs(p => ({ ...p, email: "" })); }} placeholder="you@company.com" />
-          {errs.email && <div style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{errs.email}</div>}
-        </div>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: lblC, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Phone</div>
-          <PhoneField value={f.phone} onChange={v => up("phone", v)} error={errs.phone || phoneErr} onError={setPhoneErr} st={st} />
-        </div>
+    <div style={{ ...st.cd, ...cardBg, maxWidth: 470, width: "100%" }}>
+      <div style={{ padding: "28px 28px 0" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: eyeC, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Get a Quote</div>
+        <h3 style={{ ...st.h3, fontSize: 19, marginBottom: 20, color: headC }}>We confirm within 4 working hours</h3>
       </div>
-      {sendErr && <div style={{ fontSize: 12, color: B.red, marginTop: 12, padding: "10px 12px", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca" }}>{sendErr}</div>}
-      <button onClick={handleSubmit} disabled={sending} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16, opacity: sending ? 0.7 : 1 }}>
-        {sending ? "Submitting…" : <>Submit Quote Request <I.Ar /></>}
-      </button>
-      <div style={{ fontSize: 11, color: metaC, textAlign: "center", marginTop: 8 }}>Typical response: within 4 working hours</div>
+      <form onSubmit={handleSubmit} noValidate style={{ padding: "0 28px 28px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* 5 always-visible fields */}
+          <HomePortCombo label="From (POL) *" value={f.pol} onChange={v => { up("pol", v); setErrs(p => ({ ...p, pol: "" })); }} options={POL} placeholder="JNPT, Mundra, Chennai, Cochin…" error={errs.pol} lblC={lblC} />
+          <HomePortCombo label="To (POD) *" value={f.pod} onChange={v => { up("pod", v); setErrs(p => ({ ...p, pod: "" })); }} options={ALL_POD} placeholder="Jebel Ali, Dammam, Mombasa…" error={errs.pod} lblC={lblC} />
+          <HomeCargoCombo value={f.cargo} onChange={v => up("cargo", v)} lblC={lblC} />
+          <div>
+            <label htmlFor="hq-eq" style={{ ...st.lb, color: lblC }}>Container Type *</label>
+            <select id="hq-eq" aria-invalid={!!errs.eq} aria-describedby={errs.eq ? "hq-eq-err" : undefined}
+              style={{ ...st.inp, borderColor: errs.eq ? B.red : undefined }} value={f.eq}
+              onChange={e => { up("eq", e.target.value); setErrs(p => ({ ...p, eq: "" })); }}>
+              <option value="">Select container type</option>
+              {EQ.map(e => <option key={e} value={e}>{EQ_L[e]} ({e})</option>)}
+            </select>
+            {errEl("hq-eq-err", errs.eq)}
+          </div>
+          <div>
+            <label htmlFor="hq-email" style={{ ...st.lb, color: lblC }}>Contact Email *</label>
+            <input id="hq-email" type="email" aria-invalid={!!errs.email} aria-describedby={errs.email ? "hq-email-err" : undefined}
+              style={{ ...st.inp, borderColor: errs.email ? B.red : undefined }} value={f.email}
+              onChange={e => { up("email", e.target.value); setErrs(p => ({ ...p, email: "" })); }} placeholder="you@company.com" />
+            {errEl("hq-email-err", errs.email)}
+          </div>
+
+          {/* Progressive disclosure */}
+          {!showDetails && (
+            <button type="button" onClick={() => setShowDetails(true)}
+              style={{ background: "none", border: "none", cursor: "pointer", color: eyeC, fontWeight: 600, fontSize: 12, textAlign: "left", padding: 0, fontFamily: "inherit", display: "flex", alignItems: "center", gap: 4 }}>
+              + Add name &amp; phone (optional)
+            </button>
+          )}
+          {showDetails && (
+            <>
+              <div>
+                <label htmlFor="hq-name" style={{ ...st.lb, color: lblC }}>Name</label>
+                <input id="hq-name" type="text" style={st.inp} value={f.name}
+                  onChange={e => up("name", e.target.value)} placeholder="Your full name" />
+              </div>
+              <div>
+                <label htmlFor="hq-phone" style={{ ...st.lb, color: lblC }}>Phone</label>
+                <PhoneField value={f.phone} onChange={v => up("phone", v)} error={errs.phone || phoneErr} onError={setPhoneErr} st={st} />
+              </div>
+            </>
+          )}
+        </div>
+
+        {sendErr && <div role="alert" style={{ fontSize: 12, color: B.red, marginTop: 12, padding: "10px 12px", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca" }}>{sendErr}</div>}
+        <button type="submit" disabled={sending} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16, opacity: sending ? 0.7 : 1 }}>
+          {sending ? "Submitting…" : <>Submit Quote Request <I.Ar /></>}
+        </button>
+        <div style={{ fontSize: 11, color: metaC, textAlign: "center", marginTop: 8 }}>We respond within 4 working hours · Urgent: <a href="tel:+919136121123" style={{ color: metaC }}>+91 9136 121 123</a></div>
+      </form>
     </div>
   );
 }
-function HomePortCombo({ label, value, onChange, options, placeholder }) {
+function HomePortCombo({ label, value, onChange, options, placeholder, error, lblC }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -122,11 +147,14 @@ function HomePortCombo({ label, value, onChange, options, placeholder }) {
     ? options.filter(o => o.n.toLowerCase().includes(q.toLowerCase()) || o.c.toLowerCase().includes(q.toLowerCase())).slice(0, 10)
     : [];
   const pick = (code) => { onChange(code); setQ(""); setOpen(false); setFocused(false); };
-  const inp = { width: "100%", padding: "10px 12px", border: "1.5px solid #d1d5db", borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#fff" };
+  const inp = { width: "100%", padding: "10px 12px", border: `1.5px solid ${error ? B.red : "#d1d5db"}`, borderRadius: 8, fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#fff" };
+  const inputId = `hpc-${label.replace(/\s+/g,"").toLowerCase()}`;
+  const errId = `${inputId}-err`;
   return (
     <div ref={el => ref.current = el} style={{ position: "relative" }} onBlur={e => { if (!ref.current?.contains(e.relatedTarget)) { setOpen(false); setFocused(false); setQ(""); } }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{label}</div>
-      <input type="text" value={display} style={inp} placeholder={placeholder} autoComplete="off"
+      <label htmlFor={inputId} style={{ fontSize: 11, fontWeight: 700, color: lblC || B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4, display: "block" }}>{label}</label>
+      <input id={inputId} type="text" value={display} style={inp} placeholder={placeholder} autoComplete="off"
+        aria-invalid={!!error} aria-describedby={error ? errId : undefined}
         onChange={e => { setQ(e.target.value); if (!e.target.value) onChange(""); setOpen(true); }}
         onFocus={() => { setFocused(true); setQ(selected ? `${selected.n} (${selected.c})` : ""); setOpen(true); }} />
       {open && items.length > 0 && (
@@ -140,12 +168,13 @@ function HomePortCombo({ label, value, onChange, options, placeholder }) {
           ))}
         </div>
       )}
+      {error && <div id={errId} role="alert" style={{ fontSize: 11, color: B.red, marginTop: 3 }}>{error}</div>}
     </div>
   );
 }
 
 /* ── Mini CargoCombo for homepage ── */
-function HomeCargoCombo({ value, onChange }) {
+function HomeCargoCombo({ value, onChange, lblC }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState([]);
@@ -157,8 +186,8 @@ function HomeCargoCombo({ value, onChange }) {
   };
   return (
     <div style={{ position: "relative" }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Cargo Type</div>
-      <input type="text" value={value} style={inp} placeholder="Garments, FMCG, Agro, Engineering…" autoComplete="off"
+      <label htmlFor="hq-cargo" style={{ fontSize: 11, fontWeight: 700, color: lblC || B.g5, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4, display: "block" }}>Cargo Type</label>
+      <input id="hq-cargo" type="text" value={value} style={inp} placeholder="Garments, FMCG, Agro, Engineering…" autoComplete="off"
         onChange={handleChange} onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)} />
       {open && results.length > 0 && (
         <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999, background: "#fff", border: "1.5px solid #d1d5db", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,.12)", maxHeight: 200, overflowY: "auto", marginTop: 2 }}>
