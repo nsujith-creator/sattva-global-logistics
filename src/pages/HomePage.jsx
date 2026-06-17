@@ -220,7 +220,7 @@ export function HomePage({ st, I }) {
         name: "Can I still enquire if my route is not preloaded?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. If indicative pricing is available for your route you will see it after verification. If not, you can still submit the shipment details and our team will review it directly.",
+          text: "Yes. Submit your shipment details and the team will review it directly. Supported lanes help us respond faster; complex or new routes are reviewed and quoted directly.",
         },
       },
       {
@@ -378,7 +378,7 @@ export function HomePage({ st, I }) {
               <div style={{ fontSize:10, fontWeight:700, color:"#F5A623", letterSpacing:2, textTransform:"uppercase", marginBottom:6 }}>Get a Quote</div>
               <div style={{ fontSize:15, fontWeight:700, color:"#fff", marginBottom:14 }}>We confirm within 4 working hours</div>
               <button onClick={() => go("/quote")} style={{ ...st.bp, width:"100%", justifyContent:"center", fontSize:14 }}>
-                Request FCL Quote →
+                Start Quote Request →
               </button>
               <a href="tel:+919136121123" style={{ display:"block", textAlign:"center", marginTop:10, fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.6)", textDecoration:"none" }}>
                 Or call +91 9136 121 123
@@ -528,6 +528,9 @@ export function HomePage({ st, I }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
             {Object.entries(CARRIERS).map(([name]) => <CarrierBadge key={name} name={name} size="md" />)}
           </div>
+          <p style={{ fontSize: 11, color: B.g5, textAlign: "center", marginTop: 20, lineHeight: 1.6, maxWidth: 680, margin: "20px auto 0" }}>
+            Carrier logos indicate booking experience and commonly used carriers — not partnership, endorsement, preferred contract, or guaranteed allocation. All marks are the property of their respective owners.
+          </p>
         </div>
       </section>
 

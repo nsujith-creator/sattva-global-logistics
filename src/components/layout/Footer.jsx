@@ -28,7 +28,7 @@ export function Footer({ I }) {
             Have a shipment in hand?<br />Get clarity before you commit.
           </div>
           <div style={{ fontSize: 13, color: B.g5, maxWidth: 560, lineHeight: 1.7 }}>
-            For supported lanes, start with a quote and see indicative pricing. For complex or new routes, speak to the team directly — no hand-off, no call centre.
+            Supported lanes help us respond faster; complex routes are reviewed directly. No hand-off, no call centre.
           </div>
         </div>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
