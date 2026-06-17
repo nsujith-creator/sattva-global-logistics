@@ -11,6 +11,9 @@
     "postbuild": "node prerender.mjs"
   },
   "dependencies": {
+    "@fontsource/dm-mono": "^5.2.7",
+    "@fontsource/poppins": "^5.2.7",
+    "@fontsource/quicksand": "^5.2.10",
     "@supabase/supabase-js": "^2.100.0",
     "csv-writer": "^1.6.0",
     "d3": "^7.9.0",
