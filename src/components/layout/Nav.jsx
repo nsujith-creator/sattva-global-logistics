@@ -70,7 +70,7 @@ export function Nav({ st }) {
         WebkitBackdropFilter: "blur(18px) saturate(150%)",
         boxShadow: sc ? "0 10px 30px rgba(5,10,48,.08)" : "0 1px 0 rgba(255,255,255,.3)",
         borderBottom: "1px solid rgba(5,10,48,0.08)",
-        transition: "all .3s",
+        transition: "background .3s, box-shadow .3s",
       }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
@@ -81,12 +81,12 @@ export function Nav({ st }) {
           role="link"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && goTo("home")}
-          aria-label="Sattva Global Logistics — home"
+          aria-label="Sattva Global Logistics â€” home"
         >
           <img src="/sattva-global-logistics-logo-vector-SWIRL-VERIFIED.svg" alt="Sattva Global Logistics" style={{ height: 44, width: "auto", display: "block" }} />
         </div>
 
-        {/* Desktop links — hidden on mobile via CSS */}
+        {/* Desktop links â€” hidden on mobile via CSS */}
         <div className="sg-nav-links" style={{ alignItems: "center", gap: 4 }}>
           <ul style={{ display: "flex", gap: 14, listStyle: "none", margin: 0, padding: 0 }}>
             {lk.map(([id, lb]) => {
@@ -123,7 +123,7 @@ export function Nav({ st }) {
               fontSize: 12, fontWeight: 700, color: B.primary, textDecoration: "none",
               whiteSpace: "nowrap", marginLeft: 8, padding: "8px 11px", borderRadius: 8,
               border: `1px solid ${B.primary}26`, background: "rgba(2,74,171,0.07)",
-              letterSpacing: 0.2, transition: "all .2s", boxShadow: "inset 0 1px 0 rgba(255,255,255,.7)",
+              letterSpacing: 0.2, transition: "background .2s, border-color .2s", boxShadow: "inset 0 1px 0 rgba(255,255,255,.7)",
             }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(2,74,171,0.11)"; e.currentTarget.style.borderColor = `${B.primary}44`; }}
             onMouseLeave={e => { e.currentTarget.style.background = "rgba(2,74,171,0.07)"; e.currentTarget.style.borderColor = `${B.primary}26`; }}
@@ -135,7 +135,7 @@ export function Nav({ st }) {
           </button>
         </div>
 
-        {/* Hamburger — hidden on desktop via CSS */}
+        {/* Hamburger â€” hidden on desktop via CSS */}
         <button
           className="sg-nav-hamburger"
           onClick={() => setOpen((o) => !o)}
@@ -144,13 +144,13 @@ export function Nav({ st }) {
           aria-controls="sg-nav-drawer"
           style={{ background: "none", border: "none", cursor: "pointer", padding: 8, flexDirection: "column", gap: 5 }}
         >
-          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "all .25s", transform: open ? "rotate(45deg) translate(5px,5px)" : "none" }} />
-          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "all .25s", opacity: open ? 0 : 1 }} />
-          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "all .25s", transform: open ? "rotate(-45deg) translate(5px,-5px)" : "none" }} />
+          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "transform .25s, opacity .25s", transform: open ? "rotate(45deg) translate(5px,5px)" : "none" }} />
+          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "transform .25s, opacity .25s", opacity: open ? 0 : 1 }} />
+          <span style={{ display: "block", width: 22, height: 2, background: B.dark, transition: "transform .25s, opacity .25s", transform: open ? "rotate(-45deg) translate(5px,-5px)" : "none" }} />
         </button>
       </div>
 
-      {/* Mobile drawer — only visible on small screens when open */}
+      {/* Mobile drawer â€” only visible on small screens when open */}
       {open && (
         <div
           id="sg-nav-drawer"

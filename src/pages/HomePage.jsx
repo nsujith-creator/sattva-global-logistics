@@ -395,7 +395,7 @@ export function HomePage({ st, I }) {
                 ["4 hrs", "Typical response on quote requests"],
               ].map(([n, l]) => (
                 <div key={l}>
-                  <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF }}>{n}</div>
+                  <div style={{ fontSize: m ? 24 : 28, fontWeight: 800, color: "#F5A623", fontFamily: FF, fontVariantNumeric: "tabular-nums" }}>{n}</div>
                   <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", maxWidth: 150, lineHeight: 1.6 }}>{l}</div>
                 </div>
               ))}
@@ -578,7 +578,7 @@ export function HomePage({ st, I }) {
               { icon: <I.Tr />, t: "Factory-to-port coordination", d: "Better alignment between factory dispatch, CFS handover, port cut-off milestones and vessel departure." },
             ].map((x) => (
               <div key={x.t} style={{ ...st.cd, padding: "34px 28px" }}>
-                <div style={{ width: 56, height: 56, borderRadius: 14, background: `${B.primary}08`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>{x.icon}</div>
+                <div style={{ width: 56, height: 56, borderRadius: 10, background: `${B.primary}08`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>{x.icon}</div>
                 <h3 style={{ ...st.h3, marginBottom: 10 }}>{x.t}</h3>
                 <p style={{ ...st.bd, fontSize: 14 }}>{x.d}</p>
               </div>
