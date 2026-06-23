@@ -12,4 +12,10 @@ set_secret.bat
 enrich-contacts.js
 exporters.csv
 scrape.js
-docs/advisories/*.pdf
+
+# Generated freight advisory artifacts
+docs/advisories/advisory-payload-*.json
+docs/advisories/advisory-payload-latest.json
+docs/advisories/execution-log-*.md
+docs/advisories/linkedin-post-*.txt
+docs/advisories/daily-shipping-trade-advisory-*.pdf
