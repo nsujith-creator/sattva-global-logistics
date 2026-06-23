@@ -53,8 +53,9 @@ export function ContactPage({ st, I }) {
                   background: B.brand ?? "#050A30",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
+                  color: "#fff",
                 }}>
-                  {I ? <I n="phone" size={20} color="#fff" /> : null}
+                  <I.Ph />
                 </div>
                 <div>
                   <div style={{ fontSize: 12, color: B.g5, fontFamily: FF?.mono ?? "monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
@@ -75,8 +76,9 @@ export function ContactPage({ st, I }) {
                   background: B.brand ?? "#050A30",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
+                  color: "#fff",
                 }}>
-                  {I ? <I n="mail" size={20} color="#fff" /> : null}
+                  <I.Ma />
                 </div>
                 <div>
                   <div style={{ fontSize: 12, color: B.g5, fontFamily: FF?.mono ?? "monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
@@ -98,8 +100,9 @@ export function ContactPage({ st, I }) {
                   background: B.brand ?? "#050A30",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
+                  color: "#fff",
                 }}>
-                  {I ? <I n="map-pin" size={20} color="#fff" /> : null}
+                  <I.Pi />
                 </div>
                 <div>
                   <div style={{ fontSize: 12, color: B.g5, fontFamily: FF?.mono ?? "monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
