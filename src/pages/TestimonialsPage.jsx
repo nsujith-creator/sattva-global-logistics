@@ -45,7 +45,7 @@ export function TestimonialsPage({ st, I }) {
 
   const cases = [
     {
-      tag: "Readymade Garments � Mumbai",
+      tag: "Readymade Garments · Mumbai",
       headline: "Cleaner buyer-facing execution for repeat garment exports into the Gulf",
       challenge: "A garment exporter was not struggling to get quotes. The real issue was inconsistent follow-up, avoidable BL corrections and buyer-side stress whenever dispatch windows tightened.",
       solution: "Sattva introduced a more disciplined pre-shipment coordination flow, cleaner document handling and clearer communication around cargo readiness and shipment movement.",
@@ -54,7 +54,7 @@ export function TestimonialsPage({ st, I }) {
       attr: "Export Manager, Garments Exporter",
     },
     {
-      tag: "Food Products & FMCG � Gujarat",
+      tag: "Food Products & FMCG · Gujarat",
       headline: "A steadier export rhythm for food and FMCG shipments heading into East Africa",
       challenge: "The exporter needed a forwarder that could help keep communication, shipment planning and documentation aligned across repeat cargo movements instead of forcing the team into last-minute firefighting.",
       solution: "Sattva supported the lane with stronger pre-departure coordination, cleaner cargo handover and a more reliable commercial-to-operational flow.",
@@ -63,7 +63,7 @@ export function TestimonialsPage({ st, I }) {
       attr: "Director, Food Products Exporter",
     },
     {
-      tag: "Engineering Goods � Maharashtra",
+      tag: "Engineering Goods · Maharashtra",
       headline: "More useful follow-through for engineering cargo moving on Gulf routes",
       challenge: "The exporter had no shortage of freight options, but needed better shipment ownership after the quote stage because commercial discussions kept getting disconnected from the actual movement.",
       solution: "Sattva helped tighten route communication, execution follow-through and the general handoff between commercial expectations and shipment action.",

@@ -81,7 +81,7 @@ export function Nav({ st }) {
           role="link"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && goTo("home")}
-          aria-label="Sattva Global Logistics â€” home"
+          aria-label="Sattva Global Logistics — home"
         >
           <img src="/sattva-global-logistics-logo-vector-SWIRL-VERIFIED.svg" alt="Sattva Global Logistics" style={{ height: 44, width: "auto", display: "block" }} />
         </div>

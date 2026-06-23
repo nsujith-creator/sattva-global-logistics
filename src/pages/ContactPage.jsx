@@ -83,11 +83,11 @@ export function ContactPage({ st, I }) {
                     Email
                   </div>
                   <a
-                    href="mailto:info@sattvaglobal.in"
+                    href="mailto:quotes@sattvaglobal.in"
                     onClick={() => trackEmailClick('contact-page')}
                     style={{ fontSize: 17, fontWeight: 600, color: B.dark, textDecoration: "none" }}
                   >
-                    info@sattvaglobal.in
+                    quotes@sattvaglobal.in
                   </a>
                 </div>
               </div>
