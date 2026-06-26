@@ -19,3 +19,5 @@ docs/advisories/advisory-payload-latest.json
 docs/advisories/execution-log-*.md
 docs/advisories/linkedin-post-*.txt
 docs/advisories/daily-shipping-trade-advisory-*.pdf
+
+docs/advisories/daily-freight-intelligence-digest-*.md
