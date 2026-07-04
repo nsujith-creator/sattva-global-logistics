@@ -248,8 +248,8 @@ export function TrackContainerPage({ st }) {
   const [step, setStep] = useState("input"); // input | gate | loading | result | pending | error
   const [trackingNumber, setTrackingNumber] = useState("");
   const [carrier, setCarrier] = useState("");
-  const [name, setName] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
+  const [name, setName] = useState(() => sessionStorage.getItem("sg_track_name") || "");
+  const [whatsapp, setWhatsapp] = useState(() => sessionStorage.getItem("sg_track_wa") || "");
   const [errors, setErrors] = useState({});
   const [result, setResult] = useState(null);
   const [apiError, setApiError] = useState("");
@@ -258,8 +258,6 @@ export function TrackContainerPage({ st }) {
     setStep("input");
     setTrackingNumber("");
     setCarrier("");
-    setName("");
-    setWhatsapp("");
     setErrors({});
     setResult(null);
     setApiError("");
@@ -284,12 +282,19 @@ export function TrackContainerPage({ st }) {
   function handleInputSubmit() {
     if (!validateInput()) return;
     setErrors({});
-    setStep("gate");
+    // Skip gate if we already have session credentials
+    if (name.trim() && whatsapp.replace(/\D/g, "").length >= 7) {
+      handleGateSubmit();
+    } else {
+      setStep("gate");
+    }
   }
 
   async function handleGateSubmit() {
     if (!validateGate()) return;
     setErrors({});
+    sessionStorage.setItem("sg_track_name", name.trim());
+    sessionStorage.setItem("sg_track_wa", whatsapp.trim());
     setStep("loading");
     setApiError("");
     try {
@@ -427,7 +432,7 @@ export function TrackContainerPage({ st }) {
                   type="tel"
                   value={whatsapp}
                   onChange={e => { setWhatsapp(e.target.value); setErrors(p => ({ ...p, whatsapp: "" })); }}
-                  placeholder="+91 98765 43210"
+                  placeholder="e.g. 9136121123"
                   autoComplete="tel"
                 />
                 {errors.whatsapp && <div style={{ fontSize: 11, color: "#dc2626", marginTop: 4 }}>{errors.whatsapp}</div>}
