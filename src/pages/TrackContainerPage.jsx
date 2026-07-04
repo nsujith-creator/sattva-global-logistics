@@ -377,18 +377,38 @@ export function TrackContainerPage({st}){
     try{
       const res = await trackShipment({trackingNumber:trk.trim(),carrier:car,name:name.trim(),whatsapp:wa.trim()});
       if(!res.success) throw new Error(res.error||"Tracking failed");
-      const data = res.data;
-      if(data?.error==="tracking_unavailable"||!data?.shipment){ setStep("error"); return; }
-      const sh = data.shipment;
-      const containers = sh.containers??[];
-      const hasMovements = containers.some(c=>(c.movements??[]).length>0);
-      const status = sh.status??"NEW";
-      setResult({shipment:sh});
-      setStep(!hasMovements&&["NEW","INPROGRESS"].includes(status)?"pending":"result");
+      if(res.notApproved){ setStep("notApproved"); return; }
+      if(res.processing&&res.pollId){ await pollUntilReady(res.pollId); return; }
+      handleData(res.data);
     }catch(err){
       setApiErr(err.message||"Something went wrong. Please try again.");
       setStep("error");
     }
+  }
+
+  function handleData(data){
+    if(data?.error==="tracking_unavailable"||!data?.shipment){ setStep("error"); return; }
+    const sh = data.shipment;
+    const containers = sh.containers??[];
+    const hasMovements = containers.some(c=>(c.movements??[]).length>0);
+    const status = sh.status??"NEW";
+    setResult({shipment:sh});
+    setStep(!hasMovements&&["NEW","INPROGRESS"].includes(status)?"pending":"result");
+  }
+
+  // Poll every 20s for up to 3 minutes. GET-only on the server — no credit spend.
+  async function pollUntilReady(pollId){
+    setStep("processing");
+    const maxAttempts = 9;
+    for(let i=0;i<maxAttempts;i++){
+      await new Promise(r=>setTimeout(r,20000));
+      try{
+        const res = await trackShipment({trackingNumber:trk.trim(),carrier:car,name:name.trim(),whatsapp:wa.trim(),pollId});
+        if(res.notApproved){ setStep("notApproved"); return; }
+        if(res.data&&!res.processing){ handleData(res.data); return; }
+      }catch{ /* transient — keep polling */ }
+    }
+    setStep("pending"); // timed out — soft state, not error
   }
 
   function handleInputSubmit(){
@@ -556,6 +576,44 @@ export function TrackContainerPage({st}){
             </div>
           )}
 
+          {/* STATE 3b — PROCESSING (carrier data being fetched, polling) */}
+          {step==="processing"&&(
+            <div style={{...card,display:"flex",flexDirection:"column",alignItems:"center",padding:"64px 36px",textAlign:"center"}}>
+              <div style={{position:"relative",width:72,height:72,marginBottom:22}}>
+                <div className="sg-ring" style={{position:"absolute",inset:0,borderRadius:"50%",border:`3px solid ${line}`,borderTopColor:teal,animation:"sg-spin 1s linear infinite"}}/>
+                <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <ShipIcon/>
+                </div>
+              </div>
+              <p style={{color:navy,fontSize:15.5,fontWeight:600,fontFamily:F,marginBottom:8}}>Requesting data from the carrier…</p>
+              <p style={{color:muted,fontSize:13.5,fontFamily:F,maxWidth:400,lineHeight:1.6}}>
+                This usually takes 1–2 minutes for the first lookup of a shipment.
+                Keep this page open — the result loads automatically.
+              </p>
+            </div>
+          )}
+
+          {/* STATE — NOT APPROVED */}
+          {step==="notApproved"&&(
+            <div style={card}>
+              <h2 style={{fontFamily:FF,fontWeight:700,fontSize:23,color:navy,marginBottom:10}}>Tracking access is for Sattva clients</h2>
+              <p style={{color:muted,fontSize:14.5,lineHeight:1.7,marginBottom:22,fontFamily:F}}>
+                Live container tracking on this page is a service we provide to active Sattva clients.
+                If you're shipping with us — or want to — message us on WhatsApp and we'll enable
+                tracking for your number right away.
+              </p>
+              <a href={waLink(`Hi Sattva, I'd like tracking access for my shipments. My number is ${wa||""}. Tracking number: ${trk||""}`)} target="_blank" rel="noopener noreferrer"
+                style={{...btnWA,textDecoration:"none",display:"flex"}}>
+                <WASvg/> Request Tracking Access on WhatsApp
+              </a>
+              <div style={{textAlign:"center",marginTop:16}}>
+                <button onClick={()=>setStep("input")} style={{background:"none",border:"none",color:muted,fontSize:13,cursor:"pointer",fontFamily:F}}>
+                  ← Back
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* STATE 4b — PENDING */}
           {step==="pending"&&(
             <div style={card}>
@@ -568,11 +626,11 @@ export function TrackContainerPage({st}){
               <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"#eef4ff",border:"1px solid #d6e4fb",color:blue,fontSize:13,fontWeight:600,letterSpacing:".04em",padding:"7px 14px",borderRadius:999,marginBottom:16}}>
                 <BLIcon/>{trk.trim().toUpperCase()}
               </div>
-              <p style={{color:muted,fontSize:14,marginBottom:0,fontFamily:F}}>This can be normal. Common reasons:</p>
+              <p style={{color:muted,fontSize:14,marginBottom:0,fontFamily:F}}>The carrier hasn't published milestone data yet. This can be normal:</p>
               <ul style={{margin:"18px 0 24px",paddingLeft:2,listStyle:"none"}}>
-                {["The booking is new — carriers publish milestones 24–48 hours after confirmation.",
-                  "The number format doesn't match this carrier. Try the MBL or container number instead.",
-                  "The carrier isn't covered by live tracking yet."].map((t,i)=>(
+                {["New bookings can take a few hours — you'll usually see data if you check back later today.",
+                  "Some carriers (including CMA CGM) share limited data with tracking systems.",
+                  "A container number sometimes returns better results than a booking number."].map((t,i)=>(
                   <li key={i} style={{position:"relative",paddingLeft:22,marginBottom:10,fontSize:14,color:muted,fontFamily:F}}>
                     <span style={{position:"absolute",left:4,top:8,width:6,height:6,borderRadius:"50%",background:trkAmber,display:"block"}}/>
                     {t}
@@ -599,11 +657,11 @@ export function TrackContainerPage({st}){
                 <BLIcon/>{trk.trim().toUpperCase()}
               </div>
               {apiErr&&<p style={{fontSize:13,color:"#374151",marginBottom:12,fontFamily:F}}>{apiErr}</p>}
-              <p style={{color:muted,fontSize:14,marginBottom:0,fontFamily:F}}>This can be normal. Common reasons:</p>
+              <p style={{color:muted,fontSize:14,marginBottom:0,fontFamily:F}}>The carrier hasn't published milestone data yet. This can be normal:</p>
               <ul style={{margin:"18px 0 24px",paddingLeft:2,listStyle:"none"}}>
-                {["The booking is new — carriers publish milestones 24–48 hours after confirmation.",
-                  "The number format doesn't match this carrier. Try the MBL or container number instead.",
-                  "The carrier isn't covered by live tracking yet."].map((t,i)=>(
+                {["New bookings can take a few hours — you'll usually see data if you check back later today.",
+                  "Some carriers (including CMA CGM) share limited data with tracking systems.",
+                  "A container number sometimes returns better results than a booking number."].map((t,i)=>(
                   <li key={i} style={{position:"relative",paddingLeft:22,marginBottom:10,fontSize:14,color:muted,fontFamily:F}}>
                     <span style={{position:"absolute",left:4,top:8,width:6,height:6,borderRadius:"50%",background:trkAmber,display:"block"}}/>
                     {t}
