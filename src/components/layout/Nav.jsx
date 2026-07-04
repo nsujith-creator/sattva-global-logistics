@@ -52,6 +52,7 @@ export function Nav({ st }) {
     ["trade-lanes",                 "Trade Lanes"],
     ["freight-intelligence-desk",   "Intelligence Desk"],
     ["knowledge",                   "Knowledge"],
+    ["track-container",             "Track Shipment"],
   ];
 
   const goTo = (id) => {
@@ -100,13 +101,18 @@ export function Nav({ st }) {
                     onKeyDown={(e) => e.key === "Enter" && goTo(id)}
                     aria-current={isActive ? "page" : undefined}
                     style={{
-                      color: isActive ? B.primary : B.g7,
-                      fontWeight: isActive ? 700 : 600,
+                      color: isActive ? B.primary : id === "track-container" ? "#00C9A7" : B.g7,
+                      fontWeight: isActive ? 700 : id === "track-container" ? 700 : 600,
                       fontSize: 13,
                       cursor: "pointer",
                       fontFamily: F,
-                      paddingBottom: 4,
+                      paddingBottom: id === "track-container" ? 0 : 4,
+                      paddingTop: id === "track-container" ? 0 : 0,
                       borderBottom: isActive ? `2px solid ${B.primary}` : "2px solid transparent",
+                      background: id === "track-container" && !isActive ? "rgba(0,201,167,0.10)" : "transparent",
+                      border: id === "track-container" && !isActive ? "1.5px solid rgba(0,201,167,0.35)" : undefined,
+                      borderRadius: id === "track-container" ? 6 : 0,
+                      padding: id === "track-container" ? "5px 10px" : undefined,
                       transition: "color .2s, border-color .2s",
                       display: "inline-block",
                     }}
