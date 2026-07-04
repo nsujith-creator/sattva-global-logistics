@@ -35,6 +35,7 @@ import { ServicesPage } from "./pages/ServicesPage";
 import { TradeLanesPage } from "./pages/TradeLanesPage";
 import { TradeAdvisoryPage } from "./pages/TradeAdvisoryPage";
 import { FreightIntelligenceDeskPage } from "./pages/FreightIntelligenceDeskPage";
+import { TrackContainerPage } from "./pages/TrackContainerPage";
 import { WhySattvaPage } from "./pages/WhySattvaPage";
 import { IndiaCoordinationPage } from "./pages/IndiaCoordinationPage";
 import { FaqPage } from "./pages/FaqPage";
@@ -662,6 +663,7 @@ return(
 <Route path="/quote" element={<QuotePage/>}/>
 <Route path="/trade-advisory" element={<TradeAdvisoryPage st={st} I={I}/>}/>
 <Route path="/freight-intelligence-desk" element={<FreightIntelligenceDeskPage st={st} I={I}/>}/>
+<Route path="/track-container" element={<TrackContainerPage st={st}/>}/>
 <Route path="/india-coordination" element={<IndiaCoordinationPage st={st} I={I}/>}/>
 <Route path="/faq" element={<FaqPage st={st} I={I}/>}/>
 <Route path="/contact" element={<ContactPage st={st} I={I}/>}/>
