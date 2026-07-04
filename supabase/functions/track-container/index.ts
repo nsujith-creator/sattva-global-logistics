@@ -82,7 +82,7 @@ Deno.serve(async (req: Request) => {
       // 2. POST to ShipsGo — creates or returns existing (409 = already tracked, no credit spend)
       const postPayload: Record<string, unknown> = {
         reference: null,
-        carrier: carrier || "OTHERS",
+        carrier: carrier || null,
       };
       if (isContainerNumber(trackingNumber)) {
         postPayload.container_number = trackingNumber;
