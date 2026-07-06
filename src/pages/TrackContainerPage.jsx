@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { B, F, FF } from "../theme/tokens";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { PhoneField } from "../components/forms/PhoneField";
 import { trackShipment } from "../api/tracking";
 import { waLink } from "../utils/links";
 
@@ -172,9 +173,11 @@ const ShipIcon = ({color="#024AAB"})=>(
 
 /* ─── Sub-components ────────────────────────────────────────────── */
 
-function RouteRail({pct, tsCount}){
+function RouteRail({pct, tsCount, tsStops=[]}){
+  const [showTs,setShowTs]=useState(false);
   const markerPct = Math.min(Math.max(pct,2),97);
   const tsPct = tsCount>0 ? Math.min(markerPct+20,85) : null;
+  const ts = tsStops[0]; // v1: show first T/S stop
   return(
     <div style={{position:"relative",height:38,margin:"4px 0 8px"}}>
       {/* rail */}
@@ -185,12 +188,26 @@ function RouteRail({pct, tsCount}){
       <div aria-hidden="true" style={{position:"absolute",left:0,top:19,transform:"translateY(-50%)",width:10,height:10,borderRadius:"50%",background:blue}}/>
       {/* end dot */}
       <div aria-hidden="true" style={{position:"absolute",right:0,top:19,transform:"translateY(-50%)",width:10,height:10,borderRadius:"50%",background:line,border:"2px solid #cfd5e6"}}/>
-      {/* T/S diamond */}
+      {/* T/S diamond + tooltip */}
       {tsPct!=null&&<>
         <div aria-hidden="true" style={{position:"absolute",left:`${tsPct}%`,top:-6,transform:"translateX(-50%)",fontSize:10.5,fontWeight:600,letterSpacing:".08em",color:gold,whiteSpace:"nowrap"}}>
           {tsCount} T/S
         </div>
-        <div aria-hidden="true" style={{position:"absolute",left:`${tsPct}%`,top:17,transform:"translate(-50%,-50%) rotate(45deg)",width:11,height:11,background:"#fff",border:`2px solid ${gold}`,borderRadius:2}}/>
+        <div
+          role="button" tabIndex={0}
+          aria-label={ts?`Transshipment at ${ts.port}`:`${tsCount} transshipment`}
+          onMouseEnter={()=>setShowTs(true)} onMouseLeave={()=>setShowTs(false)}
+          onClick={()=>setShowTs(s=>!s)}
+          onKeyDown={e=>e.key==="Enter"&&setShowTs(s=>!s)}
+          style={{position:"absolute",left:`${tsPct}%`,top:17,transform:"translate(-50%,-50%) rotate(45deg)",width:14,height:14,background:"#fff",border:`2px solid ${gold}`,borderRadius:2,cursor:"pointer",zIndex:3}}
+        />
+        {showTs&&ts&&(
+          <div style={{position:"absolute",left:`${tsPct}%`,top:30,transform:"translateX(-50%)",zIndex:10,background:navy,color:"#fff",borderRadius:10,padding:"10px 14px",fontSize:12,fontFamily:F,whiteSpace:"nowrap",boxShadow:"0 8px 24px rgba(5,10,48,.35)"}}>
+            <div style={{fontWeight:700,marginBottom:3,fontSize:12.5}}>{ts.port}{ts.cc?`, ${ts.cc}`:""}</div>
+            {ts.arrv&&<div style={{opacity:.85}}>Arrived · {fmtDateShort(ts.arrv)}</div>}
+            {ts.depa&&<div style={{opacity:.85}}>Departs · {fmtDateShort(ts.depa)}{ts.depaEst?" (est.)":""}</div>}
+          </div>
+        )}
       </>}
       {/* ship marker */}
       <div aria-hidden="true" style={{position:"absolute",left:`${markerPct}%`,top:19,transform:"translate(-50%,-50%)",width:30,height:30,borderRadius:"50%",background:"#fff",border:`2px solid ${teal}`,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:`0 3px 10px rgba(0,201,167,.35)`}}>
@@ -199,7 +216,7 @@ function RouteRail({pct, tsCount}){
           <path d="M8 15V10h8v5" stroke={teal} strokeWidth="1.8"/>
         </svg>
       </div>
-      <p className="sr-only">{markerPct}% of voyage complete</p>
+      <p className="sr-only">{markerPct}% of voyage complete{ts?`, transshipment at ${ts.port}`:""}</p>
     </div>
   );
 }
@@ -259,6 +276,20 @@ function ResultCard({shipment, trackingNumber, carrier, onReset}){
     pod.date_of_discharge!==pod.date_of_discharge_initial;
   const waHref  = buildWA(trackingNumber, carrier, status);
 
+  // Derive T/S stops: movement locations that are neither POL nor POD
+  const tsStops = (()=>{
+    const polName=(pol.name||"").toUpperCase(), podName=(podLoc.name||"").toUpperCase();
+    const stops={};
+    for(const mv of movements){
+      const loc=(mv.location?.name||"").toUpperCase();
+      if(!loc||loc===polName||loc===podName) continue;
+      if(!stops[loc]) stops[loc]={port:mv.location.name,cc:mv.location?.country?.code||"",arrv:null,depa:null,depaEst:false};
+      if(mv.event==="ARRV"&&!stops[loc].arrv) stops[loc].arrv=mv.timestamp;
+      if(mv.event==="DEPA"){stops[loc].depa=mv.timestamp;stops[loc].depaEst=mv.status!=="ACT";}
+    }
+    return Object.values(stops);
+  })();
+
   return(
     <div style={{maxWidth:720,margin:"0 auto",padding:"0 20px",marginTop:-96,position:"relative",zIndex:5}}>
       <div style={card}>
@@ -295,7 +326,7 @@ function ResultCard({shipment, trackingNumber, carrier, onReset}){
           </div>
         </div>
 
-        <RouteRail pct={pct} tsCount={tsCount}/>
+        <RouteRail pct={pct} tsCount={tsCount} tsStops={tsStops}/>
         <div style={{fontSize:12.5,color:muted,textAlign:"right",marginBottom:22}}>
           <b style={{color:teal,fontWeight:600}}>{pct}%</b> of voyage complete
         </div>
@@ -352,6 +383,7 @@ export function TrackContainerPage({st}){
   const [name,   setName]   = useState(()=>sessionStorage.getItem("sg_track_name")||"");
   const [wa,     setWa]     = useState(()=>sessionStorage.getItem("sg_track_wa")||"");
   const [errors, setErrors] = useState({});
+  const [phoneErr, setPhoneErr] = useState("");
   const [result, setResult] = useState(null);
   const [apiErr, setApiErr] = useState("");
 
@@ -368,7 +400,8 @@ export function TrackContainerPage({st}){
   function validateGate(){
     const e={};
     if(!name.trim()) e.name="Required";
-    if(!wa.trim()||wa.replace(/\D/g,"").length<7) e.wa="Enter a valid WhatsApp number";
+    if(phoneErr) e.wa=phoneErr;
+    else if(!wa.trim()||wa.replace(/\D/g,"").length<10) e.wa="Enter a valid WhatsApp number";
     setErrors(e); return !Object.keys(e).length;
   }
 
@@ -413,7 +446,7 @@ export function TrackContainerPage({st}){
 
   function handleInputSubmit(){
     if(!validateInput()) return;
-    if(name.trim()&&wa.replace(/\D/g,"").length>=7){ doTrack(); }
+    if(name.trim()&&wa.replace(/\D/g,"").length>=10){ doTrack(); }
     else{ setStep("gate"); }
   }
 
@@ -433,6 +466,7 @@ export function TrackContainerPage({st}){
     .sg-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7390' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;}
     .sg-btn:focus-visible{outline:3px solid ${blue};outline-offset:2px;}
     .sg-btn:active{transform:translateY(1px);}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
     @keyframes sg-spin{to{transform:rotate(360deg)}}
     @media(prefers-reduced-motion:reduce){.sg-ring{animation:none!important}}
   `;
@@ -546,12 +580,14 @@ export function TrackContainerPage({st}){
                 </div>
                 <div style={{marginBottom:20}}>
                   <label style={labelStyle} htmlFor="sg-wa">WhatsApp Number</label>
-                  <input id="sg-wa" className="sg-inp" type="tel"
-                    style={{...inputStyle,borderColor:errors.wa?"#dc2626":line}}
-                    value={wa} placeholder="e.g. 9136121123"
-                    onChange={e=>{setWa(e.target.value);setErrors(p=>({...p,wa:""}));}}
-                    autoComplete="tel"/>
-                  {errors.wa&&<div style={{fontSize:11,color:"#dc2626",marginTop:4}}>{errors.wa}</div>}
+                  <PhoneField
+                    value={wa}
+                    onChange={v=>{setWa(v);setErrors(p=>({...p,wa:""}));}}
+                    error={errors.wa||phoneErr}
+                    onError={setPhoneErr}
+                    st={{inp:inputStyle}}
+                  />
+                  {errors.wa&&!phoneErr&&<div style={{fontSize:11,color:"#dc2626",marginTop:4}}>{errors.wa}</div>}
                 </div>
               </div>
               <button className="sg-btn" onClick={handleGateSubmit} style={btnPrimary}>
