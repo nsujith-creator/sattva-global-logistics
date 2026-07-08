@@ -266,6 +266,43 @@ function Invoke-VercelDeployHook {
   }
 }
 
+function Get-MarkerVariants {
+  param([string]$Marker)
+
+  if ([string]::IsNullOrWhiteSpace($Marker)) {
+    return @($Marker)
+  }
+
+  $variants = New-Object System.Collections.Generic.List[string]
+  $variants.Add($Marker)
+
+  $dateMatch = [regex]::Match($Marker, '^(0?[1-9]|[12][0-9]|3[01])\s+([A-Za-z]+)\s+(\d{4})$')
+  if ($dateMatch.Success) {
+    $day = [int]$dateMatch.Groups[1].Value
+    $month = $dateMatch.Groups[2].Value
+    $year = $dateMatch.Groups[3].Value
+    $variants.Add(("{0} {1} {2}" -f $day, $month, $year))
+    $variants.Add(("{0:00} {1} {2}" -f $day, $month, $year))
+  }
+
+  return @($variants | Select-Object -Unique)
+}
+
+function Test-HtmlContainsMarker {
+  param(
+    [string]$Html,
+    [string]$Marker
+  )
+
+  foreach ($variant in (Get-MarkerVariants -Marker $Marker)) {
+    if ($Html.Contains($variant)) {
+      return $true
+    }
+  }
+
+  return $false
+}
+
 function Test-StaticHtml {
   param(
     [object]$Payload,
@@ -292,9 +329,9 @@ function Test-StaticHtml {
     }
 
     $ssrFound = $html.Contains('id="ssr-advisory"')
-    $dateFound = $html.Contains([string]$Payload.date_display)
-    $foundMarkers = @($requiredMarkers | Where-Object { $html.Contains([string]$_) })
-    $missingMarkers = @($requiredMarkers | Where-Object { -not $html.Contains([string]$_) })
+    $dateFound = Test-HtmlContainsMarker -Html $html -Marker ([string]$Payload.date_display)
+    $foundMarkers = @($requiredMarkers | Where-Object { Test-HtmlContainsMarker -Html $html -Marker ([string]$_) })
+    $missingMarkers = @($requiredMarkers | Where-Object { -not (Test-HtmlContainsMarker -Html $html -Marker ([string]$_)) })
     $presentStaleMarkers = @($staleMarkers | Where-Object { $html.Contains([string]$_) })
 
     $htmlRefreshed = $ssrFound -and $dateFound -and ($foundMarkers.Count -ge 1) -and ($presentStaleMarkers.Count -eq 0)
