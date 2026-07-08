@@ -8,6 +8,7 @@ $TodayDisplay = Get-Date -Format "dd MMMM yyyy"
 $PayloadPath = Join-Path $AdvisoryDir "advisory-payload-$TodayIso.json"
 $LatestPath = Join-Path $AdvisoryDir "advisory-payload-latest.json"
 $RunLog = Join-Path $AdvisoryDir "auto-run-$TodayIso.log"
+$CodexExe = "C:\Users\sujit\AppData\Roaming\npm\codex.ps1"
 
 function Log($msg) {
   $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')  $msg"
@@ -39,7 +40,7 @@ Do not modify website source files.
 "@
 
 Log "Running Codex generation dry-run"
-$codexOutput = codex exec $Prompt 2>&1
+$codexOutput = & $CodexExe exec $Prompt 2>&1
 $codexOutput | Out-File -LiteralPath (Join-Path $AdvisoryDir "codex-generation-$TodayIso.log") -Encoding UTF8
 
 if ($LASTEXITCODE -ne 0) {
@@ -101,3 +102,4 @@ if ($gitStatusAfter) {
 }
 
 Log "SUCCESS: Advisory generated, validated, and published for $TodayDisplay"
+
