@@ -21,3 +21,8 @@ docs/advisories/linkedin-post-*.txt
 docs/advisories/daily-shipping-trade-advisory-*.pdf
 
 docs/advisories/daily-freight-intelligence-digest-*.md
+
+docs/advisories/auto-run-*.log
+docs/advisories/codex-generation-*.log
+docs/advisories/publisher-dry-run-*.log
+docs/advisories/publisher-live-*.log
