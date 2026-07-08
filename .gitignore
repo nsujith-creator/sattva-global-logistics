@@ -26,3 +26,8 @@ docs/advisories/auto-run-*.log
 docs/advisories/codex-generation-*.log
 docs/advisories/publisher-dry-run-*.log
 docs/advisories/publisher-live-*.log
+
+docs/advisories/auto-run-*.log
+docs/advisories/codex-generation-*.log
+docs/advisories/publisher-dry-run-*.log
+docs/advisories/publisher-live-*.log

@@ -23,7 +23,7 @@ Set-Location $Repo
 Log "Starting full-auto advisory run for $TodayDisplay"
 
 # Safety: do not run if repo has source changes
-$gitStatus = git status --short --untracked-files=no
+$gitStatus = git status --short
 if ($gitStatus) {
   Fail "Repo is not clean. git status: $gitStatus"
 }
@@ -95,7 +95,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Final repo safety check
-$gitStatusAfter = git status --short --untracked-files=no
+$gitStatusAfter = git status --short
 if ($gitStatusAfter) {
   Fail "Repo became dirty after run: $gitStatusAfter"
 }
