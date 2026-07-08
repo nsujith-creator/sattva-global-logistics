@@ -31,3 +31,5 @@ docs/advisories/auto-run-*.log
 docs/advisories/codex-generation-*.log
 docs/advisories/publisher-dry-run-*.log
 docs/advisories/publisher-live-*.log
+docs/advisories/scheduled-smoke-test-*.log
+docs/advisories/scheduled-smoke-codex-*.log
