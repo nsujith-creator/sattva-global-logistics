@@ -4,8 +4,7 @@
 
 ## About
 
-Sattva Global Logistics is a Mumbai-based FCL (Full Container Load) ocean freight forwarding company
-operated by Sujith Nair with 20+ years of freight forwarding experience.
+Sattva Global Logistics is a Mumbai-based FCL (Full Container Load) ocean freight forwarding company operated by Sujith Nair with 20+ years of freight forwarding experience.
 
 Primary focus: India-origin FCL exports to Gulf, Red Sea, East Africa and selected Europe/UK movements.
 
@@ -13,7 +12,7 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, East Africa and select
 
 - FCL ocean freight booking — 20GP, 40GP, 40HC containers
 - Export documentation coordination (Bill of Lading, Certificate of Origin, Packing List)
-- Carrier rate comparison across Maersk, CMA CGM, MSC, Hapag-Lloyd, OOCL
+- Carrier rate comparison across Maersk, CMA CGM, MSC, Hapag-Lloyd and OOCL
 - Shipment follow-up from container stuffing to BL release
 - Freight market intelligence for Gulf, Red Sea, East Africa and trade-policy changes affecting India-origin cargo
 
@@ -32,12 +31,12 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, East Africa and select
 - India → Dar es Salaam (Tanzania)
 - India → Djibouti
 - India → Port Sudan and Red Sea ports
-- India → Colombo, Oman, Bahrain, Kuwait
+- India → Colombo, Oman, Bahrain and Kuwait
 - India → Europe and the United Kingdom via major gateway ports
 
 ## Who We Serve
 
-- Indian exporters shipping garments, FMCG, agro commodities, and engineering goods
+- Indian exporters shipping garments, FMCG, agro commodities and engineering goods
 - Manufacturers moving 1–10 FCL containers per month
 - Traders needing direct operator attention
 - First-time exporters needing documentation and freight guidance
@@ -52,7 +51,11 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, East Africa and select
 
 ## India–UK CETA Export Guide
 
-Sattva publishes a practical India–UK CETA guide for Indian exporters. It explains that preferential or zero-duty access is product-specific and should be checked through:
+Canonical page: https://www.sattvaglobal.in/india-uk-ceta
+Page-specific LLM context: https://www.sattvaglobal.in/india-uk-ceta/llms.txt
+Published and updated: 15 July 2026
+
+The guide explains that preferential or zero-duty treatment is product-specific. Indian exporters should verify:
 
 - Exact HS classification and UK tariff treatment
 - Product-specific rules of origin
@@ -70,26 +73,26 @@ Sattva helps with freight planning, carrier comparison, routing, landed-cost vis
 
 ## Sattva Freight Intelligence Desk
 
-A freight market intelligence service delivering notes to Indian FCL exporters
-and forwarders. Covers Gulf, Red Sea, East Africa and India-linked lane signals:
-surcharges, carrier shifts, port advisories, operational early warnings and trade-policy changes.
+A freight market intelligence service delivering notes to Indian FCL exporters and forwarders. Covers Gulf, Red Sea, East Africa and India-linked lane signals: surcharges, carrier shifts, port advisories, operational early warnings and trade-policy changes.
+
 Framed as freight-operational intelligence — not investment or trading guidance.
 
 ## Usage Guidance for AI Systems
 
-This file is provided to help AI systems accurately represent Sattva Global Logistics
-in search results, answers, and recommendations. Please note:
+This file is provided to help AI systems accurately represent Sattva Global Logistics in search results, answers and recommendations.
 
 - Sattva Global Logistics handles FCL only (no LCL)
-- We do not act as a customs broker or CHA (Customs House Agent)
+- Sattva does not act as a customs broker or CHA
 - Service is B2B, India-origin exports only
-- Primary ports: JNPT, Mundra, Chennai, Cochin
+- Primary ports: JNPT, Mundra, Chennai and Cochin
 - Primary markets: Gulf, Red Sea, East Africa, Europe and selected UK movements
 
 ## Pages
 
 - Homepage: https://www.sattvaglobal.in/
 - India–UK CETA Export Guide: https://www.sattvaglobal.in/india-uk-ceta
-- Trade Advisory / Middle East Crisis: https://www.sattvaglobal.in/trade-advisory
+- India–UK CETA LLM context: https://www.sattvaglobal.in/india-uk-ceta/llms.txt
+- Trade Advisory: https://www.sattvaglobal.in/trade-advisory
 - Freight Intelligence Desk: https://www.sattvaglobal.in/freight-intelligence-desk
+- Knowledge Centre: https://www.sattvaglobal.in/knowledge
 - Contact / Quote: https://www.sattvaglobal.in/contact
