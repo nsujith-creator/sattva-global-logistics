@@ -10,32 +10,26 @@ export function Nav({ st }) {
   const [open, setOpen] = useState(false);
   const navRef = useRef(null);
 
-  /* scroll shadow */
   useEffect(() => {
     const h = () => setSc(window.scrollY > 20);
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  /* Escape key closes drawer */
   useEffect(() => {
     const h = (e) => { if (e.key === "Escape") setOpen(false); };
     document.addEventListener("keydown", h);
     return () => document.removeEventListener("keydown", h);
   }, []);
 
-  /* outside-click closes drawer */
   useEffect(() => {
     const h = (e) => {
-      if (open && navRef.current && !navRef.current.contains(e.target)) {
-        setOpen(false);
-      }
+      if (open && navRef.current && !navRef.current.contains(e.target)) setOpen(false);
     };
     document.addEventListener("pointerdown", h);
     return () => document.removeEventListener("pointerdown", h);
   }, [open]);
 
-  /* close drawer if window widens past breakpoint */
   useEffect(() => {
     const h = () => { if (window.innerWidth > 860) setOpen(false); };
     window.addEventListener("resize", h);
@@ -47,16 +41,18 @@ export function Nav({ st }) {
     : "linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.68))";
 
   const lk = [
-    ["why-sattva",                  "Why Sattva"],
-    ["services",                    "Services"],
-    ["trade-lanes",                 "Trade Lanes"],
-    ["freight-intelligence-desk",   "Intelligence Desk"],
-    ["knowledge",                   "Knowledge"],
-    ["track-container",             "Track Shipment"],
+    ["why-sattva", "Why Sattva"],
+    ["services", "Services"],
+    ["trade-lanes", "Trade Lanes"],
+    ["freight-intelligence-desk", "Intelligence Desk"],
+    ["india-uk-ceta", "India–UK CETA"],
+    ["knowledge", "Knowledge"],
+    ["track-container", "Track Shipment"],
   ];
 
   const goTo = (id) => {
-    go(id === "home" ? "/" : `/${id}`);
+    if (id === "india-uk-ceta") window.location.href = "/india-uk-ceta";
+    else go(id === "home" ? "/" : `/${id}`);
     setOpen(false);
   };
 
@@ -75,8 +71,6 @@ export function Nav({ st }) {
       }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
-
-        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
           onClick={() => goTo("home")}
           role="link"
@@ -87,11 +81,12 @@ export function Nav({ st }) {
           <img src="/sattva-global-logistics-logo-vector-SWIRL-VERIFIED.svg" alt="Sattva Global Logistics" style={{ height: 44, width: "auto", display: "block" }} />
         </div>
 
-        {/* Desktop links â€” hidden on mobile via CSS */}
         <div className="sg-nav-links" style={{ alignItems: "center", gap: 4 }}>
-          <ul style={{ display: "flex", gap: 14, listStyle: "none", margin: 0, padding: 0 }}>
+          <ul style={{ display: "flex", gap: 12, listStyle: "none", margin: 0, padding: 0 }}>
             {lk.map(([id, lb]) => {
               const isActive = page === id;
+              const isCeta = id === "india-uk-ceta";
+              const isTrack = id === "track-container";
               return (
                 <li key={id}>
                   <span
@@ -101,20 +96,19 @@ export function Nav({ st }) {
                     onKeyDown={(e) => e.key === "Enter" && goTo(id)}
                     aria-current={isActive ? "page" : undefined}
                     style={{
-                      color: isActive ? B.primary : id === "track-container" ? "#00C9A7" : B.g7,
-                      fontWeight: isActive ? 700 : id === "track-container" ? 700 : 600,
-                      fontSize: 13,
+                      color: isActive ? B.primary : isCeta ? "#b45309" : isTrack ? "#00C9A7" : B.g7,
+                      fontWeight: isActive || isCeta || isTrack ? 700 : 600,
+                      fontSize: 12,
                       cursor: "pointer",
                       fontFamily: F,
-                      paddingBottom: id === "track-container" ? 0 : 4,
-                      paddingTop: id === "track-container" ? 0 : 0,
                       borderBottom: isActive ? `2px solid ${B.primary}` : "2px solid transparent",
-                      background: id === "track-container" && !isActive ? "rgba(0,201,167,0.10)" : "transparent",
-                      border: id === "track-container" && !isActive ? "1.5px solid rgba(0,201,167,0.35)" : undefined,
-                      borderRadius: id === "track-container" ? 6 : 0,
-                      padding: id === "track-container" ? "5px 10px" : undefined,
+                      background: isCeta ? "rgba(245,166,35,0.12)" : isTrack && !isActive ? "rgba(0,201,167,0.10)" : "transparent",
+                      border: isCeta ? "1.5px solid rgba(245,166,35,0.42)" : isTrack && !isActive ? "1.5px solid rgba(0,201,167,0.35)" : undefined,
+                      borderRadius: isCeta || isTrack ? 6 : 0,
+                      padding: isCeta || isTrack ? "5px 9px" : undefined,
                       transition: "color .2s, border-color .2s",
                       display: "inline-block",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {lb}
@@ -131,17 +125,14 @@ export function Nav({ st }) {
               border: `1px solid ${B.primary}26`, background: "rgba(2,74,171,0.07)",
               letterSpacing: 0.2, transition: "background .2s, border-color .2s", boxShadow: "inset 0 1px 0 rgba(255,255,255,.7)",
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(2,74,171,0.11)"; e.currentTarget.style.borderColor = `${B.primary}44`; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(2,74,171,0.07)"; e.currentTarget.style.borderColor = `${B.primary}26`; }}
           >
             +91 9136 121 123
           </a>
-          <button onClick={() => go("/quote")} style={{ ...st.bp, padding: "9px 20px", fontSize: 12, marginLeft: 8 }}>
+          <button onClick={() => go("/quote")} style={{ ...st.bp, padding: "9px 18px", fontSize: 12, marginLeft: 8 }}>
             Get Quote
           </button>
         </div>
 
-        {/* Hamburger â€” hidden on desktop via CSS */}
         <button
           className="sg-nav-hamburger"
           onClick={() => setOpen((o) => !o)}
@@ -156,33 +147,35 @@ export function Nav({ st }) {
         </button>
       </div>
 
-      {/* Mobile drawer â€” only visible on small screens when open */}
       {open && (
         <div
           id="sg-nav-drawer"
           className="sg-nav-drawer"
           style={{ background: "rgba(255,255,255,.97)", borderTop: `1px solid ${B.g3}33`, padding: "8px 24px 24px" }}
         >
-          {lk.map(([id, lb]) => (
-            <div
-              key={id}
-              onClick={() => goTo(id)}
-              role="link"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && goTo(id)}
-              aria-current={page === id ? "page" : undefined}
-              style={{
-                padding: "13px 0", fontSize: 15,
-                fontWeight: page === id ? 700 : 500,
-                color: page === id ? B.primary : B.dark,
-                cursor: "pointer",
-                borderBottom: `1px solid ${B.g1}`,
-                fontFamily: F,
-              }}
-            >
-              {lb}
-            </div>
-          ))}
+          {lk.map(([id, lb]) => {
+            const isCeta = id === "india-uk-ceta";
+            return (
+              <div
+                key={id}
+                onClick={() => goTo(id)}
+                role="link"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && goTo(id)}
+                aria-current={page === id ? "page" : undefined}
+                style={{
+                  padding: "13px 0", fontSize: 15,
+                  fontWeight: page === id || isCeta ? 700 : 500,
+                  color: page === id ? B.primary : isCeta ? "#b45309" : B.dark,
+                  cursor: "pointer",
+                  borderBottom: `1px solid ${B.g1}`,
+                  fontFamily: F,
+                }}
+              >
+                {isCeta ? "NEW · India–UK CETA Guide" : lb}
+              </div>
+            );
+          })}
           <button onClick={() => goTo("quote")} style={{ ...st.bp, width: "100%", justifyContent: "center", marginTop: 16 }}>
             Get Quote
           </button>
@@ -190,6 +183,24 @@ export function Nav({ st }) {
             +91 9136 121 123
           </a>
         </div>
+      )}
+
+      {loc.pathname === "/" && !open && (
+        <a
+          href="/india-uk-ceta"
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+            minHeight: 42, padding: "8px 16px", textDecoration: "none",
+            background: "linear-gradient(90deg,#fff4da,#fffaf0)",
+            borderTop: "1px solid rgba(245,166,35,.34)",
+            borderBottom: "1px solid rgba(245,166,35,.42)",
+            color: B.dark, fontFamily: F, textAlign: "center",
+          }}
+        >
+          <span style={{ background: "#f5a623", color: B.dark, borderRadius: 999, padding: "3px 8px", fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>NEW</span>
+          <span style={{ fontSize: 12, fontWeight: 700 }}>India–UK CETA is live — 5 checks before assuming zero duty</span>
+          <span aria-hidden="true" style={{ color: "#b45309", fontWeight: 900 }}>→</span>
+        </a>
       )}
     </nav>
   );
