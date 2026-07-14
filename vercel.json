@@ -10,6 +10,7 @@
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/llms.txt", "destination": "/llms.txt" },
+    { "source": "/india-uk-ceta", "destination": "/india-uk-ceta/index.html" },
     { "source": "/trade-advisory", "destination": "/trade-advisory/index.html" },
     { "source": "/contact", "destination": "/contact/index.html" },
     { "source": "/freight-intelligence-desk", "destination": "/freight-intelligence-desk/index.html" },

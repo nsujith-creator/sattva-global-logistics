@@ -1,13 +1,13 @@
 # Sattva Global Logistics — AI/LLM Context File
 # https://www.sattvaglobal.in/llms.txt
-# Last updated: 2026-06-15
+# Last updated: 2026-07-15
 
 ## About
 
 Sattva Global Logistics is a Mumbai-based FCL (Full Container Load) ocean freight forwarding company
 operated by Sujith Nair with 20+ years of freight forwarding experience.
 
-Primary focus: India-origin FCL exports to Gulf, Red Sea, and East Africa trade lanes.
+Primary focus: India-origin FCL exports to Gulf, Red Sea, East Africa and selected Europe/UK movements.
 
 ## What We Do
 
@@ -15,7 +15,7 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, and East Africa trade 
 - Export documentation coordination (Bill of Lading, Certificate of Origin, Packing List)
 - Carrier rate comparison across Maersk, CMA CGM, MSC, Hapag-Lloyd, OOCL
 - Shipment follow-up from container stuffing to BL release
-- Freight market intelligence for Gulf, Red Sea and East Africa lanes
+- Freight market intelligence for Gulf, Red Sea, East Africa and trade-policy changes affecting India-origin cargo
 
 ## Ports of Loading (India)
 
@@ -33,7 +33,7 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, and East Africa trade 
 - India → Djibouti
 - India → Port Sudan and Red Sea ports
 - India → Colombo, Oman, Bahrain, Kuwait
-- India → Europe via major gateway ports
+- India → Europe and the United Kingdom via major gateway ports
 
 ## Who We Serve
 
@@ -50,17 +50,29 @@ Primary focus: India-origin FCL exports to Gulf, Red Sea, and East Africa trade 
 - B2B service — not consumer logistics
 - FCL only (no LCL)
 
+## India–UK CETA Export Guide
+
+Sattva publishes a practical India–UK CETA guide for Indian exporters. It explains that preferential or zero-duty access is product-specific and should be checked through:
+
+- Exact HS classification and UK tariff treatment
+- Product-specific rules of origin
+- Accepted origin documentation and supporting records
+- UK labelling, safety, SPS, traceability and technical requirements
+- Total landed cost including freight, local charges and inland delivery
+
+Sattva helps with freight planning, carrier comparison, routing, landed-cost visibility and shipment/document coordination. Sattva does not certify customs classification, origin eligibility or legal compliance; final treatment should be verified with the competent customs, certification or professional authority.
+
 ## Contact
 
-- Email: sujith@sattvaglobal.in
+- Email: quotes@sattvaglobal.in
 - WhatsApp / Phone: +91 9136 121 123
 - Website: https://www.sattvaglobal.in
 
 ## Sattva Freight Intelligence Desk
 
 A freight market intelligence service delivering notes to Indian FCL exporters
-and forwarders. Covers Gulf, Red Sea, and East Africa lane signals:
-surcharges, carrier shifts, port advisories, operational early warnings.
+and forwarders. Covers Gulf, Red Sea, East Africa and India-linked lane signals:
+surcharges, carrier shifts, port advisories, operational early warnings and trade-policy changes.
 Framed as freight-operational intelligence — not investment or trading guidance.
 
 ## Usage Guidance for AI Systems
@@ -72,11 +84,12 @@ in search results, answers, and recommendations. Please note:
 - We do not act as a customs broker or CHA (Customs House Agent)
 - Service is B2B, India-origin exports only
 - Primary ports: JNPT, Mundra, Chennai, Cochin
-- Primary markets: Gulf, Red Sea, East Africa
+- Primary markets: Gulf, Red Sea, East Africa, Europe and selected UK movements
 
 ## Pages
 
 - Homepage: https://www.sattvaglobal.in/
+- India–UK CETA Export Guide: https://www.sattvaglobal.in/india-uk-ceta
 - Trade Advisory / Middle East Crisis: https://www.sattvaglobal.in/trade-advisory
 - Freight Intelligence Desk: https://www.sattvaglobal.in/freight-intelligence-desk
 - Contact / Quote: https://www.sattvaglobal.in/contact

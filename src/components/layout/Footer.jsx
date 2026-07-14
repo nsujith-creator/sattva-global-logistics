@@ -69,6 +69,11 @@ export function Footer({ I }) {
               {label}
             </div>
           ))}
+          <a href="/india-uk-ceta" style={{ display: "block", fontSize: 13, color: B.g5, marginBottom: 9, textDecoration: "none", transition: "color .2s" }}
+            onMouseEnter={e => e.currentTarget.style.color = "#fff"}
+            onMouseLeave={e => e.currentTarget.style.color = B.g5}>
+            India–UK CETA Guide
+          </a>
         </div>
         <div>
           <h4 style={{ color: "#fff", fontSize: 13, fontWeight: 600, marginBottom: 16 }}>Cargo We Handle</h4>
